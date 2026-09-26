@@ -19,7 +19,25 @@ export type UnitId = number;
 export type UnitDefId = string;
 
 export type UnitState = 'idle' | 'move' | 'attack' | 'die' | 'deploy' | 'cast';
-export type ProjectileStyle = 'bullet' | 'shell' | 'pulse' | 'skill';
+export type ProjectileStyle =
+  | 'bullet'
+  | 'shell'
+  | 'pulse'
+  | 'skill'
+  | 'heart'
+  | 'data'
+  | 'camera'
+  | 'pen'
+  | 'window'
+  | 'ai'
+  | 'command'
+  | 'rings'
+  | 'ecosystem'
+  | 'lens'
+  | 'spatial'
+  | 'air'
+  | 'thermal'
+  | 'keynote';
 
 // ---------------------------------------------------------------------------
 // Snapshot — 매 틱 시뮬이 내놓는 읽기 전용 게임 상태

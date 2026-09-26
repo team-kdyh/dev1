@@ -5,7 +5,7 @@
       "id": "semicon_t1_buds", "faction": "semicon", "tier": 1,
       "name": "버즈 트윈스", "desc": "둘이 한 쌍으로 전선을 채우는 근접 소모 유닛",
       "cost": 60, "supply": 1, "cooldown": 1.4, "roles": ["melee"],
-      "stats": { "hp": 180, "armor": 1, "armorClass": "light", "atk": 14, "atkSpeed": 1.1, "range": 20, "moveSpeed": 95, "dmgType": "melee", "targetType": "single", "targetPolicy": "nearest" },
+      "stats": { "hp": 180, "armor": 1, "armorClass": "light", "atk": 14, "atkSpeed": 1.1, "range": 14, "moveSpeed": 95, "dmgType": "melee", "targetType": "single", "targetPolicy": "nearest" },
       "skills": ["semicon_buds_pair"], "traits": ["paired"],
       "assets": { "sprite": "units.semicon.buds", "sfxAttack": "sfx.buds.attack", "sfxDeath": "sfx.buds.death" }
     },
@@ -13,7 +13,7 @@
       "id": "semicon_t2_watch_medic", "faction": "semicon", "tier": 2,
       "name": "워치 메딕", "desc": "주변 아군을 회복하고 치명상 아군을 긴급 지원하는 서포터",
       "cost": 120, "supply": 1, "cooldown": 2.8, "roles": ["support"],
-      "stats": { "hp": 220, "armor": 2, "armorClass": "light", "atk": 8, "atkSpeed": 1.0, "range": 60, "moveSpeed": 85, "dmgType": "magic", "targetType": "single", "targetPolicy": "nearest" },
+      "stats": { "hp": 220, "armor": 2, "armorClass": "light", "atk": 8, "atkSpeed": 1.0, "range": 24, "moveSpeed": 85, "dmgType": "magic", "targetType": "single", "targetPolicy": "nearest" },
       "skills": ["semicon_heart_monitor", "semicon_emergency_call"], "traits": [],
       "assets": { "sprite": "units.semicon.watch_medic", "sfxAttack": "sfx.watch_medic.attack", "sfxDeath": "sfx.watch_medic.death" }
     },
@@ -21,7 +21,7 @@
       "id": "semicon_t3_aphone", "faction": "semicon", "tier": 3,
       "name": "A폰 보병", "desc": "빠르게 생산되고 무리 지을수록 강해지는 원거리 보병",
       "cost": 140, "supply": 1, "cooldown": 1.2, "roles": ["ranged"],
-      "stats": { "hp": 200, "armor": 2, "armorClass": "light", "atk": 22, "atkSpeed": 1.0, "range": 80, "moveSpeed": 70, "dmgType": "ranged", "targetType": "single", "targetPolicy": "nearest" },
+      "stats": { "hp": 200, "armor": 2, "armorClass": "light", "atk": 22, "atkSpeed": 1.0, "range": 32, "moveSpeed": 70, "dmgType": "ranged", "targetType": "single", "targetPolicy": "nearest" },
       "skills": ["semicon_crowd_mode"], "traits": [],
       "assets": { "sprite": "units.semicon.aphone", "sfxAttack": "sfx.aphone.attack", "sfxDeath": "sfx.aphone.death" }
     },
@@ -29,7 +29,7 @@
       "id": "semicon_t4_sphone_sniper", "faction": "semicon", "tier": 4,
       "name": "S폰 저격수", "desc": "오래 조준해 적 후방을 치명타로 제거하는 딜러",
       "cost": 260, "supply": 2, "cooldown": 3.4, "roles": ["ranged"],
-      "stats": { "hp": 260, "armor": 3, "armorClass": "light", "atk": 55, "atkSpeed": 0.65, "range": 220, "moveSpeed": 60, "dmgType": "ranged", "targetType": "single", "targetPolicy": "farthest" },
+      "stats": { "hp": 260, "armor": 3, "armorClass": "light", "atk": 55, "atkSpeed": 0.65, "range": 55, "moveSpeed": 60, "dmgType": "ranged", "targetType": "single", "targetPolicy": "farthest" },
       "skills": ["semicon_long_exposure"], "traits": [],
       "assets": { "sprite": "units.semicon.sphone_sniper", "sfxAttack": "sfx.sphone_sniper.attack", "sfxDeath": "sfx.sphone_sniper.death" }
     },
@@ -37,7 +37,7 @@
       "id": "semicon_t5_fold", "faction": "semicon", "tier": 5,
       "name": "폴드 방패병", "desc": "접었다 펴며 태세를 바꾸는 최전방 탱커",
       "cost": 320, "supply": 2, "cooldown": 4.0, "roles": ["melee", "tank"],
-      "stats": { "hp": 900, "armor": 12, "armorClass": "heavy", "atk": 30, "atkSpeed": 0.8, "range": 25, "moveSpeed": 55, "dmgType": "melee", "targetType": "splash", "splashRadius": 120, "targetPolicy": "nearest" },
+      "stats": { "hp": 900, "armor": 12, "armorClass": "heavy", "atk": 30, "atkSpeed": 0.8, "range": 18, "moveSpeed": 55, "dmgType": "melee", "targetType": "splash", "splashRadius": 120, "targetPolicy": "nearest" },
       "skills": ["semicon_fold_toggle"], "traits": [],
       "assets": { "sprite": "units.semicon.fold", "sfxAttack": "sfx.fold.attack", "sfxDeath": "sfx.fold.death" }
     },
@@ -45,7 +45,7 @@
       "id": "semicon_t6_tab_artillery", "faction": "semicon", "tier": 6,
       "name": "탭 포병", "desc": "광역 포격과 주기적인 관통 투창을 사용하는 포병",
       "cost": 380, "supply": 2, "cooldown": 4.8, "roles": ["siege"],
-      "stats": { "hp": 340, "armor": 4, "armorClass": "light", "atk": 48, "atkSpeed": 0.75, "range": 195, "moveSpeed": 50, "dmgType": "siege", "targetType": "splash", "splashRadius": 70, "targetPolicy": "nearest" },
+      "stats": { "hp": 340, "armor": 4, "armorClass": "light", "atk": 48, "atkSpeed": 0.75, "range": 62, "moveSpeed": 50, "dmgType": "siege", "targetType": "splash", "splashRadius": 70, "targetPolicy": "nearest" },
       "skills": ["semicon_pen_throw"], "traits": ["minimum_range"],
       "assets": { "sprite": "units.semicon.tab_artillery", "sfxAttack": "sfx.tab_artillery.attack", "sfxDeath": "sfx.tab_artillery.death" }
     },
@@ -53,7 +53,7 @@
       "id": "semicon_t7_book_station", "faction": "semicon", "tier": 7,
       "name": "북 워크스테이션", "desc": "전선에 설치되어 아군 사거리와 공격력을 강화하는 포대",
       "cost": 520, "supply": 3, "cooldown": 6.5, "roles": ["siege", "support"],
-      "stats": { "hp": 700, "armor": 8, "armorClass": "heavy", "atk": 70, "atkSpeed": 0.7, "range": 255, "moveSpeed": 40, "dmgType": "siege", "targetType": "single", "targetPolicy": "nearest" },
+      "stats": { "hp": 700, "armor": 8, "armorClass": "heavy", "atk": 70, "atkSpeed": 0.7, "range": 75, "moveSpeed": 40, "dmgType": "siege", "targetType": "single", "targetPolicy": "nearest" },
       "skills": ["semicon_dex_mode", "semicon_extended_display"], "traits": ["deploy"],
       "assets": { "sprite": "units.semicon.book_station", "sfxAttack": "sfx.book_station.attack", "sfxDeath": "sfx.book_station.death" }
     },
@@ -61,7 +61,7 @@
       "id": "semicon_t8_ai_assistant", "faction": "semicon", "tier": 8,
       "name": "AI 어시스턴트", "desc": "적의 공격 속도와 스킬을 봉인하는 제어 유닛",
       "cost": 600, "supply": 2, "cooldown": 7.0, "roles": ["control", "support"],
-      "stats": { "hp": 420, "armor": 4, "armorClass": "light", "atk": 30, "atkSpeed": 0.9, "range": 170, "moveSpeed": 65, "dmgType": "magic", "targetType": "splash", "splashRadius": 120, "targetPolicy": "nearest" },
+      "stats": { "hp": 420, "armor": 4, "armorClass": "light", "atk": 30, "atkSpeed": 0.9, "range": 48, "moveSpeed": 65, "dmgType": "magic", "targetType": "splash", "splashRadius": 120, "targetPolicy": "nearest" },
       "skills": ["semicon_malfunction", "semicon_routine_execute"], "traits": [],
       "assets": { "sprite": "units.semicon.ai_assistant", "sfxAttack": "sfx.ai_assistant.attack", "sfxDeath": "sfx.ai_assistant.death" }
     },
@@ -69,7 +69,7 @@
       "id": "semicon_t9_chairman", "faction": "semicon", "tier": 9,
       "name": "회장", "desc": "전장 전체를 강화하고 보병 생산과 인수합병을 지시하는 궁극 유닛",
       "cost": 1600, "supply": 3, "cooldown": 18.0, "roles": ["ultimate", "support", "control"],
-      "stats": { "hp": 2600, "armor": 16, "armorClass": "heavy", "atk": 120, "atkSpeed": 0.7, "range": 90, "moveSpeed": 50, "dmgType": "magic", "targetType": "splash", "splashRadius": 90, "targetPolicy": "nearest" },
+      "stats": { "hp": 2600, "armor": 16, "armorClass": "heavy", "atk": 120, "atkSpeed": 0.7, "range": 36, "moveSpeed": 50, "dmgType": "magic", "targetType": "splash", "splashRadius": 90, "targetPolicy": "nearest" },
       "skills": ["semicon_vertical_integration", "semicon_increase_production", "semicon_acquisition"], "traits": ["ultimate_immunity"],
       "assets": { "sprite": "units.semicon.chairman", "sfxAttack": "sfx.chairman.attack", "sfxDeath": "sfx.chairman.death" }
     }

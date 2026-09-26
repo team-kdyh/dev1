@@ -11,6 +11,7 @@ const DEATH_MS = 400; // 스냅샷에서 사라져도 0.4초 유지 (§2.2)
 const SPAWN_MS = 220; // 등장 애니메이션 (§6 spawn)
 const BLOCK_MS = 280;
 const HIT_RECOIL_MS = 150;
+const DEVICE_FX_MS = 280;
 
 /**
  * 유닛 한 기의 화면 표현. 스냅샷을 절대 쓰지 않고 읽기만 한다. (§0-1)
@@ -26,6 +27,7 @@ export class UnitView {
 
   private readonly body = new AnimatedSprite([Texture.WHITE]);
   private readonly attackArc = new Graphics();
+  private readonly deviceFx = new Graphics();
   private readonly shield = new Graphics();
   private readonly hpBg = new Sprite(Texture.WHITE);
   private readonly hpFill = new Sprite(Texture.WHITE);
@@ -47,6 +49,7 @@ export class UnitView {
   private tank = false;
   private attackMotionMs = 0;
   private attackMotionTotalMs = 0;
+  private deviceFxMs = 0;
 
   /** 현재 이 뷰가 담당하는 유닛. 풀 반환 시 -1. */
   unitId = -1;
@@ -56,13 +59,12 @@ export class UnitView {
   constructor() {
     this.body.updateAnchor = true;
     this.body.anchor.set(0.5, 1); // 앵커 하단 중앙 (§8)
-    this.attackArc.arc(0, 0, 27, -1.08, 1.08).stroke({ width: 5, color: 0xffd36a, alpha: 0.8 });
-    this.attackArc.arc(0, 0, 36, -0.92, 0.92).stroke({ width: 2, color: 0xffffff, alpha: 0.65 });
     this.attackArc.visible = false;
+    this.deviceFx.visible = false;
     this.shield.circle(0, 0, 27).fill({ color: 0x83c9ff, alpha: 0.12 });
     this.shield.circle(0, 0, 30).stroke({ width: 3, color: 0xbce5ff, alpha: 0.9 });
     this.shield.visible = false;
-    this.root.addChild(this.body, this.attackArc, this.shield);
+    this.root.addChild(this.body, this.attackArc, this.deviceFx, this.shield);
 
     this.hpBg.anchor.set(0.5, 0.5);
     this.hpBg.tint = 0x000000;
@@ -105,7 +107,10 @@ export class UnitView {
     this.tank = tank;
     this.attackMotionMs = 0;
     this.attackMotionTotalMs = 0;
+    this.deviceFxMs = 0;
+    this.configureAttackFx(unit.defId);
     this.attackArc.visible = false;
+    this.deviceFx.visible = false;
     this.shield.visible = false;
     this.shield.alpha = 1;
     this.shield.scale.set(1);
@@ -151,6 +156,10 @@ export class UnitView {
       this.attackMotionTotalMs = skill ? 620 : 480;
       this.attackMotionMs = this.attackMotionTotalMs;
     }
+    if (this.currentDefId === 'semicon_t1_buds' || this.currentDefId === 'orchard_t1_airpods') {
+      this.deviceFxMs = DEVICE_FX_MS;
+      this.deviceFx.visible = true;
+    }
   }
 
   /** 피격은 뒤로 밀리고, 방어 성공 시에는 방패 링과 folded 클립을 사용한다. */
@@ -160,7 +169,9 @@ export class UnitView {
     this.reactionTotalMs = blocked ? BLOCK_MS : HIT_RECOIL_MS;
     this.reactionMs = this.reactionTotalMs;
     this.attackMotionMs = 0;
+    this.deviceFxMs = 0;
     this.attackArc.visible = false;
+    this.deviceFx.visible = false;
     this.flashMs = blocked ? 0 : FLASH_MS;
     this.shield.visible = blocked;
     if (blocked) {
@@ -177,7 +188,9 @@ export class UnitView {
       this.deathMs = 0;
       this.reactionMs = 0;
       this.attackMotionMs = 0;
+      this.deviceFxMs = 0;
       this.attackArc.visible = false;
+      this.deviceFx.visible = false;
       this.shield.visible = false;
       this.setAnimation(this.currentDefId, 'die', this.currentTier);
     }
@@ -239,6 +252,15 @@ export class UnitView {
         this.attackArc.visible = false;
       }
     }
+    if (this.deviceFxMs > 0 && this.reactionMs <= 0) {
+      this.deviceFxMs -= deltaMs;
+      const p = 1 - Math.max(0, this.deviceFxMs / DEVICE_FX_MS);
+      const size = 0.65 + p * 0.9;
+      this.deviceFx.position.set(this.facing * (18 + p * 24), -this.displayHeight * 0.5);
+      this.deviceFx.scale.set(this.facing * size, size);
+      this.deviceFx.alpha = Math.sin(Math.PI * p);
+      if (this.deviceFxMs <= 0) this.deviceFx.visible = false;
+    }
     if (this.reactionMs > 0) {
       this.reactionMs -= deltaMs;
       const t = Math.max(0, this.reactionMs / this.reactionTotalMs);
@@ -292,6 +314,32 @@ export class UnitView {
     this.body.animationSpeed = clip.fps / 60;
     this.body.loop = clip.loop;
     this.body.gotoAndPlay(0);
+  }
+
+  private configureAttackFx(defId: string): void {
+    this.attackArc.clear();
+    this.attackArc.rotation = 0;
+    if (defId === 'orchard_t5_pad_shield') {
+      // 패드는 방패를 열고 펜을 크게 휘두른다.
+      this.attackArc.roundRect(-4, -38, 8, 76, 4).fill(0xffffff);
+      this.attackArc.moveTo(-13, -29).lineTo(12, 28).stroke({ width: 3, color: 0xffd36a, alpha: 0.8 });
+      this.attackArc.rotation = -0.72;
+    } else {
+      // 폴드는 힌지를 축으로 펼쳐지는 방패 충격파를 만든다.
+      this.attackArc.arc(0, 0, 27, -1.08, 1.08).stroke({ width: 5, color: 0x76c6ff, alpha: 0.85 });
+      this.attackArc.arc(0, 0, 36, -0.92, 0.92).stroke({ width: 2, color: 0xffffff, alpha: 0.65 });
+    }
+
+    this.deviceFx.clear();
+    if (defId === 'semicon_t1_buds') {
+      this.deviceFx.arc(0, 0, 8, -0.85, 0.85).stroke({ width: 3, color: 0x76c6ff, alpha: 0.9 });
+      this.deviceFx.arc(0, 0, 15, -0.85, 0.85).stroke({ width: 2, color: 0xffffff, alpha: 0.65 });
+      this.deviceFx.arc(0, 0, 22, -0.85, 0.85).stroke({ width: 2, color: 0x76c6ff, alpha: 0.4 });
+    } else if (defId === 'orchard_t1_airpods') {
+      this.deviceFx.circle(0, 0, 6).stroke({ width: 3, color: 0xffffff, alpha: 0.9 });
+      this.deviceFx.circle(0, 0, 13).stroke({ width: 2, color: 0xff8c82, alpha: 0.65 });
+      this.deviceFx.circle(0, 0, 20).stroke({ width: 2, color: 0xffffff, alpha: 0.35 });
+    }
   }
 }
 

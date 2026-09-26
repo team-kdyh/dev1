@@ -28,7 +28,7 @@ describe('FakeSimAdapter combat loop', () => {
       nextFrame = undefined;
       now += 100;
       callback(now);
-      projectileSeen ||= adapter.getSnapshot().projectiles.some((projectile) => projectile.style === 'bullet');
+      projectileSeen ||= adapter.getSnapshot().projectiles.some((projectile) => projectile.style === 'data');
       if (projectileSeen && events.some((event) => event.type === 'skill')) break;
     }
     adapter.stop();

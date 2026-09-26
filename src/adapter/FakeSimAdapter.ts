@@ -67,7 +67,8 @@ interface FakePlayer {
   queue: { def: UnitDef; elapsedMs: number }[];
 }
 
-const CONTACT_PAD = 8;
+const CONTACT_PAD = 4;
+const BASE_EDGE_REACH = 34;
 const AI_SPAWN_INTERVAL_MS = 2500;
 const SKILL_DAMAGE_MULTIPLIER = 1.55;
 const BLOCKED_DAMAGE_MULTIPLIER = 0.35;
@@ -290,6 +291,7 @@ export class FakeSimAdapter implements SimAdapter {
       const target = this.nearestEnemy(unit, dir);
       const enemyBaseX = unit.owner === 0 ? LOGICAL_MAX : 0;
       const reach = unit.def.range + CONTACT_PAD;
+      const baseReach = Math.max(reach, BASE_EDGE_REACH);
 
       if (target && Math.abs(target.x - unit.x) <= reach) {
         unit.state = 'attack';
@@ -297,7 +299,7 @@ export class FakeSimAdapter implements SimAdapter {
           const killed = this.performAttack(unit, target);
           if (killed) dead.push(killed);
         }
-      } else if (!target && Math.abs(enemyBaseX - unit.x) <= reach) {
+      } else if (!target && Math.abs(enemyBaseX - unit.x) <= baseReach) {
         unit.state = 'attack';
         if (unit.attackCdMs === 0) {
           const victim: PlayerId = unit.owner === 0 ? 1 : 0;
