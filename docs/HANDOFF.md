@@ -112,6 +112,11 @@ src/
 - **§4.1 미해금 버튼의 조건 툴팁.** 자물쇠만 그리고 툴팁이 없습니다. 어느 시대에
   풀리는지가 현재 `BalanceData`에서 도출되지 않아서입니다. C의 `ages.json`에
   `tiers[]`가 있으므로 데이터가 합의되면 바로 가능합니다.
+- **전략 버튼(Q/W)에 쿨다운 표시가 없고 이름이 슬롯 번호입니다.**
+  마스터 §7.1의 전략 스킬은 쿨다운이 45~70초로 길어 남은 시간이 HUD에 보여야 하는데,
+  담을 스냅샷 필드가 없습니다(`PlayerSnapshot.cooldowns`는 유닛 전용).
+  B에게 추가 요청해 뒀습니다 — [contract-response-a.md](contract-response-a.md) §4.1.
+  이름은 C의 `strategies.json`이 합의되면 "초고속 충전" 등으로 바뀝니다.
 - **투사체와 `skill` 연출이 한 번도 화면에 나온 적이 없습니다.** 렌더러는 완성돼
   있지만 `FakeSimAdapter`가 `projectiles: []`를 보내고 `skill` 이벤트를 만들지
   않습니다. 역할 명세 §1.1이 FakeSim에 요구하지 않는 항목이라 임의로 넣지
