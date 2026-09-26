@@ -12,6 +12,8 @@ const SPAWN_MS = 220; // 등장 애니메이션 (§6 spawn)
 const BLOCK_MS = 280;
 const HIT_RECOIL_MS = 150;
 const DEVICE_FX_MS = 280;
+const DISPLAY_BASE_HEIGHT = 76;
+const DISPLAY_TIER_STEP = 8;
 
 /**
  * 유닛 한 기의 화면 표현. 스냅샷을 절대 쓰지 않고 읽기만 한다. (§0-1)
@@ -41,7 +43,7 @@ export class UnitView {
   private logicalState: UnitState = 'idle';
   private currentTier = 1;
   private bodyScale = 1;
-  private displayHeight = 64;
+  private displayHeight = DISPLAY_BASE_HEIGHT;
   private facing: 1 | -1 = 1;
   private reactionMs = 0;
   private reactionTotalMs = 0;
@@ -85,7 +87,7 @@ export class UnitView {
     this.logicalState = unit.state;
     this.currentTier = unit.tier;
     this.bodyScale = characterScale(unit.tier);
-    this.displayHeight = (64 + unit.tier * 7);
+    this.displayHeight = characterDisplayHeight(unit.tier);
     this.body.stop();
     this.body.textures = [unitTexture(unit.defId, faction, unit.tier)];
     this.setAnimation(unit.defId, unit.state, unit.tier);
@@ -309,7 +311,7 @@ export class UnitView {
     this.currentState = state;
     this.currentTier = tier;
     this.bodyScale = characterScale(tier);
-    this.displayHeight = 64 + tier * 7;
+    this.displayHeight = characterDisplayHeight(tier);
     this.body.textures = [...clip.textures];
     this.body.animationSpeed = clip.fps / 60;
     this.body.loop = clip.loop;
@@ -345,7 +347,11 @@ export class UnitView {
 
 function characterScale(tier: number): number {
   const sourceSize = tier >= 7 ? 192 : 128;
-  return (64 + tier * 7) / sourceSize;
+  return characterDisplayHeight(tier) / sourceSize;
+}
+
+function characterDisplayHeight(tier: number): number {
+  return DISPLAY_BASE_HEIGHT + tier * DISPLAY_TIER_STEP;
 }
 
 function easeOut(t: number): number {

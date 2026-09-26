@@ -1,11 +1,15 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { BALANCE_DATA } from '../data/balanceData';
 import type { SimEvent } from '../sim/contracts';
-import { FakeSimAdapter } from './FakeSimAdapter';
+import { DEMO_TIME_SCALE, FakeSimAdapter } from './FakeSimAdapter';
 
 afterEach(() => vi.unstubAllGlobals());
 
 describe('FakeSimAdapter combat loop', () => {
+  it('runs the showcase at a calmer base pace', () => {
+    expect(DEMO_TIME_SCALE).toBe(0.72);
+  });
+
   it('emits attacks and keeps ranged projectiles in snapshots until impact', () => {
     let nextFrame: FrameRequestCallback | undefined;
     vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => {

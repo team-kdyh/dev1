@@ -69,10 +69,14 @@ interface FakePlayer {
 
 const CONTACT_PAD = 4;
 const BASE_EDGE_REACH = 34;
+const ALLY_SPACING = 16;
 const AI_SPAWN_INTERVAL_MS = 2500;
 const SKILL_DAMAGE_MULTIPLIER = 1.55;
 const BLOCKED_DAMAGE_MULTIPLIER = 0.35;
 const CAST_MS = 420;
+
+/** 실제 플레이 체감 속도. setTimeScale 인자는 이 값을 기준으로 한 상대 배율이다. */
+export const DEMO_TIME_SCALE = 0.72;
 
 function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
@@ -110,6 +114,7 @@ export class FakeSimAdapter implements SimAdapter {
     this.rng = mulberry32(seed);
     this.players = [this.makePlayer(), this.makePlayer()];
     this.loop = new FixedStepLoop(TICK_MS, () => this.step());
+    this.loop.timeScale = DEMO_TIME_SCALE;
     this.currSnapshot = this.buildSnapshot();
   }
 
@@ -132,7 +137,7 @@ export class FakeSimAdapter implements SimAdapter {
   }
 
   setTimeScale(scale: number): void {
-    this.loop.timeScale = scale;
+    this.loop.timeScale = DEMO_TIME_SCALE * scale;
   }
 
   send(cmd: Command): void {
@@ -462,7 +467,7 @@ export class FakeSimAdapter implements SimAdapter {
     for (const other of this.units) {
       if (other === unit || other.owner !== unit.owner) continue;
       const delta = (other.x - unit.x) * dir;
-      if (delta > 0 && delta < 11 && other.state !== 'move') return true;
+      if (delta > 0 && delta < ALLY_SPACING && other.state !== 'move') return true;
     }
     return false;
   }
