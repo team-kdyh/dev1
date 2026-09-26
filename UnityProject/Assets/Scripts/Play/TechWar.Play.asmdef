@@ -1,0 +1,5 @@
+{
+  "name": "TechWar.Play",
+  "rootNamespace": "TechWar.Play",
+  "references": ["TechWar.Sim"]
+}
