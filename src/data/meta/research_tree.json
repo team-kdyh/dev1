@@ -1,0 +1,15 @@
+{
+  "$schema": "../schema/research.schema.json",
+  "rankedPolicy": "disabled",
+  "quickMatchPolicy": "enabled",
+  "nodes": [
+    { "id": "semicon_initial_capital", "name": "초기 자본", "faction": "semicon", "levels": [{ "cost": 100, "effect": { "type": "startCash", "value": 50 } }, { "cost": 250, "effect": { "type": "startCash", "value": 100 } }, { "cost": 500, "effect": { "type": "startCash", "value": 150 } }], "requires": [] },
+    { "id": "semicon_cash_rate", "name": "기본 수급", "faction": "semicon", "levels": [{ "cost": 150, "effect": { "type": "cashRate", "value": 0.5 } }, { "cost": 350, "effect": { "type": "cashRate", "value": 0.5 } }, { "cost": 700, "effect": { "type": "cashRate", "value": 0.5 } }], "requires": ["semicon_initial_capital"] },
+    { "id": "semicon_unit_mastery", "name": "유닛 숙련", "faction": "semicon", "levels": [{ "cost": 200, "effect": { "type": "tierStats", "value": 0.03, "tiers": [1, 2, 3] } }, { "cost": 450, "effect": { "type": "tierStats", "value": 0.03, "tiers": [4, 5, 6] } }, { "cost": 900, "effect": { "type": "tierStats", "value": 0.03, "tiers": [7, 8, 9] } }], "requires": ["semicon_cash_rate"] },
+    { "id": "semicon_base_fortify", "name": "본진 강화", "faction": "semicon", "levels": [{ "cost": 200, "effect": { "type": "baseHp", "value": 300 } }, { "cost": 450, "effect": { "type": "baseHp", "value": 300 } }, { "cost": 900, "effect": { "type": "baseHp", "value": 300 } }], "requires": ["semicon_initial_capital"] },
+    { "id": "orchard_initial_capital", "name": "초기 자본", "faction": "orchard", "levels": [{ "cost": 100, "effect": { "type": "startCash", "value": 50 } }, { "cost": 250, "effect": { "type": "startCash", "value": 100 } }, { "cost": 500, "effect": { "type": "startCash", "value": 150 } }], "requires": [] },
+    { "id": "orchard_cash_rate", "name": "기본 수급", "faction": "orchard", "levels": [{ "cost": 150, "effect": { "type": "cashRate", "value": 0.5 } }, { "cost": 350, "effect": { "type": "cashRate", "value": 0.5 } }, { "cost": 700, "effect": { "type": "cashRate", "value": 0.5 } }], "requires": ["orchard_initial_capital"] },
+    { "id": "orchard_unit_mastery", "name": "유닛 숙련", "faction": "orchard", "levels": [{ "cost": 200, "effect": { "type": "tierStats", "value": 0.03, "tiers": [1, 2, 3] } }, { "cost": 450, "effect": { "type": "tierStats", "value": 0.03, "tiers": [4, 5, 6] } }, { "cost": 900, "effect": { "type": "tierStats", "value": 0.03, "tiers": [7, 8, 9] } }], "requires": ["orchard_cash_rate"] },
+    { "id": "orchard_base_fortify", "name": "본진 강화", "faction": "orchard", "levels": [{ "cost": 200, "effect": { "type": "baseHp", "value": 300 } }, { "cost": 450, "effect": { "type": "baseHp", "value": 300 } }, { "cost": 900, "effect": { "type": "baseHp", "value": 300 } }], "requires": ["orchard_initial_capital"] }
+  ]
+}

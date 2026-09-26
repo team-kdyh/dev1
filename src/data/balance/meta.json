@@ -1,0 +1,29 @@
+{
+  "$schema": "../schema/meta.schema.json",
+  "schemaVersion": "1.0.0",
+  "balanceVersion": "0.1.0-draft",
+  "tickRate": 30,
+  "laneLength": 1000,
+  "matchTimeLimitSeconds": 480,
+  "economy": {
+    "startCash": 300,
+    "baseCashPerSecond": 8,
+    "killRewardRate": 0.4,
+    "cashCap": 9999
+  },
+  "supply": { "base": 12, "max": 18 },
+  "bases": {
+    "hp": 5000,
+    "spawnPoints": { "p0": 60, "p1": 940 },
+    "turret": {
+      "range": 180,
+      "dpsByLevel": [25, 45, 80],
+      "rangePerUpgrade": 30
+    }
+  },
+  "ai": {
+    "evaluationIntervalTicks": 15,
+    "transitionLockTicks": 90,
+    "powerRatioCap": 10
+  }
+}

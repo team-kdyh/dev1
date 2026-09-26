@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tech-war.local/schema/unit.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "units"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "units": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/unit" } }
+  },
+  "definitions": {
+    "unit": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "faction", "tier", "name", "desc", "cost", "supply", "cooldown", "roles", "stats", "skills", "traits", "assets"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^(semicon|orchard)_t[1-9]_[a-z0-9_]+$" },
+        "faction": { "enum": ["semicon", "orchard"] },
+        "tier": { "type": "integer", "minimum": 1, "maximum": 9 },
+        "name": { "type": "string", "minLength": 1 },
+        "desc": { "type": "string", "minLength": 1 },
+        "cost": { "type": "number", "exclusiveMinimum": 0 },
+        "supply": { "type": "integer", "minimum": 1, "maximum": 3 },
+        "cooldown": { "type": "number", "exclusiveMinimum": 0 },
+        "roles": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/definitions/role" } },
+        "stats": { "$ref": "#/definitions/stats" },
+        "skills": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+        "traits": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+        "assets": {
+          "type": "object", "additionalProperties": false, "required": ["sprite", "sfxAttack", "sfxDeath"],
+          "properties": { "sprite": { "type": "string" }, "sfxAttack": { "type": "string" }, "sfxDeath": { "type": "string" } }
+        }
+      }
+    },
+    "role": { "enum": ["melee", "ranged", "siege", "support", "tank", "control", "ultimate"] },
+    "stats": {
+      "type": "object", "additionalProperties": false,
+      "required": ["hp", "armor", "armorClass", "atk", "atkSpeed", "range", "moveSpeed", "dmgType", "targetType", "targetPolicy"],
+      "properties": {
+        "hp": { "type": "number", "exclusiveMinimum": 0 },
+        "armor": { "type": "number", "minimum": 0 },
+        "armorClass": { "enum": ["light", "heavy", "structure"] },
+        "atk": { "type": "number", "minimum": 0 },
+        "atkSpeed": { "type": "number", "exclusiveMinimum": 0 },
+        "range": { "type": "number", "minimum": 0 },
+        "moveSpeed": { "type": "number", "minimum": 0 },
+        "dmgType": { "enum": ["melee", "ranged", "siege", "magic"] },
+        "targetType": { "enum": ["single", "splash", "pierce", "chain"] },
+        "splashRadius": { "type": "number", "exclusiveMinimum": 0 },
+        "targetPolicy": { "enum": ["nearest", "farthest", "lowestHpRatio", "highestTier", "highestPower"] }
+      },
+      "allOf": [
+        { "if": { "properties": { "targetType": { "const": "splash" } } }, "then": { "required": ["splashRadius"] } }
+      ]
+    }
+  }
+}

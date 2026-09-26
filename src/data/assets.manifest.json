@@ -1,0 +1,26 @@
+{
+  "$schema": "./schema/asset-manifest.schema.json",
+  "placeholder": true,
+  "keys": [
+    "bases.semicon.age1", "bases.semicon.age2", "bases.semicon.age3", "bases.semicon.age4",
+    "bases.orchard.age1", "bases.orchard.age2", "bases.orchard.age3", "bases.orchard.age4",
+    "units.semicon.buds", "sfx.buds.attack", "sfx.buds.death",
+    "units.semicon.watch_medic", "sfx.watch_medic.attack", "sfx.watch_medic.death",
+    "units.semicon.aphone", "sfx.aphone.attack", "sfx.aphone.death",
+    "units.semicon.sphone_sniper", "sfx.sphone_sniper.attack", "sfx.sphone_sniper.death",
+    "units.semicon.fold", "sfx.fold.attack", "sfx.fold.death",
+    "units.semicon.tab_artillery", "sfx.tab_artillery.attack", "sfx.tab_artillery.death",
+    "units.semicon.book_station", "sfx.book_station.attack", "sfx.book_station.death",
+    "units.semicon.ai_assistant", "sfx.ai_assistant.attack", "sfx.ai_assistant.death",
+    "units.semicon.chairman", "sfx.chairman.attack", "sfx.chairman.death",
+    "units.orchard.airpods", "sfx.airpods.attack", "sfx.airpods.death",
+    "units.orchard.watch_trainer", "sfx.watch_trainer.attack", "sfx.watch_trainer.death",
+    "units.orchard.phone", "sfx.phone.attack", "sfx.phone.death",
+    "units.orchard.phone_pro", "sfx.phone_pro.attack", "sfx.phone_pro.death",
+    "units.orchard.pad_shield", "sfx.pad_shield.attack", "sfx.pad_shield.death",
+    "units.orchard.vision", "sfx.vision.attack", "sfx.vision.death",
+    "units.orchard.air_notebook", "sfx.air_notebook.attack", "sfx.air_notebook.death",
+    "units.orchard.pro_notebook", "sfx.pro_notebook.attack", "sfx.pro_notebook.death",
+    "units.orchard.founder", "sfx.founder.attack", "sfx.founder.death"
+  ]
+}

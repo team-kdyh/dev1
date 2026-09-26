@@ -1,0 +1,95 @@
+{
+  "$schema": "../../schema/skill.schema.json",
+  "skills": [
+    {
+      "id": "orchard_noise_cancel", "name": "노이즈 캔슬링", "trigger": "onDeath",
+      "target": { "type": "enemyUnitsInRadius", "radius": 60 }, "conditions": [],
+      "effects": [{ "type": "applyStatus", "status": "silence", "duration": 1.5, "stacking": "refresh" }]
+    },
+    {
+      "id": "orchard_trainer_heal", "name": "트레이닝 회복", "trigger": "interval", "interval": 1,
+      "target": { "type": "friendlyUnitsInRadius", "radius": 110, "order": "lowestHpRatio" }, "conditions": [],
+      "effects": [{ "type": "heal", "amount": 5 }]
+    },
+    {
+      "id": "orchard_close_rings", "name": "링 완성", "trigger": "friendlyKillInRadius",
+      "target": { "type": "killOwner" },
+      "conditions": [{ "type": "killCountModulo", "value": 3 }],
+      "effects": [{ "type": "addStack", "stack": "ring", "maxStacks": 5, "perStack": { "stat": "atk", "mode": "multiply", "value": 0.05 } }]
+    },
+    {
+      "id": "orchard_ecosystem_protection", "name": "생태계 보호", "trigger": "aura",
+      "target": { "type": "self" },
+      "conditions": [{ "type": "friendlyUnitInRadiusAtLeast", "radius": 130, "count": 1 }],
+      "effects": [{ "type": "statMod", "stat": "damageTaken", "mode": "multiply", "value": 0.9, "duration": 0.5 }]
+    },
+    {
+      "id": "orchard_dynamic_aim", "name": "다이내믹 조준", "trigger": "onKill",
+      "target": { "type": "self" }, "conditions": [],
+      "effects": [{ "type": "resetCooldown", "scope": "attack" }]
+    },
+    {
+      "id": "orchard_large_screen", "name": "대형 화면", "trigger": "aura",
+      "target": { "type": "friendlyUnitsBehindSelf", "radius": 100, "includeSelf": false }, "conditions": [],
+      "effects": [{ "type": "statMod", "stat": "rangedDamageTaken", "mode": "multiply", "value": 0.65, "duration": 0.5 }]
+    },
+    {
+      "id": "orchard_pencil_stab", "name": "펜슬 찌르기", "trigger": "automatic", "cooldown": 12,
+      "target": { "type": "enemyUnitInFront", "count": 1, "order": "nearest" }, "conditions": [],
+      "effects": [
+        { "type": "damage", "atkMultiplier": 2.5 },
+        { "type": "applyStatus", "status": "stun", "duration": 1.5, "stacking": "refresh" }
+      ]
+    },
+    {
+      "id": "orchard_illusion", "name": "환영 생성", "trigger": "automatic", "cooldown": 14,
+      "target": { "type": "nearSelf" }, "conditions": [],
+      "effects": [{ "type": "summon", "template": "self", "count": 2, "hp": 1, "canAttack": false, "duration": 5, "tauntPriority": 100, "supplyCost": 0 }]
+    },
+    {
+      "id": "orchard_spawn_ghost", "name": "공간 컴퓨팅", "trigger": "onSpawn",
+      "target": { "type": "self" }, "conditions": [],
+      "effects": [{ "type": "applyStatus", "status": "ghost", "duration": 3, "ignoredByRoles": ["melee"] }]
+    },
+    {
+      "id": "orchard_fanless", "name": "팬리스", "trigger": "passive",
+      "target": { "type": "self" }, "conditions": [],
+      "effects": [{ "type": "statMod", "stat": "overheatGain", "mode": "set", "value": 0, "duration": -1 }]
+    },
+    {
+      "id": "orchard_performance_mode", "name": "성능 모드", "trigger": "afterAttack",
+      "target": { "type": "self" }, "conditions": [],
+      "effects": [
+        { "type": "addStack", "stack": "overheat", "maxStacks": 5, "perStack": { "stat": "atk", "mode": "multiply", "value": 0.08 } },
+        { "type": "toggleState", "when": "stackReachedMax", "states": [{ "name": "cooling", "duration": 3, "canAttack": false, "damageTakenMod": 0.2, "clearStack": "overheat" }] }
+      ]
+    },
+    {
+      "id": "orchard_structure_bonus", "name": "구조물 철거", "trigger": "beforeAttack",
+      "target": { "type": "currentTarget" },
+      "conditions": [{ "type": "targetArmorClassIs", "value": "structure" }],
+      "effects": [{ "type": "statMod", "stat": "damageDealt", "mode": "multiply", "value": 2, "duration": 0 }]
+    },
+    {
+      "id": "orchard_reality_distortion", "name": "현실 왜곡", "trigger": "aura",
+      "target": { "type": "unitsInRadius", "radius": 250 }, "conditions": [],
+      "effects": [
+        { "type": "statMod", "targetTeam": "friendly", "stat": "atkSpeed", "mode": "multiply", "value": 1.3, "duration": 0.5 },
+        { "type": "statMod", "targetTeam": "enemy", "stat": "moveSpeed", "mode": "multiply", "value": 0.8, "duration": 0.5 }
+      ]
+    },
+    {
+      "id": "orchard_presentation", "name": "프레젠테이션", "trigger": "active", "cooldown": 18,
+      "target": { "type": "enemyUnitsInFrontCone", "range": 300, "angle": 60 }, "conditions": [],
+      "effects": [{ "type": "applyStatus", "status": "root", "duration": 3, "canAttack": true, "stacking": "refresh" }]
+    },
+    {
+      "id": "orchard_one_more_thing", "name": "One More Thing", "trigger": "active", "cooldown": 40, "maxUses": 1,
+      "target": { "type": "allFriendlyUnits" }, "conditions": [],
+      "effects": [
+        { "type": "healAll", "maxHpRatio": 1 },
+        { "type": "statMod", "stat": "atk", "mode": "multiply", "value": 1.5, "duration": 15 }
+      ]
+    }
+  ]
+}

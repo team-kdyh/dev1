@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "moduleDetection": "force",
@@ -13,5 +17,15 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src"]
+  "include": [
+    "src/main.ts",
+    "src/adapter/**/*.ts",
+    "src/app/**/*.ts",
+    "src/input/**/*.ts",
+    "src/render/**/*.ts",
+    "src/screens/**/*.ts",
+    "src/sim/**/*.ts",
+    "src/ui/**/*.ts",
+    "src/data/placeholderBalance.ts"
+  ]
 }

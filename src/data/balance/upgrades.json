@@ -1,0 +1,11 @@
+{
+  "$schema": "../schema/upgrade.schema.json",
+  "upgrades": [
+    { "id": "production_line", "name": "생산 라인", "maxLevel": 3, "costs": [250, 600, 1200], "effect": { "type": "cashRateFlat", "values": [3, 3, 3] } },
+    { "id": "quality_control", "name": "품질 관리", "maxLevel": 3, "costs": [300, 700, 1400], "effect": { "type": "unitHpPct", "values": [0.12, 0.12, 0.12] } },
+    { "id": "rnd", "name": "R&D", "maxLevel": 3, "costs": [300, 700, 1400], "effect": { "type": "unitAtkPct", "values": [0.12, 0.12, 0.12] } },
+    { "id": "logistics", "name": "물류", "maxLevel": 2, "costs": [250, 600], "effect": { "type": "productionCooldownPct", "values": [-0.2, -0.2] } },
+    { "id": "expansion", "name": "증설", "maxLevel": 2, "costs": [400, 900], "effect": { "type": "supplyCapFlat", "values": [3, 3] } },
+    { "id": "defense_facility", "name": "방어 시설", "maxLevel": 3, "costs": [350, 800, 1600], "effect": { "type": "baseTurretLevel", "values": [1, 1, 1] } }
+  ]
+}

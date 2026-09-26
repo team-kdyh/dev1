@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tech-war.local/schema/skill.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "skills"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "skills": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/skill" } }
+  },
+  "definitions": {
+    "skill": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "name", "trigger", "target", "conditions", "effects"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^(semicon|orchard)_[a-z0-9_]+$" },
+        "name": { "type": "string", "minLength": 1 },
+        "trigger": { "enum": ["active", "automatic", "passive", "passiveToggle", "interval", "aura", "onSpawn", "onDeath", "onHit", "onKill", "afterAttack", "beforeAttack", "enemyEntersRange", "friendlyKillInRadius"] },
+        "interval": { "type": "number", "exclusiveMinimum": 0 },
+        "cooldown": { "type": "number", "exclusiveMinimum": 0 },
+        "maxUses": { "type": "integer", "minimum": 1 },
+        "target": { "type": "object", "required": ["type"], "properties": { "type": { "type": "string", "minLength": 1 } }, "additionalProperties": true },
+        "conditions": { "type": "array", "items": { "type": "object", "required": ["type"], "properties": { "type": { "type": "string" } }, "additionalProperties": true } },
+        "effects": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/effect" } },
+        "fallbackEffects": { "type": "array", "items": { "$ref": "#/definitions/effect" } }
+      },
+      "allOf": [
+        { "if": { "properties": { "trigger": { "const": "interval" } } }, "then": { "required": ["interval"] } },
+        { "if": { "properties": { "trigger": { "enum": ["active", "automatic"] } } }, "then": { "required": ["cooldown"] } }
+      ]
+    },
+    "effect": {
+      "type": "object",
+      "required": ["type"],
+      "properties": { "type": { "enum": ["damage", "heal", "applyStatus", "statMod", "summon", "toggleState", "addStack", "resetCooldown", "changeOwner", "healAll"] } },
+      "additionalProperties": true
+    }
+  }
+}
