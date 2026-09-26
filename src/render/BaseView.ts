@@ -1,4 +1,4 @@
-import { Container, Sprite, Texture } from 'pixi.js';
+import { Container, Graphics, Sprite, Texture } from 'pixi.js';
 import { GROUND_Y } from './coords';
 import { baseTexture } from './textures';
 
@@ -16,6 +16,8 @@ const MORPH_MS = 600;
 export class BaseView {
   readonly root = new Container();
   private readonly body = new Sprite();
+  private readonly core = new Graphics();
+  private readonly warning = new Graphics();
   private readonly barBg = new Sprite(Texture.WHITE);
   private readonly barFill = new Sprite(Texture.WHITE);
 
@@ -25,8 +27,9 @@ export class BaseView {
   /** §6 ageup 본진 모핑 — 정식 시대별 스프라이트가 오기 전까지 크기로 표현한다 */
   private morphMs = 0;
   private ageScale = 1;
+  private corePhase = 0;
 
-  constructor(faction: string, worldX: number) {
+  constructor(private readonly faction: string, worldX: number) {
     this.body.texture = baseTexture(faction);
     this.body.anchor.set(0.5, 1);
     this.body.y = GROUND_Y;
@@ -44,8 +47,33 @@ export class BaseView {
     this.barFill.x = -BAR_W / 2;
     this.barFill.y = this.barBg.y;
 
+    if (faction === 'semicon') {
+      this.core.circle(0, 0, 18).stroke({ width: 3, color: 0x76c6ff, alpha: 0.9 });
+      this.core.circle(0, 0, 28).stroke({ width: 2, color: 0xffffff, alpha: 0.45 });
+      this.core.moveTo(-34, 0).lineTo(34, 0).moveTo(0, -34).lineTo(0, 34)
+        .stroke({ width: 2, color: 0x4a9eff, alpha: 0.5 });
+      this.warning.moveTo(-48, -174).lineTo(-25, -157).lineTo(-37, -135).lineTo(-9, -112)
+        .stroke({ width: 5, color: 0xff4d55, alpha: 0.9 });
+      this.warning.moveTo(34, -194).lineTo(19, -169).lineTo(43, -149).lineTo(26, -126)
+        .stroke({ width: 4, color: 0xffa34d, alpha: 0.8 });
+    } else {
+      this.core.circle(0, 0, 13).stroke({ width: 4, color: 0xff7c70, alpha: 0.9 });
+      this.core.circle(0, 0, 24).stroke({ width: 3, color: 0xffffff, alpha: 0.75 });
+      this.core.arc(0, 0, 33, -2.65, -0.45).stroke({ width: 4, color: 0xff7c70, alpha: 0.75 });
+      this.core.arc(0, 0, 33, 0.5, 2.7).stroke({ width: 4, color: 0x9edcff, alpha: 0.75 });
+      this.warning.roundRect(-34, -119, 68, 34, 8).fill({ color: 0x111827, alpha: 0.9 });
+      this.warning.roundRect(-34, -119, 68, 34, 8).stroke({ width: 4, color: 0xffffff });
+      this.warning.rect(35, -109, 7, 14).fill(0xffffff);
+      this.warning.roundRect(-27, -112, 18, 20, 4).fill(0xff554d);
+      this.warning.rect(5, -111, 4, 13).fill(0xff554d);
+      this.warning.circle(7, -93, 3).fill(0xff554d);
+    }
+    this.core.position.set(0, GROUND_Y - 210);
+    this.warning.position.set(0, GROUND_Y);
+    this.warning.alpha = 0;
+
     this.root.x = worldX;
-    this.root.addChild(this.body, this.barBg, this.barFill);
+    this.root.addChild(this.body, this.core, this.warning, this.barBg, this.barFill);
   }
 
   setHp(hp: number, maxHp: number): void {
@@ -67,6 +95,13 @@ export class BaseView {
   }
 
   tick(deltaMs: number): void {
+    this.corePhase += deltaMs * 0.003;
+    this.core.rotation += deltaMs * (this.faction === 'semicon' ? 0.00075 : -0.00055);
+    const corePulse = this.ageScale * (1 + Math.sin(this.corePhase) * 0.08);
+    this.core.scale.set(corePulse);
+    this.core.alpha = (0.72 + Math.sin(this.corePhase * 1.3) * 0.18) * (1 - this.damage * 0.4);
+    this.warning.alpha = Math.max(0, (this.damage - 0.2) / 0.8) * (0.7 + Math.sin(this.corePhase * 2.2) * 0.25);
+
     if (this.morphMs > 0) {
       this.morphMs -= deltaMs;
       const t = 1 - Math.max(0, this.morphMs / MORPH_MS);

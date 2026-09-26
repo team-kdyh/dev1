@@ -1,6 +1,6 @@
 import { Container } from 'pixi.js';
 import type { BalanceData, RejectReason, Snapshot, UnitDef } from '../sim/contracts';
-import { unitsOfFaction } from '../data/placeholderBalance';
+import { unitsOfFaction } from '../data/balanceData';
 import { BUTTON_GAP, BUTTON_H, BUTTON_W } from './theme';
 import { UnitButton } from './UnitButton';
 

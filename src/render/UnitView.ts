@@ -1,6 +1,7 @@
-import { Container, Sprite, Texture } from 'pixi.js';
-import type { UnitSnapshot } from '../sim/contracts';
+import { AnimatedSprite, Container, Graphics, Sprite, Texture } from 'pixi.js';
+import type { UnitSnapshot, UnitState } from '../sim/contracts';
 import { laneY, lerp, toPixel } from './coords';
+import { getUnitClip, type UnitAnimationState } from './unitAssets';
 import { unitTexture } from './textures';
 
 const HP_BAR_W = 34;
@@ -8,6 +9,13 @@ const HP_BAR_H = 4;
 const FLASH_MS = 50; // 흰색 3프레임 (§6 hit)
 const DEATH_MS = 400; // 스냅샷에서 사라져도 0.4초 유지 (§2.2)
 const SPAWN_MS = 220; // 등장 애니메이션 (§6 spawn)
+const BLOCK_MS = 280;
+const HIT_RECOIL_MS = 150;
+const DEVICE_FX_MS = 280;
+const DISPLAY_BASE_HEIGHT = 76;
+const DISPLAY_TIER_STEP = 8;
+const GENERATED_ATTACK_CONTENT_HEIGHT = 525;
+const GENERATED_ATTACK_BASELINE_OFFSET = 15;
 
 /**
  * 유닛 한 기의 화면 표현. 스냅샷을 절대 쓰지 않고 읽기만 한다. (§0-1)
@@ -21,7 +29,10 @@ export class UnitView {
   /** 레이어 8에 올라가는 HP 바 — GameRenderer가 별도 컨테이너에 붙인다 */
   readonly bar = new Container();
 
-  private readonly body = new Sprite();
+  private readonly body = new AnimatedSprite([Texture.WHITE]);
+  private readonly attackArc = new Graphics();
+  private readonly deviceFx = new Graphics();
+  private readonly shield = new Graphics();
   private readonly hpBg = new Sprite(Texture.WHITE);
   private readonly hpFill = new Sprite(Texture.WHITE);
 
@@ -29,6 +40,20 @@ export class UnitView {
   private deathMs = -1;
   private spawnMs = 0;
   private baseTint = 0xffffff;
+  private currentDefId = '';
+  private currentState: UnitAnimationState | '' = '';
+  private logicalState: UnitState = 'idle';
+  private currentTier = 1;
+  private bodyScale = 1;
+  private displayHeight = DISPLAY_BASE_HEIGHT;
+  private facing: 1 | -1 = 1;
+  private reactionMs = 0;
+  private reactionTotalMs = 0;
+  private blocking = false;
+  private tank = false;
+  private attackMotionMs = 0;
+  private attackMotionTotalMs = 0;
+  private deviceFxMs = 0;
 
   /** 현재 이 뷰가 담당하는 유닛. 풀 반환 시 -1. */
   unitId = -1;
@@ -36,8 +61,14 @@ export class UnitView {
   worldX = 0;
 
   constructor() {
+    this.body.updateAnchor = true;
     this.body.anchor.set(0.5, 1); // 앵커 하단 중앙 (§8)
-    this.root.addChild(this.body);
+    this.attackArc.visible = false;
+    this.deviceFx.visible = false;
+    this.shield.circle(0, 0, 27).fill({ color: 0x83c9ff, alpha: 0.12 });
+    this.shield.circle(0, 0, 30).stroke({ width: 3, color: 0xbce5ff, alpha: 0.9 });
+    this.shield.visible = false;
+    this.root.addChild(this.body, this.attackArc, this.deviceFx, this.shield);
 
     this.hpBg.anchor.set(0.5, 0.5);
     this.hpBg.tint = 0x000000;
@@ -51,12 +82,21 @@ export class UnitView {
     this.bar.addChild(this.hpBg, this.hpFill);
   }
 
-  reset(unit: UnitSnapshot, faction: string): void {
+  reset(unit: UnitSnapshot, faction: string, tank: boolean): void {
     this.unitId = unit.id;
-    this.body.texture = unitTexture(faction, unit.tier);
+    this.currentDefId = unit.defId;
+    this.currentState = '';
+    this.logicalState = unit.state;
+    this.currentTier = unit.tier;
+    this.bodyScale = characterScale(unit.defId, unit.tier, unit.state);
+    this.displayHeight = characterDisplayHeight(unit.tier);
+    this.body.stop();
+    this.body.textures = [unitTexture(unit.defId, faction, unit.tier)];
+    this.setAnimation(unit.defId, unit.state, unit.tier);
     this.body.tint = 0xffffff;
     this.baseTint = 0xffffff;
     this.body.alpha = 1;
+    this.body.rotation = 0;
     this.root.alpha = 1;
     this.root.scale.set(1);
     this.root.visible = true;
@@ -65,6 +105,19 @@ export class UnitView {
     this.flashMs = 0;
     this.deathMs = -1;
     this.spawnMs = SPAWN_MS;
+    this.reactionMs = 0;
+    this.reactionTotalMs = 0;
+    this.blocking = false;
+    this.tank = tank;
+    this.attackMotionMs = 0;
+    this.attackMotionTotalMs = 0;
+    this.deviceFxMs = 0;
+    this.configureAttackFx(unit.defId);
+    this.attackArc.visible = false;
+    this.deviceFx.visible = false;
+    this.shield.visible = false;
+    this.shield.alpha = 1;
+    this.shield.scale.set(1);
   }
 
   /** prev가 없으면(신규 스폰) 보간 없이 즉시 배치 (§2.2) */
@@ -74,18 +127,25 @@ export class UnitView {
     const y = laneY(curr.id);
     this.root.position.set(this.worldX, y);
 
-    this.body.scale.x = curr.facing;
-    this.body.y = 0;
+    this.logicalState = curr.state;
+    this.facing = curr.facing;
+    if (this.reactionMs <= 0) this.setAnimation(curr.defId, curr.state, curr.tier);
+    this.body.scale.set(curr.facing * this.bodyScale, this.bodyScale);
+    this.body.y = usesGeneratedTankAttack(curr.defId, this.currentState)
+      ? GENERATED_ATTACK_BASELINE_OFFSET
+      : 0;
+    this.body.rotation = 0;
 
     const ratio = curr.maxHp > 0 ? Math.max(0, curr.hp / curr.maxHp) : 0;
-    const barY = y - this.body.height - 10;
+    const barY = y - this.displayHeight - 10;
     this.hpFill.width = HP_BAR_W * ratio;
     this.hpFill.tint = ratio > 0.5 ? 0x5ddc7a : ratio > 0.25 ? 0xf0c040 : 0xe6483c;
     this.bar.position.set(this.worldX, barY);
     this.bar.visible = (ratio < 1 || curr.state === 'attack') && this.deathMs < 0;
 
-    // 공격 모션이 없으므로 살짝 앞으로 기울여 상태를 눈에 보이게 한다.
+    // 공격 클립의 전진감을 조금 더 보강한다.
     this.body.x = curr.state === 'attack' ? curr.facing * 3 : 0;
+    this.shield.position.set(curr.facing * 8, -this.displayHeight * 0.52);
   }
 
   flash(): void {
@@ -93,8 +153,53 @@ export class UnitView {
     this.body.tint = 0xffffff;
   }
 
+  /** 공격 이벤트마다 비순환 attack/cast 클립을 첫 프레임부터 다시 재생한다. */
+  playAttack(skill: boolean): void {
+    if (this.deathMs >= 0) return;
+    this.currentState = '';
+    this.setAnimation(this.currentDefId, skill ? 'cast' : 'attack', this.currentTier);
+    if (this.tank) {
+      this.attackMotionTotalMs = skill ? 620 : 480;
+      this.attackMotionMs = this.attackMotionTotalMs;
+    }
+    if (this.currentDefId === 'semicon_t1_buds' || this.currentDefId === 'orchard_t1_airpods') {
+      this.deviceFxMs = DEVICE_FX_MS;
+      this.deviceFx.visible = true;
+    }
+  }
+
+  /** 피격은 뒤로 밀리고, 방어 성공 시에는 방패 링과 folded 클립을 사용한다. */
+  reactToHit(blocked: boolean): void {
+    if (this.deathMs >= 0) return;
+    this.blocking = blocked;
+    this.reactionTotalMs = blocked ? BLOCK_MS : HIT_RECOIL_MS;
+    this.reactionMs = this.reactionTotalMs;
+    this.attackMotionMs = 0;
+    this.deviceFxMs = 0;
+    this.attackArc.visible = false;
+    this.deviceFx.visible = false;
+    this.flashMs = blocked ? 0 : FLASH_MS;
+    this.shield.visible = blocked;
+    if (blocked) {
+      this.body.tint = 0xb7e5ff;
+      this.currentState = '';
+      this.setAnimation(this.currentDefId, 'folded', this.currentTier);
+    } else {
+      this.body.tint = 0xff7b7b;
+    }
+  }
+
   startDeath(): void {
-    if (this.deathMs < 0) this.deathMs = 0;
+    if (this.deathMs < 0) {
+      this.deathMs = 0;
+      this.reactionMs = 0;
+      this.attackMotionMs = 0;
+      this.deviceFxMs = 0;
+      this.attackArc.visible = false;
+      this.deviceFx.visible = false;
+      this.shield.visible = false;
+      this.setAnimation(this.currentDefId, 'die', this.currentTier);
+    }
   }
 
   get isDying(): boolean {
@@ -119,6 +224,75 @@ export class UnitView {
       this.root.scale.set(0.7 + t * 0.3, 0.55 + t * 0.45);
       this.root.alpha = 0.35 + t * 0.65;
     }
+    if (this.attackMotionMs > 0 && this.reactionMs <= 0) {
+      this.attackMotionMs -= deltaMs;
+      const p = 1 - Math.max(0, this.attackMotionMs / this.attackMotionTotalMs);
+      const windup = Math.min(1, p / 0.3);
+      const strike = Math.min(1, Math.max(0, (p - 0.3) / 0.28));
+      const recover = Math.min(1, Math.max(0, (p - 0.58) / 0.42));
+      const articulated = usesGeneratedTankAttack(this.currentDefId, this.currentState);
+      const drive = articulated
+        ? 0
+        : p < 0.3
+          ? -7 * windup
+          : p < 0.58
+            ? -7 + 25 * easeOut(strike)
+            : 18 * (1 - recover);
+
+      this.body.x = this.facing * drive;
+      this.body.rotation = this.facing
+        * (articulated ? -0.025 * (1 - strike) + 0.04 * strike : -0.12 * (1 - strike) + 0.18 * strike)
+        * (1 - recover);
+      const squash = Math.sin(Math.PI * Math.min(1, strike)) * (1 - recover);
+      this.body.scale.set(
+        this.facing * this.bodyScale * (1 + squash * (articulated ? 0.03 : 0.12)),
+        this.bodyScale * (1 - squash * (articulated ? 0.02 : 0.08)),
+      );
+
+      const arcVisible = p >= 0.28 && p <= 0.72;
+      this.attackArc.visible = arcVisible;
+      if (arcVisible) {
+        const arcT = (p - 0.28) / 0.44;
+        this.attackArc.position.set(this.facing * (20 + arcT * 17), -this.displayHeight * 0.48);
+        this.attackArc.scale.set(this.facing * (0.78 + arcT * 0.48), 0.78 + arcT * 0.48);
+        this.attackArc.alpha = Math.sin(Math.PI * arcT);
+      }
+      if (this.attackMotionMs <= 0) {
+        this.body.x = 0;
+        this.body.rotation = 0;
+        this.attackArc.visible = false;
+      }
+    }
+    if (this.deviceFxMs > 0 && this.reactionMs <= 0) {
+      this.deviceFxMs -= deltaMs;
+      const p = 1 - Math.max(0, this.deviceFxMs / DEVICE_FX_MS);
+      const size = 0.65 + p * 0.9;
+      this.deviceFx.position.set(this.facing * (18 + p * 24), -this.displayHeight * 0.5);
+      this.deviceFx.scale.set(this.facing * size, size);
+      this.deviceFx.alpha = Math.sin(Math.PI * p);
+      if (this.deviceFxMs <= 0) this.deviceFx.visible = false;
+    }
+    if (this.reactionMs > 0) {
+      this.reactionMs -= deltaMs;
+      const t = Math.max(0, this.reactionMs / this.reactionTotalMs);
+      if (this.blocking) {
+        this.body.x = -this.facing * (2 + t * 3);
+        this.body.rotation = -this.facing * 0.07 * t;
+        this.shield.alpha = 0.3 + t * 0.7;
+        this.shield.scale.set(1 + (1 - t) * 0.24);
+      } else {
+        this.body.x = -this.facing * 9 * t;
+        this.body.rotation = -this.facing * 0.12 * t;
+      }
+      if (this.reactionMs <= 0) {
+        this.shield.visible = false;
+        this.body.x = 0;
+        this.body.rotation = 0;
+        this.body.tint = this.baseTint;
+        this.currentState = '';
+        this.setAnimation(this.currentDefId, this.logicalState, this.currentTier);
+      }
+    }
     if (this.deathMs >= 0) {
       this.deathMs += deltaMs;
       const t = Math.min(1, this.deathMs / DEATH_MS);
@@ -132,7 +306,70 @@ export class UnitView {
   }
 
   destroy(): void {
+    this.body.stop();
     this.root.destroy({ children: true });
     this.bar.destroy({ children: true });
   }
+
+  private setAnimation(defId: string, state: UnitAnimationState, tier: number): void {
+    if (this.currentDefId === defId && this.currentState === state) return;
+    const clip = getUnitClip(defId, state);
+    if (!clip) return;
+
+    this.currentDefId = defId;
+    this.currentState = state;
+    this.currentTier = tier;
+    this.bodyScale = characterScale(defId, tier, state);
+    this.displayHeight = characterDisplayHeight(tier);
+    this.body.textures = [...clip.textures];
+    this.body.animationSpeed = clip.fps / 60;
+    this.body.loop = clip.loop;
+    this.body.gotoAndPlay(0);
+  }
+
+  private configureAttackFx(defId: string): void {
+    this.attackArc.clear();
+    this.attackArc.rotation = 0;
+    if (defId === 'orchard_t5_pad_shield') {
+      // 새 프레임에 펜이 직접 그려져 있으므로 여기서는 베기 궤적만 보강한다.
+      this.attackArc.arc(0, 0, 35, -1.2, 1.2).stroke({ width: 6, color: 0xffffff, alpha: 0.85 });
+      this.attackArc.arc(0, 0, 43, -1.05, 1.05).stroke({ width: 3, color: 0x83c9ff, alpha: 0.65 });
+    } else {
+      // 폴드는 힌지를 축으로 펼쳐지는 방패 충격파를 만든다.
+      this.attackArc.arc(0, 0, 27, -1.08, 1.08).stroke({ width: 5, color: 0x76c6ff, alpha: 0.85 });
+      this.attackArc.arc(0, 0, 36, -0.92, 0.92).stroke({ width: 2, color: 0xffffff, alpha: 0.65 });
+    }
+
+    this.deviceFx.clear();
+    if (defId === 'semicon_t1_buds') {
+      this.deviceFx.arc(0, 0, 8, -0.85, 0.85).stroke({ width: 3, color: 0x76c6ff, alpha: 0.9 });
+      this.deviceFx.arc(0, 0, 15, -0.85, 0.85).stroke({ width: 2, color: 0xffffff, alpha: 0.65 });
+      this.deviceFx.arc(0, 0, 22, -0.85, 0.85).stroke({ width: 2, color: 0x76c6ff, alpha: 0.4 });
+    } else if (defId === 'orchard_t1_airpods') {
+      this.deviceFx.circle(0, 0, 6).stroke({ width: 3, color: 0xffffff, alpha: 0.9 });
+      this.deviceFx.circle(0, 0, 13).stroke({ width: 2, color: 0xff8c82, alpha: 0.65 });
+      this.deviceFx.circle(0, 0, 20).stroke({ width: 2, color: 0xffffff, alpha: 0.35 });
+    }
+  }
+}
+
+function characterScale(defId: string, tier: number, state: UnitAnimationState | ''): number {
+  if (usesGeneratedTankAttack(defId, state)) {
+    return characterDisplayHeight(tier) / GENERATED_ATTACK_CONTENT_HEIGHT;
+  }
+  const sourceSize = tier >= 7 ? 192 : 128;
+  return characterDisplayHeight(tier) / sourceSize;
+}
+
+function characterDisplayHeight(tier: number): number {
+  return DISPLAY_BASE_HEIGHT + tier * DISPLAY_TIER_STEP;
+}
+
+function usesGeneratedTankAttack(defId: string, state: UnitAnimationState | ''): boolean {
+  return (state === 'attack' || state === 'cast')
+    && (defId === 'semicon_t5_fold' || defId === 'orchard_t5_pad_shield');
+}
+
+function easeOut(t: number): number {
+  return 1 - (1 - t) * (1 - t);
 }

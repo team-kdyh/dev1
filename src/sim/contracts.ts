@@ -19,6 +19,25 @@ export type UnitId = number;
 export type UnitDefId = string;
 
 export type UnitState = 'idle' | 'move' | 'attack' | 'die' | 'deploy' | 'cast';
+export type ProjectileStyle =
+  | 'bullet'
+  | 'shell'
+  | 'pulse'
+  | 'skill'
+  | 'heart'
+  | 'data'
+  | 'camera'
+  | 'pen'
+  | 'window'
+  | 'ai'
+  | 'command'
+  | 'rings'
+  | 'ecosystem'
+  | 'lens'
+  | 'spatial'
+  | 'air'
+  | 'thermal'
+  | 'keynote';
 
 // ---------------------------------------------------------------------------
 // Snapshot — 매 틱 시뮬이 내놓는 읽기 전용 게임 상태
@@ -42,7 +61,12 @@ export interface ProjectileSnapshot {
   readonly id: number;
   readonly defId: string;
   readonly owner: PlayerId;
+  readonly sourceUnitId: UnitId;
+  readonly targetUnitId?: UnitId;
+  readonly fromX: number;
+  readonly toX: number;
   readonly x: number;
+  readonly style: ProjectileStyle;
   /** 0~1, 발사~착탄 진행도. 프론트가 포물선 Y를 만들 때 쓴다. */
   readonly progress: number;
 }
@@ -103,9 +127,10 @@ export type RejectReason =
 
 export type SimEvent =
   | { type: 'spawn'; unitId: UnitId; defId: UnitDefId; owner: PlayerId; x: number }
-  | { type: 'hit'; unitId: UnitId; x: number; amount: number; crit: boolean }
+  | { type: 'attack'; unitId: UnitId; defId: UnitDefId; owner: PlayerId; x: number; ranged: boolean; skill: boolean }
+  | { type: 'hit'; unitId: UnitId; x: number; amount: number; crit: boolean; blocked: boolean }
   | { type: 'kill'; unitId: UnitId; defId: UnitDefId; owner: PlayerId; x: number }
-  | { type: 'skill'; unitId: UnitId; skillId: string; x: number }
+  | { type: 'skill'; unitId: UnitId; defId: UnitDefId; owner: PlayerId; skillId: string; x: number }
   | { type: 'ageup'; owner: PlayerId; age: number }
   | { type: 'baseHit'; owner: PlayerId; amount: number }
   | { type: 'strategy'; owner: PlayerId; slot: 0 | 1; strategyId: string }
@@ -127,10 +152,17 @@ export interface UnitDef {
   readonly cooldownMs: number;
   readonly hp: number;
   readonly dps: number;
+  readonly attackIntervalMs: number;
+  readonly damageType: 'melee' | 'ranged' | 'magic' | 'siege';
   /** 논리 단위 사거리 */
   readonly range: number;
   /** 논리 단위 / 초 */
   readonly speed: number;
+  /** C 밸런스 데이터의 설명과 스킬명. 도감과 툴팁이 사용한다. */
+  readonly description: string;
+  readonly roles: readonly string[];
+  readonly skillIds: readonly string[];
+  readonly skills: readonly string[];
 }
 
 export interface BalanceData {

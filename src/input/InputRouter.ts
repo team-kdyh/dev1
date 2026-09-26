@@ -134,12 +134,6 @@ export class InputRouter {
     }
 
     switch (e.code) {
-      case 'KeyQ':
-        this.send({ type: 'USE_STRATEGY', slot: 0 });
-        break;
-      case 'KeyW':
-        this.send({ type: 'USE_STRATEGY', slot: 1 });
-        break;
       case 'KeyE':
         this.send({ type: 'AGE_UP' });
         break;

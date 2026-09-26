@@ -14,6 +14,8 @@
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "types": ["vite/client"],
     "skipLibCheck": true,
     "noEmit": true
   },
@@ -21,11 +23,12 @@
     "src/main.ts",
     "src/adapter/**/*.ts",
     "src/app/**/*.ts",
+    "src/audio/**/*.ts",
     "src/input/**/*.ts",
     "src/render/**/*.ts",
     "src/screens/**/*.ts",
     "src/sim/**/*.ts",
     "src/ui/**/*.ts",
-    "src/data/placeholderBalance.ts"
+    "src/data/**/*.ts"
   ]
 }

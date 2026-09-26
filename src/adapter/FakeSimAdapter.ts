@@ -3,6 +3,7 @@ import type {
   Command,
   PlayerId,
   PlayerSnapshot,
+  ProjectileStyle,
   RejectReason,
   SimEvent,
   Snapshot,
@@ -10,8 +11,15 @@ import type {
   UnitSnapshot,
   UnitState,
 } from '../sim/contracts';
-import { FACTION_OF_PLAYER, unitsOfFaction } from '../data/placeholderBalance';
+import { FACTION_OF_PLAYER, unitsOfFaction } from '../data/balanceData';
 import { FixedStepLoop, LOGICAL_MAX, TICK_MS, type SimAdapter } from './SimAdapter';
+import {
+  SKILL_EVERY_ATTACKS,
+  blockChanceFor,
+  isRangedAttack,
+  projectileDurationMs,
+  projectileStyleFor,
+} from './combatRules';
 
 /**
  * 진짜 시뮬(B)이 오기 전까지 프론트를 끝까지 만들기 위한 가짜 시뮬. (명세 §1.1)
@@ -30,6 +38,24 @@ interface FakeUnit {
   state: UnitState;
   facing: 1 | -1;
   attackCdMs: number;
+  attackCount: number;
+  castMs: number;
+}
+
+interface FakeProjectile {
+  id: number;
+  defId: string;
+  owner: PlayerId;
+  sourceUnitId: number;
+  targetUnitId?: number;
+  targetOwner?: PlayerId;
+  fromX: number;
+  toX: number;
+  elapsedMs: number;
+  durationMs: number;
+  damage: number;
+  crit: boolean;
+  style: ProjectileStyle;
 }
 
 interface FakePlayer {
@@ -41,9 +67,16 @@ interface FakePlayer {
   queue: { def: UnitDef; elapsedMs: number }[];
 }
 
-const ATTACK_INTERVAL_MS = 600;
-const CONTACT_PAD = 8;
+const CONTACT_PAD = 4;
+const BASE_EDGE_REACH = 34;
+const ALLY_SPACING = 16;
 const AI_SPAWN_INTERVAL_MS = 2500;
+const SKILL_DAMAGE_MULTIPLIER = 1.55;
+const BLOCKED_DAMAGE_MULTIPLIER = 0.35;
+const CAST_MS = 420;
+
+/** 실제 플레이 체감 속도. setTimeScale 인자는 이 값을 기준으로 한 상대 배율이다. */
+export const DEMO_TIME_SCALE = 0.72;
 
 function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
@@ -63,7 +96,9 @@ export class FakeSimAdapter implements SimAdapter {
 
   private tick = 0;
   private nextUnitId = 1;
+  private nextProjectileId = 1;
   private units: FakeUnit[] = [];
+  private projectiles: FakeProjectile[] = [];
   private players: [FakePlayer, FakePlayer];
   private aiTimerMs = 1200;
   private winner: PlayerId | null = null;
@@ -79,6 +114,7 @@ export class FakeSimAdapter implements SimAdapter {
     this.rng = mulberry32(seed);
     this.players = [this.makePlayer(), this.makePlayer()];
     this.loop = new FixedStepLoop(TICK_MS, () => this.step());
+    this.loop.timeScale = DEMO_TIME_SCALE;
     this.currSnapshot = this.buildSnapshot();
   }
 
@@ -101,7 +137,7 @@ export class FakeSimAdapter implements SimAdapter {
   }
 
   setTimeScale(scale: number): void {
-    this.loop.timeScale = scale;
+    this.loop.timeScale = DEMO_TIME_SCALE * scale;
   }
 
   send(cmd: Command): void {
@@ -220,6 +256,8 @@ export class FakeSimAdapter implements SimAdapter {
       state: 'move',
       facing: owner === 0 ? 1 : -1,
       attackCdMs: 0,
+      attackCount: 0,
+      castMs: 0,
     };
     this.units.push(unit);
     this.emit({ type: 'spawn', unitId: unit.id, defId: def.id, owner, x });
@@ -248,32 +286,29 @@ export class FakeSimAdapter implements SimAdapter {
       const dir = unit.owner === 0 ? 1 : -1;
       unit.facing = dir;
       unit.attackCdMs = Math.max(0, unit.attackCdMs - TICK_MS);
+      unit.castMs = Math.max(0, unit.castMs - TICK_MS);
+
+      if (unit.castMs > 0) {
+        unit.state = 'cast';
+        continue;
+      }
 
       const target = this.nearestEnemy(unit, dir);
       const enemyBaseX = unit.owner === 0 ? LOGICAL_MAX : 0;
       const reach = unit.def.range + CONTACT_PAD;
+      const baseReach = Math.max(reach, BASE_EDGE_REACH);
 
       if (target && Math.abs(target.x - unit.x) <= reach) {
         unit.state = 'attack';
         if (unit.attackCdMs === 0) {
-          unit.attackCdMs = ATTACK_INTERVAL_MS;
-          const crit = this.rng() < 0.12;
-          const amount = Math.round(unit.def.dps * (ATTACK_INTERVAL_MS / 1000) * (crit ? 2 : 1));
-          target.hp -= amount;
-          this.emit({ type: 'hit', unitId: target.id, x: target.x, amount, crit });
-          if (target.hp <= 0 && !dead.includes(target)) {
-            target.state = 'die';
-            dead.push(target);
-          }
+          const killed = this.performAttack(unit, target);
+          if (killed) dead.push(killed);
         }
-      } else if (!target && Math.abs(enemyBaseX - unit.x) <= reach) {
+      } else if (!target && Math.abs(enemyBaseX - unit.x) <= baseReach) {
         unit.state = 'attack';
         if (unit.attackCdMs === 0) {
-          unit.attackCdMs = ATTACK_INTERVAL_MS;
           const victim: PlayerId = unit.owner === 0 ? 1 : 0;
-          const amount = Math.round(unit.def.dps * (ATTACK_INTERVAL_MS / 1000));
-          this.players[victim].baseHp = Math.max(0, this.players[victim].baseHp - amount);
-          this.emit({ type: 'baseHit', owner: victim, amount });
+          this.performAttack(unit, undefined, victim);
         }
       } else if (this.blockedByAlly(unit, dir)) {
         unit.state = 'idle';
@@ -283,10 +318,8 @@ export class FakeSimAdapter implements SimAdapter {
       }
     }
 
-    for (const unit of dead) {
-      this.emit({ type: 'kill', unitId: unit.id, defId: unit.def.id, owner: unit.owner, x: unit.x });
-    }
-    if (dead.length > 0) this.units = this.units.filter((u) => !dead.includes(u));
+    this.removeDead(dead);
+    this.stepProjectiles();
 
     for (let i = 0; i < 2; i += 1) {
       if (this.players[i].baseHp <= 0) {
@@ -295,6 +328,123 @@ export class FakeSimAdapter implements SimAdapter {
         return;
       }
     }
+  }
+
+  private performAttack(attacker: FakeUnit, target?: FakeUnit, targetOwner?: PlayerId): FakeUnit | undefined {
+    attacker.attackCdMs = attacker.def.attackIntervalMs;
+    attacker.attackCount += 1;
+    const skill = attacker.attackCount % SKILL_EVERY_ATTACKS === 0 && attacker.def.skillIds.length > 0;
+    const ranged = isRangedAttack(attacker.def);
+    const crit = this.rng() < 0.12;
+    const baseDamage = attacker.def.dps * (attacker.def.attackIntervalMs / 1000);
+    const damage = Math.max(1, Math.round(baseDamage * (skill ? SKILL_DAMAGE_MULTIPLIER : 1) * (crit ? 2 : 1)));
+
+    if (skill) {
+      attacker.state = 'cast';
+      attacker.castMs = CAST_MS;
+      this.emit({
+        type: 'skill',
+        unitId: attacker.id,
+        defId: attacker.def.id,
+        owner: attacker.owner,
+        skillId: attacker.def.skillIds[(attacker.attackCount / SKILL_EVERY_ATTACKS - 1) % attacker.def.skillIds.length],
+        x: attacker.x,
+      });
+    }
+    this.emit({
+      type: 'attack',
+      unitId: attacker.id,
+      defId: attacker.def.id,
+      owner: attacker.owner,
+      x: attacker.x,
+      ranged,
+      skill,
+    });
+
+    if (ranged) {
+      this.launchProjectile(attacker, damage, crit, skill, target, targetOwner);
+      return undefined;
+    }
+    if (target) return this.damageUnit(target, damage, crit);
+    if (targetOwner !== undefined) this.damageBase(targetOwner, damage);
+    return undefined;
+  }
+
+  private launchProjectile(
+    attacker: FakeUnit,
+    damage: number,
+    crit: boolean,
+    skill: boolean,
+    target?: FakeUnit,
+    targetOwner?: PlayerId,
+  ): void {
+    const toX = target?.x ?? (targetOwner === 0 ? 0 : LOGICAL_MAX);
+    const style = projectileStyleFor(attacker.def, skill);
+    this.projectiles.push({
+      id: this.nextProjectileId++,
+      defId: attacker.def.id,
+      owner: attacker.owner,
+      sourceUnitId: attacker.id,
+      ...(target ? { targetUnitId: target.id } : {}),
+      ...(targetOwner !== undefined ? { targetOwner } : {}),
+      fromX: attacker.x,
+      toX,
+      elapsedMs: 0,
+      durationMs: projectileDurationMs(toX - attacker.x, style),
+      damage,
+      crit,
+      style,
+    });
+  }
+
+  private stepProjectiles(): void {
+    const completed: FakeProjectile[] = [];
+    const dead: FakeUnit[] = [];
+
+    for (const projectile of this.projectiles) {
+      projectile.elapsedMs += TICK_MS;
+      if (projectile.elapsedMs < projectile.durationMs) continue;
+      completed.push(projectile);
+
+      if (projectile.targetUnitId !== undefined) {
+        const target = this.units.find((unit) => unit.id === projectile.targetUnitId && unit.hp > 0);
+        if (target) {
+          const killed = this.damageUnit(target, projectile.damage, projectile.crit);
+          if (killed) dead.push(killed);
+        }
+      } else if (projectile.targetOwner !== undefined) {
+        this.damageBase(projectile.targetOwner, projectile.damage);
+      }
+    }
+
+    if (completed.length > 0) {
+      this.projectiles = this.projectiles.filter((projectile) => !completed.includes(projectile));
+    }
+    this.removeDead(dead);
+  }
+
+  private damageUnit(target: FakeUnit, rawAmount: number, crit: boolean): FakeUnit | undefined {
+    const blocked = this.rng() < blockChanceFor(target.def);
+    const amount = Math.max(1, Math.round(rawAmount * (blocked ? BLOCKED_DAMAGE_MULTIPLIER : 1)));
+    target.hp -= amount;
+    this.emit({ type: 'hit', unitId: target.id, x: target.x, amount, crit, blocked });
+    if (target.hp > 0) return undefined;
+    target.state = 'die';
+    return target;
+  }
+
+  private damageBase(owner: PlayerId, amount: number): void {
+    this.players[owner].baseHp = Math.max(0, this.players[owner].baseHp - amount);
+    this.emit({ type: 'baseHit', owner, amount });
+  }
+
+  private removeDead(dead: readonly FakeUnit[]): void {
+    if (dead.length === 0) return;
+    const unique = new Set(dead);
+    for (const unit of unique) {
+      this.emit({ type: 'kill', unitId: unit.id, defId: unit.def.id, owner: unit.owner, x: unit.x });
+    }
+    this.units = this.units.filter((unit) => !unique.has(unit));
   }
 
   private nearestEnemy(unit: FakeUnit, dir: 1 | -1): FakeUnit | null {
@@ -317,7 +467,7 @@ export class FakeSimAdapter implements SimAdapter {
     for (const other of this.units) {
       if (other === unit || other.owner !== unit.owner) continue;
       const delta = (other.x - unit.x) * dir;
-      if (delta > 0 && delta < 11 && other.state !== 'move') return true;
+      if (delta > 0 && delta < ALLY_SPACING && other.state !== 'move') return true;
     }
     return false;
   }
@@ -341,7 +491,21 @@ export class FakeSimAdapter implements SimAdapter {
       tick: this.tick,
       elapsedMs: this.tick * TICK_MS,
       units,
-      projectiles: [],
+      projectiles: this.projectiles.map((projectile) => {
+        const progress = Math.min(1, projectile.elapsedMs / projectile.durationMs);
+        return {
+          id: projectile.id,
+          defId: projectile.defId,
+          owner: projectile.owner,
+          sourceUnitId: projectile.sourceUnitId,
+          ...(projectile.targetUnitId !== undefined ? { targetUnitId: projectile.targetUnitId } : {}),
+          fromX: projectile.fromX,
+          toX: projectile.toX,
+          x: projectile.fromX + (projectile.toX - projectile.fromX) * progress,
+          style: projectile.style,
+          progress,
+        };
+      }),
       players: [this.snapshotPlayer(0), this.snapshotPlayer(1)],
       me: this.me,
       phase: this.winner === null ? 'playing' : 'over',

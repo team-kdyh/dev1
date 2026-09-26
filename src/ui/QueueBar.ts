@@ -53,7 +53,7 @@ export class QueueBar {
         return;
       }
       const def = findUnitDef(this.balance, item.defId);
-      slot.show(def?.faction ?? 'blue', def?.tier ?? 1, i === 0 ? item.progress : 0);
+      slot.show(item.defId, def?.faction ?? 'semicon', def?.tier ?? 1, i === 0 ? item.progress : 0);
     });
   }
 
@@ -112,11 +112,11 @@ class QueueSlot {
     });
   }
 
-  show(faction: string, tier: number, progress: number): void {
+  show(defId: string, faction: string, tier: number, progress: number): void {
     this.filled = true;
     this.root.visible = true;
     this.icon.visible = true;
-    this.icon.texture = unitTexture(faction, tier);
+    this.icon.texture = unitTexture(defId, faction, tier);
     const fit = Math.min(22 / this.icon.texture.height, 22 / this.icon.texture.width);
     this.icon.scale.set(fit);
 

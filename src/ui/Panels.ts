@@ -56,42 +56,6 @@ class TextButton {
 }
 
 /**
- * 전략 버튼 2개 (§4 전략 버튼, §5 Q/W).
- * 전략 정의가 밸런스 데이터에 없어 슬롯 번호만 표시한다 — C의 JSON이 오면 이름/아이콘이 붙는다.
- */
-export class StrategyButtons {
-  readonly root = new Container();
-  private x = 0;
-  private y = 0;
-  private readonly w = 96;
-  private readonly h = 34;
-
-  constructor(send: (cmd: Command) => void) {
-    const q = new TextButton('Q  전략 1', this.w, this.h, () =>
-      send({ type: 'USE_STRATEGY', slot: 0 }),
-    );
-    const w = new TextButton('W  전략 2', this.w, this.h, () =>
-      send({ type: 'USE_STRATEGY', slot: 1 }),
-    );
-    q.root.position.set(0, 0);
-    w.root.position.set(0, this.h + 6);
-    this.root.addChild(q.root, w.root);
-  }
-
-  layout(screenW: number, screenH: number, bottomMargin: number): void {
-    this.x = 14;
-    this.y = screenH - this.h * 2 - 6 - bottomMargin;
-    this.root.position.set(this.x, this.y);
-  }
-
-  hitTest(px: number, py: number): boolean {
-    return (
-      px >= this.x && px <= this.x + this.w && py >= this.y && py <= this.y + this.h * 2 + 6
-    );
-  }
-}
-
-/**
  * 업그레이드 패널. (§4, §5 R 토글)
  *
  * BalanceData에 업그레이드 목록 필드가 아직 없다. §7의 "하드코딩 없이 렌더링" 원칙에 따라
