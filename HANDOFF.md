@@ -1,5 +1,7 @@
 # Track D 아트·사운드 핸드오프
 
+> 아래는 D 단독 브랜치의 인계 기록이다. 2026-09-26 A·B·C·D 병합 이후의 상태는 [통합 기록](docs/INTEGRATION.md)을 확인한다.
+
 **전달 브랜치:** [`feat/track-d-art-audio-final`](https://github.com/team-kdyh/dev1/tree/feat/track-d-art-audio-final)
 
 **상태:** 이미지·오디오 파일과 manifest 생성 및 독립 검증 완료. A 클라이언트·B 시뮬·C 밸런스 브랜치와의 인게임 통합은 아직 검증하지 않았다.

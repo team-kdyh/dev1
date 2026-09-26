@@ -3,7 +3,7 @@
 이 브랜치(`feat/track-a-client`)를 이어받는 사람을 위한 문서입니다.
 **이것만 읽어도 손댈 수 있게** 쓰는 것이 목적입니다.
 
-읽는 순서: 이 문서 → [README.md](../README.md)(실행·경계) → [DEVLOG.md](DEVLOG.md)(왜 이렇게 생겼나).
+읽는 순서: 이 문서 → [README.track-a.md](../README.track-a.md)(실행·경계) → [DEVLOG.md](DEVLOG.md)(왜 이렇게 생겼나).
 C와의 미결 사항은 [contract-response-a.md](contract-response-a.md)에 있습니다.
 
 ---

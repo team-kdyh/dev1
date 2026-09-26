@@ -1,9 +1,9 @@
-name: Track C checks
+name: Team integration checks
 
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, gjtjw/track-c-docs]
 
 jobs:
   validate:
@@ -17,6 +17,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Validate Track D assets and audio
+        run: python3 assets/tools/validate_assets.py
       - name: Verify batch reporting pipeline
         run: npm run batch -- --adapter smoke --n 20 --seed 1000 --out reports/ci-smoke.csv
 

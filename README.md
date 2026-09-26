@@ -9,6 +9,8 @@ A 클라이언트, B Unity 시뮬레이션, C 밸런스·AI 도구, D 아트·�
 | C · 밸런스·AI·도구 | `src/ai`, `src/data`, `tools/` | [C 핸드오프](docs/TRACK_C_HANDOFF.md) · [C 제작 설명](README.track-c.md) |
 | D · 아트·사운드 | `assets/` | [D 핸드오프](HANDOFF.md) · [D 제작 설명](README.track-d.md) |
 
+병합 대상·충돌 해결·검증 결과와 남은 연결 작업은 [통합 기록](docs/INTEGRATION.md)에 정리했습니다.
+
 ## 웹 클라이언트와 밸런스 도구
 
 Node.js 24에서 저장소 루트에서 실행합니다.
