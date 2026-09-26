@@ -1,0 +1,15 @@
+{
+  "name": "tech-war-assets",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "generate:placeholders": "python3 assets/tools/generate_placeholders.py",
+    "generate:unit-art": "python3 assets/tools/generate_unit_art.py",
+    "generate:audio": "python3 assets/tools/generate_audio.py",
+    "validate:audio": "python3 assets/tools/validate_audio.py",
+    "preview:assets": "python3 assets/tools/make_previews.py",
+    "preview:images": "python3 assets/tools/make_image_gallery.py",
+    "pack:assets": "python3 assets/tools/pack_assets.py",
+    "validate:assets": "python3 assets/tools/validate_assets.py"
+  }
+}

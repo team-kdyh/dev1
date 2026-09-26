@@ -1,0 +1,599 @@
+{
+  "version": "0.2",
+  "sampleRate": 44100,
+  "sfx": {
+    "semicon_t1_buds": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_semicon_t1_buds_attack.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t1_buds_attack.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t1_buds_attack.wav",
+        "channels": 1,
+        "frames": 13450
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_semicon_t1_buds_death.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t1_buds_death.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t1_buds_death.wav",
+        "channels": 1,
+        "frames": 20815
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_semicon_t1_buds_skill.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t1_buds_skill.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t1_buds_skill.wav",
+        "channels": 1,
+        "frames": 24123
+      }
+    },
+    "semicon_t2_watch_medic": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_semicon_t2_watch_medic_attack.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t2_watch_medic_attack.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t2_watch_medic_attack.wav",
+        "channels": 1,
+        "frames": 15435
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_semicon_t2_watch_medic_death.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t2_watch_medic_death.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t2_watch_medic_death.wav",
+        "channels": 1,
+        "frames": 23990
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_semicon_t2_watch_medic_skill.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t2_watch_medic_skill.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t2_watch_medic_skill.wav",
+        "channels": 1,
+        "frames": 27077
+      }
+    },
+    "semicon_t3_aphone_soldier": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_semicon_t3_aphone_soldier_attack.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t3_aphone_soldier_attack.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t3_aphone_soldier_attack.wav",
+        "channels": 1,
+        "frames": 17420
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_semicon_t3_aphone_soldier_death.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t3_aphone_soldier_death.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t3_aphone_soldier_death.wav",
+        "channels": 1,
+        "frames": 27166
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_semicon_t3_aphone_soldier_skill.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t3_aphone_soldier_skill.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t3_aphone_soldier_skill.wav",
+        "channels": 1,
+        "frames": 30032
+      }
+    },
+    "semicon_t4_sphone_sniper": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_semicon_t4_sphone_sniper_attack.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t4_sphone_sniper_attack.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t4_sphone_sniper_attack.wav",
+        "channels": 1,
+        "frames": 19404
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_semicon_t4_sphone_sniper_death.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t4_sphone_sniper_death.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t4_sphone_sniper_death.wav",
+        "channels": 1,
+        "frames": 30341
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_semicon_t4_sphone_sniper_skill.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t4_sphone_sniper_skill.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t4_sphone_sniper_skill.wav",
+        "channels": 1,
+        "frames": 32987
+      }
+    },
+    "semicon_t5_fold": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_semicon_t5_fold_attack.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t5_fold_attack.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t5_fold_attack.wav",
+        "channels": 1,
+        "frames": 21388
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_semicon_t5_fold_death.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t5_fold_death.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t5_fold_death.wav",
+        "channels": 1,
+        "frames": 33516
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_semicon_t5_fold_skill.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t5_fold_skill.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t5_fold_skill.wav",
+        "channels": 1,
+        "frames": 35942
+      }
+    },
+    "semicon_t6_tab_artillery": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_semicon_t6_tab_artillery_attack.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t6_tab_artillery_attack.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t6_tab_artillery_attack.wav",
+        "channels": 1,
+        "frames": 23373
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_semicon_t6_tab_artillery_death.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t6_tab_artillery_death.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t6_tab_artillery_death.wav",
+        "channels": 1,
+        "frames": 36691
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_semicon_t6_tab_artillery_skill.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t6_tab_artillery_skill.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t6_tab_artillery_skill.wav",
+        "channels": 1,
+        "frames": 38896
+      }
+    },
+    "semicon_t7_workstation": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_semicon_t7_workstation_attack.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t7_workstation_attack.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t7_workstation_attack.wav",
+        "channels": 1,
+        "frames": 25357
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_semicon_t7_workstation_death.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t7_workstation_death.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t7_workstation_death.wav",
+        "channels": 1,
+        "frames": 39866
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_semicon_t7_workstation_skill.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t7_workstation_skill.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t7_workstation_skill.wav",
+        "channels": 1,
+        "frames": 41851
+      }
+    },
+    "semicon_t8_ai_assistant": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_semicon_t8_ai_assistant_attack.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t8_ai_assistant_attack.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t8_ai_assistant_attack.wav",
+        "channels": 1,
+        "frames": 27342
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_semicon_t8_ai_assistant_death.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t8_ai_assistant_death.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t8_ai_assistant_death.wav",
+        "channels": 1,
+        "frames": 43042
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_semicon_t8_ai_assistant_skill.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t8_ai_assistant_skill.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t8_ai_assistant_skill.wav",
+        "channels": 1,
+        "frames": 44806
+      }
+    },
+    "semicon_t9_trifold": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_semicon_t9_trifold_attack.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t9_trifold_attack.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t9_trifold_attack.wav",
+        "channels": 1,
+        "frames": 29326
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_semicon_t9_trifold_death.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t9_trifold_death.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t9_trifold_death.wav",
+        "channels": 1,
+        "frames": 46217
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_semicon_t9_trifold_skill.ogg",
+        "mp3": "audio/sfx/sfx_semicon_t9_trifold_skill.mp3",
+        "source": "audio/source/sfx/sfx_semicon_t9_trifold_skill.wav",
+        "channels": 1,
+        "frames": 47760
+      }
+    },
+    "orchard_t1_airpod_duo": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_orchard_t1_airpod_duo_attack.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t1_airpod_duo_attack.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t1_airpod_duo_attack.wav",
+        "channels": 1,
+        "frames": 13450
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_orchard_t1_airpod_duo_death.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t1_airpod_duo_death.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t1_airpod_duo_death.wav",
+        "channels": 1,
+        "frames": 20815
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_orchard_t1_airpod_duo_skill.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t1_airpod_duo_skill.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t1_airpod_duo_skill.wav",
+        "channels": 1,
+        "frames": 24123
+      }
+    },
+    "orchard_t2_watch_trainer": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_orchard_t2_watch_trainer_attack.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t2_watch_trainer_attack.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t2_watch_trainer_attack.wav",
+        "channels": 1,
+        "frames": 15435
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_orchard_t2_watch_trainer_death.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t2_watch_trainer_death.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t2_watch_trainer_death.wav",
+        "channels": 1,
+        "frames": 23990
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_orchard_t2_watch_trainer_skill.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t2_watch_trainer_skill.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t2_watch_trainer_skill.wav",
+        "channels": 1,
+        "frames": 27077
+      }
+    },
+    "orchard_t3_phone": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_orchard_t3_phone_attack.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t3_phone_attack.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t3_phone_attack.wav",
+        "channels": 1,
+        "frames": 17420
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_orchard_t3_phone_death.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t3_phone_death.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t3_phone_death.wav",
+        "channels": 1,
+        "frames": 27166
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_orchard_t3_phone_skill.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t3_phone_skill.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t3_phone_skill.wav",
+        "channels": 1,
+        "frames": 30032
+      }
+    },
+    "orchard_t4_phone_pro": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_orchard_t4_phone_pro_attack.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t4_phone_pro_attack.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t4_phone_pro_attack.wav",
+        "channels": 1,
+        "frames": 19404
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_orchard_t4_phone_pro_death.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t4_phone_pro_death.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t4_phone_pro_death.wav",
+        "channels": 1,
+        "frames": 30341
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_orchard_t4_phone_pro_skill.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t4_phone_pro_skill.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t4_phone_pro_skill.wav",
+        "channels": 1,
+        "frames": 32987
+      }
+    },
+    "orchard_t5_pad_guard": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_orchard_t5_pad_guard_attack.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t5_pad_guard_attack.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t5_pad_guard_attack.wav",
+        "channels": 1,
+        "frames": 21388
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_orchard_t5_pad_guard_death.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t5_pad_guard_death.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t5_pad_guard_death.wav",
+        "channels": 1,
+        "frames": 33516
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_orchard_t5_pad_guard_skill.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t5_pad_guard_skill.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t5_pad_guard_skill.wav",
+        "channels": 1,
+        "frames": 35942
+      }
+    },
+    "orchard_t6_vision": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_orchard_t6_vision_attack.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t6_vision_attack.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t6_vision_attack.wav",
+        "channels": 1,
+        "frames": 23373
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_orchard_t6_vision_death.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t6_vision_death.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t6_vision_death.wav",
+        "channels": 1,
+        "frames": 36691
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_orchard_t6_vision_skill.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t6_vision_skill.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t6_vision_skill.wav",
+        "channels": 1,
+        "frames": 38896
+      }
+    },
+    "orchard_t7_air_laptop": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_orchard_t7_air_laptop_attack.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t7_air_laptop_attack.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t7_air_laptop_attack.wav",
+        "channels": 1,
+        "frames": 25357
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_orchard_t7_air_laptop_death.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t7_air_laptop_death.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t7_air_laptop_death.wav",
+        "channels": 1,
+        "frames": 39866
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_orchard_t7_air_laptop_skill.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t7_air_laptop_skill.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t7_air_laptop_skill.wav",
+        "channels": 1,
+        "frames": 41851
+      }
+    },
+    "orchard_t8_pro_laptop": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_orchard_t8_pro_laptop_attack.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t8_pro_laptop_attack.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t8_pro_laptop_attack.wav",
+        "channels": 1,
+        "frames": 27342
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_orchard_t8_pro_laptop_death.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t8_pro_laptop_death.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t8_pro_laptop_death.wav",
+        "channels": 1,
+        "frames": 43042
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_orchard_t8_pro_laptop_skill.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t8_pro_laptop_skill.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t8_pro_laptop_skill.wav",
+        "channels": 1,
+        "frames": 44806
+      }
+    },
+    "orchard_t9_imac": {
+      "attack": {
+        "ogg": "audio/sfx/sfx_orchard_t9_imac_attack.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t9_imac_attack.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t9_imac_attack.wav",
+        "channels": 1,
+        "frames": 29326
+      },
+      "death": {
+        "ogg": "audio/sfx/sfx_orchard_t9_imac_death.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t9_imac_death.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t9_imac_death.wav",
+        "channels": 1,
+        "frames": 46217
+      },
+      "skill": {
+        "ogg": "audio/sfx/sfx_orchard_t9_imac_skill.ogg",
+        "mp3": "audio/sfx/sfx_orchard_t9_imac_skill.mp3",
+        "source": "audio/source/sfx/sfx_orchard_t9_imac_skill.wav",
+        "channels": 1,
+        "frames": 47760
+      }
+    },
+    "misc": {
+      "button_click": {
+        "ogg": "audio/sfx/sfx_button_click.ogg",
+        "mp3": "audio/sfx/sfx_button_click.mp3",
+        "source": "audio/source/sfx/sfx_button_click.wav",
+        "channels": 1,
+        "frames": 5292
+      },
+      "purchase_fail": {
+        "ogg": "audio/sfx/sfx_purchase_fail.ogg",
+        "mp3": "audio/sfx/sfx_purchase_fail.mp3",
+        "source": "audio/source/sfx/sfx_purchase_fail.wav",
+        "channels": 1,
+        "frames": 13671
+      },
+      "base_hit": {
+        "ogg": "audio/sfx/sfx_base_hit.ogg",
+        "mp3": "audio/sfx/sfx_base_hit.mp3",
+        "source": "audio/source/sfx/sfx_base_hit.wav",
+        "channels": 1,
+        "frames": 25578
+      },
+      "age_up": {
+        "ogg": "audio/sfx/sfx_age_up.ogg",
+        "mp3": "audio/sfx/sfx_age_up.mp3",
+        "source": "audio/source/sfx/sfx_age_up.wav",
+        "channels": 1,
+        "frames": 52038
+      },
+      "victory": {
+        "ogg": "audio/sfx/sfx_victory.ogg",
+        "mp3": "audio/sfx/sfx_victory.mp3",
+        "source": "audio/source/sfx/sfx_victory.wav",
+        "channels": 1,
+        "frames": 63063
+      },
+      "defeat": {
+        "ogg": "audio/sfx/sfx_defeat.ogg",
+        "mp3": "audio/sfx/sfx_defeat.mp3",
+        "source": "audio/source/sfx/sfx_defeat.wav",
+        "channels": 1,
+        "frames": 59535
+      },
+      "ui_transition": {
+        "ogg": "audio/sfx/sfx_ui_transition.ogg",
+        "mp3": "audio/sfx/sfx_ui_transition.mp3",
+        "source": "audio/source/sfx/sfx_ui_transition.wav",
+        "channels": 1,
+        "frames": 11907
+      },
+      "t9_semicon_cutin": {
+        "ogg": "audio/sfx/sfx_t9_semicon_cutin.ogg",
+        "mp3": "audio/sfx/sfx_t9_semicon_cutin.mp3",
+        "source": "audio/source/sfx/sfx_t9_semicon_cutin.wav",
+        "channels": 1,
+        "frames": 63945
+      },
+      "t9_orchard_cutin": {
+        "ogg": "audio/sfx/sfx_t9_orchard_cutin.ogg",
+        "mp3": "audio/sfx/sfx_t9_orchard_cutin.mp3",
+        "source": "audio/source/sfx/sfx_t9_orchard_cutin.wav",
+        "channels": 1,
+        "frames": 63945
+      },
+      "semicon_fast_charge": {
+        "ogg": "audio/sfx/sfx_semicon_fast_charge.ogg",
+        "mp3": "audio/sfx/sfx_semicon_fast_charge.mp3",
+        "source": "audio/source/sfx/sfx_semicon_fast_charge.wav",
+        "channels": 1,
+        "frames": 29988
+      },
+      "semicon_mass_production": {
+        "ogg": "audio/sfx/sfx_semicon_mass_production.ogg",
+        "mp3": "audio/sfx/sfx_semicon_mass_production.mp3",
+        "source": "audio/source/sfx/sfx_semicon_mass_production.wav",
+        "channels": 1,
+        "frames": 31311
+      },
+      "orchard_airdrop": {
+        "ogg": "audio/sfx/sfx_orchard_airdrop.ogg",
+        "mp3": "audio/sfx/sfx_orchard_airdrop.mp3",
+        "source": "audio/source/sfx/sfx_orchard_airdrop.wav",
+        "channels": 1,
+        "frames": 31752
+      },
+      "orchard_ota_update": {
+        "ogg": "audio/sfx/sfx_orchard_ota_update.ogg",
+        "mp3": "audio/sfx/sfx_orchard_ota_update.mp3",
+        "source": "audio/source/sfx/sfx_orchard_ota_update.wav",
+        "channels": 1,
+        "frames": 37044
+      }
+    }
+  },
+  "bgm": {
+    "semicon": {
+      "bass_drums": {
+        "ogg": "audio/bgm/bgm_semicon_bass_drums.ogg",
+        "mp3": "audio/bgm/bgm_semicon_bass_drums.mp3",
+        "source": "audio/source/bgm/bgm_semicon_bass_drums.wav",
+        "channels": 2,
+        "loopStart": 0,
+        "loopEnd": 1128960,
+        "frames": 1128960,
+        "tempoBpm": 150
+      },
+      "synth": {
+        "ogg": "audio/bgm/bgm_semicon_synth.ogg",
+        "mp3": "audio/bgm/bgm_semicon_synth.mp3",
+        "source": "audio/source/bgm/bgm_semicon_synth.wav",
+        "channels": 2,
+        "loopStart": 0,
+        "loopEnd": 1128960,
+        "frames": 1128960,
+        "tempoBpm": 150
+      },
+      "strings": {
+        "ogg": "audio/bgm/bgm_semicon_strings.ogg",
+        "mp3": "audio/bgm/bgm_semicon_strings.mp3",
+        "source": "audio/source/bgm/bgm_semicon_strings.wav",
+        "channels": 2,
+        "loopStart": 0,
+        "loopEnd": 1128960,
+        "frames": 1128960,
+        "tempoBpm": 150
+      },
+      "age4": {
+        "ogg": "audio/bgm/bgm_semicon_age4.ogg",
+        "mp3": "audio/bgm/bgm_semicon_age4.mp3",
+        "source": "audio/source/bgm/bgm_semicon_age4.wav",
+        "channels": 2,
+        "loopStart": 0,
+        "loopEnd": 1128960,
+        "frames": 1128960,
+        "tempoBpm": 150
+      }
+    },
+    "orchard": {
+      "bass_drums": {
+        "ogg": "audio/bgm/bgm_orchard_bass_drums.ogg",
+        "mp3": "audio/bgm/bgm_orchard_bass_drums.mp3",
+        "source": "audio/source/bgm/bgm_orchard_bass_drums.wav",
+        "channels": 2,
+        "loopStart": 0,
+        "loopEnd": 1128960,
+        "frames": 1128960,
+        "tempoBpm": 150
+      },
+      "synth": {
+        "ogg": "audio/bgm/bgm_orchard_synth.ogg",
+        "mp3": "audio/bgm/bgm_orchard_synth.mp3",
+        "source": "audio/source/bgm/bgm_orchard_synth.wav",
+        "channels": 2,
+        "loopStart": 0,
+        "loopEnd": 1128960,
+        "frames": 1128960,
+        "tempoBpm": 150
+      },
+      "strings": {
+        "ogg": "audio/bgm/bgm_orchard_strings.ogg",
+        "mp3": "audio/bgm/bgm_orchard_strings.mp3",
+        "source": "audio/source/bgm/bgm_orchard_strings.wav",
+        "channels": 2,
+        "loopStart": 0,
+        "loopEnd": 1128960,
+        "frames": 1128960,
+        "tempoBpm": 150
+      },
+      "age4": {
+        "ogg": "audio/bgm/bgm_orchard_age4.ogg",
+        "mp3": "audio/bgm/bgm_orchard_age4.mp3",
+        "source": "audio/source/bgm/bgm_orchard_age4.wav",
+        "channels": 2,
+        "loopStart": 0,
+        "loopEnd": 1128960,
+        "frames": 1128960,
+        "tempoBpm": 150
+      }
+    }
+  }
+}

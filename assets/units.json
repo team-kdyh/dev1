@@ -1,0 +1,20 @@
+[
+  {"id":"semicon_t1_buds","faction":"semicon","tier":1,"name":"버즈 트윈스","shape":"duo"},
+  {"id":"semicon_t2_watch_medic","faction":"semicon","tier":2,"name":"워치 메딕","shape":"watch"},
+  {"id":"semicon_t3_aphone_soldier","faction":"semicon","tier":3,"name":"A폰 보병","shape":"phone"},
+  {"id":"semicon_t4_sphone_sniper","faction":"semicon","tier":4,"name":"S폰 저격수","shape":"sniper"},
+  {"id":"semicon_t5_fold","faction":"semicon","tier":5,"name":"폴드 방패병","shape":"fold"},
+  {"id":"semicon_t6_tab_artillery","faction":"semicon","tier":6,"name":"탭 포병","shape":"artillery"},
+  {"id":"semicon_t7_workstation","faction":"semicon","tier":7,"name":"북 워크스테이션","shape":"workstation"},
+  {"id":"semicon_t8_ai_assistant","faction":"semicon","tier":8,"name":"AI 어시스턴트","shape":"assistant"},
+  {"id":"semicon_t9_trifold","faction":"semicon","tier":9,"name":"이재용 보스","shape":"fold"},
+  {"id":"orchard_t1_airpod_duo","faction":"orchard","tier":1,"name":"에어팟 듀오","shape":"duo"},
+  {"id":"orchard_t2_watch_trainer","faction":"orchard","tier":2,"name":"워치 트레이너","shape":"watch"},
+  {"id":"orchard_t3_phone","faction":"orchard","tier":3,"name":"폰 기본형","shape":"phone"},
+  {"id":"orchard_t4_phone_pro","faction":"orchard","tier":4,"name":"폰 프로","shape":"sniper"},
+  {"id":"orchard_t5_pad_guard","faction":"orchard","tier":5,"name":"패드 방패병","shape":"fold"},
+  {"id":"orchard_t6_vision","faction":"orchard","tier":6,"name":"비전 헤드셋","shape":"vision"},
+  {"id":"orchard_t7_air_laptop","faction":"orchard","tier":7,"name":"에어 노트북","shape":"laptop"},
+  {"id":"orchard_t8_pro_laptop","faction":"orchard","tier":8,"name":"프로 노트북","shape":"heavy_laptop"},
+  {"id":"orchard_t9_imac","faction":"orchard","tier":9,"name":"스티브 잡스 보스","shape":"laptop"}
+]

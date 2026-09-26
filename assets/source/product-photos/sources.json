@@ -1,0 +1,87 @@
+{
+  "semicon_t1_buds": {
+    "page": "https://api.samsungmobilepress.com/media-assets/galaxy-buds3-pro",
+    "image": "https://api.samsungmobilepress.com/file/09FC383E8EC6A41CFFD9A27F7160B0DCABFDD590D1E7BD5C8E1072BD130236641BFF3BDB2F706049E6CBF2C9082BBC8B1F8944FCE143A7EFB5CB7024889DB2483574C5B2372F0550B76CC52F1BB6B65908E2A4E2D71968A49D57EFC650113608D5AB7C6E6FD1221D0845378716AB77A0D23BB6C2F797F1E01ED6E072803244BE",
+    "file": "source/product-photos/semicon_t1_buds.jpg"
+  },
+  "semicon_t2_watch_medic": {
+    "page": "https://api.samsungmobilepress.com/media-assets/galaxy-watch-ultra",
+    "image": "https://api.samsungmobilepress.com/file/C0D9961AF80226FEFADFE8F6D7EEE76D84E867950DD5FE75D9B10FE9F3816F05C48A39F333786CFAF66A029A9174C6D78E71172ED4FF32D82F23F29F5340AA753A1581C0B0FD475DAD72CFDA2BC74DFBB91681AEEF3A7296E9DF7986342231B3BD3770777DEAE1FD5525AA81E9BFB7FD02F51D5D61E561229D45216A1F9FC7849FE1BBD13D8EF52B08F5D1CE5CA17836",
+    "file": "source/product-photos/semicon_t2_watch_medic.jpg"
+  },
+  "semicon_t3_aphone_soldier": {
+    "page": "https://api.samsungmobilepress.com/media-assets/galaxy-a56-5g",
+    "image": "https://api.samsungmobilepress.com/file/4E3E2DCBADFDF6826E762352C4A027BBB53DA566D22717BA28EEB734BD9B82A1322029D51573C01B2DA6C9CD58DC378BC8F8A8C6829B0135DB28079A4344C8CD3FFB9EB78AE299D78609519C579562AB5D42013EAA78C5CB7DD6CC48A595F33F53774BC25B082661B541D0547B514EC5DD332ED11F772E81AE67BE3EEF44833E8527791029E2AC91673BEC5BFBA20D80",
+    "file": "source/product-photos/semicon_t3_aphone_soldier.jpg"
+  },
+  "semicon_t4_sphone_sniper": {
+    "page": "https://api.samsungmobilepress.com/media-assets/galaxy-s25-ultra",
+    "image": "https://api.samsungmobilepress.com/file/45876D170967230A0A586C2ECB3686866369E4E1605DDA38431436F62D80DEFFF2719FE0B1F351D9452371EF97810A4993EC246CE986FD60BF6D007CFDD28EC47C86EAA680F57A622605AC15F1D5BF784535A2F8B4C2A7790A0982A800BE65661FCC5D5F67CB90DD28FDC0A7CFA9EA7466ECFDF1A4DC68DEF7B48192A8541D2C36C0FDCA5C113399575A40CB4D5D848D84F64B32859A262B4775F07669DA7C58",
+    "file": "source/product-photos/semicon_t4_sphone_sniper.jpg"
+  },
+  "semicon_t5_fold": {
+    "page": "https://api.samsungmobilepress.com/media-assets/galaxy-z-fold6",
+    "image": "https://api.samsungmobilepress.com/file/9CCBF8FE7F7710A70CF09F6E91A835139636837FE2673FA33D0E77DB17BC9E0C5C0B257922814F8FDB8A9E5D31605F4263BE1D8F9982F8A30A683B7C889ACD88F1C302920B8CBC0EA2A406F89F735F993844A431910B078E5C203FEEB7D8A48705F8AE2BBA8CFB15A4534FE06ACCCDE18E4F2C76AADDCF768CB8AC3655276AD73C4251ACC502B06E1E9AE471CBC9329B",
+    "file": "source/product-photos/semicon_t5_fold.jpg"
+  },
+  "semicon_t6_tab_artillery": {
+    "page": "https://api.samsungmobilepress.com/media-assets/galaxy-tab-s10-ultra",
+    "image": "https://api.samsungmobilepress.com/file/C6BD18AF9B1FE382772816FF46922634CBE6CA1916AF98F97026F35DC4A910B85698C3629E7F5C347663A7E52F417E7293B2ECC515747378E5C61E042D1EE118DDBA3EA61B062C2B694222774C219A27BE2CDE63BAAB066FAC474003B7C234D06E28F0283FB4EA061AA14E816006DE7546ED5CC053C74075DFF79AAC9409275017092D1B2F68410FE2CB3D2AE507796F",
+    "file": "source/product-photos/semicon_t6_tab_artillery.jpg"
+  },
+  "semicon_t7_workstation": {
+    "page": "https://api.samsungmobilepress.com/media-assets/galaxy-book4-ultra",
+    "image": "https://api.samsungmobilepress.com/file/1A80EF46D2065DE8FCAC518E24CAD17BCC46BBF6370E21A3DCB1CA9EB3982D90B51D5E5AAD4396C26EC4AF20A2F78290B22DB8CF9C9680079D621A571878ED8D25423FDE8BF6E5DB809680B26F51924E6B7BB24BAD726DB3DB43830414E873EA02C3C4BFB9C8A9B3CB61B8ABA1974AF62BDCA3D336443888429F252A7E2B4AC16C38AC24E152217E9244228670378AE4",
+    "file": "source/product-photos/semicon_t7_workstation.jpg"
+  },
+  "semicon_t5_fold_closed": {
+    "page": "https://api.samsungmobilepress.com/media-assets/galaxy-z-fold6",
+    "image": "https://api.samsungmobilepress.com/file/A2F41C3C3671C3DA76AC0A0383705977130ED3D4C6F3FEE2914683A6C42CA08CC88ED74838661F2423410FBCFB3585993315AD4D6561C4647F2F40CCA57166B7BB62A6F05008C26E716AAA371C6AC14C8E53E3984421DC41B0D0E21141E0AC85928377B1F53AB976D770586C4DE626A3229D3CE55C948950843A5D034A55B672FED9161F6BD6E7D2D307BB817D353C03",
+    "file": "source/product-photos/semicon_t5_fold_closed.jpg"
+  },
+  "orchard_t1_airpod_duo": {
+    "page": "https://www.apple.com/newsroom/2022/09/apple-announces-the-next-generation-of-airpods-pro/",
+    "image": "https://www.apple.com/newsroom/images/product/airpods/standard/Apple-AirPods-Pro-2nd-gen-l-and-r-220907_inline.jpg.large.jpg",
+    "file": "source/product-photos/orchard_t1_airpod_duo.jpg"
+  },
+  "orchard_t3_phone": {
+    "page": "https://www.apple.com/newsroom/2024/09/get-ready-to-upgrade-to-the-new-iphone-16-apple-watch-and-airpods-lineups/",
+    "image": "https://www.apple.com/newsroom/images/2024/09/get-ready-to-upgrade-to-the-new-iphone-16-apple-watch-and-airpods-lineups/article/Apple-iPhone-16_inline.jpg.large.jpg",
+    "file": "source/product-photos/orchard_t3_phone.jpg"
+  },
+  "orchard_t5_pad_guard": {
+    "page": "https://www.apple.com/uk/newsroom/2024/05/apple-unveils-stunning-new-ipad-pro-with-m4-chip-and-apple-pencil-pro/",
+    "image": "https://www.apple.com/newsroom/images/2024/05/apple-unveils-stunning-new-ipad-pro-with-m4-chip-and-apple-pencil-pro/article/Apple-iPad-Pro-Ultra-Retina-XDR-with-OLED-240507_big.jpg.large.jpg",
+    "file": "source/product-photos/orchard_t5_pad_guard.jpg"
+  },
+  "orchard_t6_vision": {
+    "page": "https://www.apple.com/newsroom/2023/06/introducing-apple-vision-pro/",
+    "image": "https://www.apple.com/newsroom/images/media/introducing-apple-vision-pro/Apple-WWDC23-Vision-Pro-with-battery-230605_big.jpg.large.jpg",
+    "file": "source/product-photos/orchard_t6_vision.jpg"
+  },
+  "orchard_t7_air_laptop": {
+    "page": "https://www.apple.com/newsroom/2024/03/apple-unveils-the-new-13-and-15-inch-macbook-air-with-the-powerful-m3-chip/",
+    "image": "https://www.apple.com/newsroom/images/2024/03/apple-unveils-the-new-13-and-15-inch-macbook-air-with-the-powerful-m3-chip/article/Apple-MacBook-Air-Liquid-Retina-Display-240304_big.jpg.large.jpg",
+    "file": "source/product-photos/orchard_t7_air_laptop.jpg"
+  },
+  "orchard_t2_watch_trainer": {
+    "page": "https://www.apple.com/shop/product/freh3lw/a/Refurbished-Apple-Watch-Ultra-2-GPS-Cellular-49mm-Natural-Titanium-Case-with-Orange-Ocean-Band",
+    "image": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/refurb-49-cell-titanium-ocean-orange-ultra?wid=1144&hei=1144&fmt=jpeg&qlt=90",
+    "file": "source/product-photos/orchard_t2_watch_trainer.jpg"
+  },
+  "orchard_t4_phone_pro": {
+    "page": "https://www.apple.com/ca/shop/product/fyn23vc/a/refurbished-iphone-16-pro-256gb-desert-titanium-unlocked",
+    "image": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/refurb-iphone-16-pro-deserttitanium-202509?wid=1144&hei=1144&fmt=jpeg&qlt=90",
+    "file": "source/product-photos/orchard_t4_phone_pro.jpg"
+  },
+  "orchard_t8_pro_laptop": {
+    "page": "https://www.apple.com/shop/product/g1dw0ll/a/refurbished-14-inch-macbook-pro-apple-m4-chip-with-10-core-cpu-and-10-core-gpu-silver",
+    "image": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/refurb-mbp14-m4-silver-202502?wid=1144&hei=1144&fmt=jpeg&qlt=90",
+    "file": "source/product-photos/orchard_t8_pro_laptop.jpg"
+  },
+  "semicon_t8_ai_assistant": {
+    "page": "https://www.samsung.com/sec/projectors/home-robot-ballie/",
+    "image": "https://images.samsung.com/kdp/static/mkt/tvs/ballie/teasing-page/2025-ballie-teasing-f02-manifesto-pc.jpg?$1440_N_JPG$",
+    "file": "source/product-photos/semicon_t8_ai_assistant.jpg"
+  }
+}
