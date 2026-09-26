@@ -27,28 +27,22 @@ BOSS_HEADS = {
 }
 FACE_PLACEMENTS = {
     "semicon_t1_buds": ((0.29, 0.33, 0.25), (0.71, 0.33, 0.25)),
-    "semicon_t2_watch_medic": ((0.5, 0.46, 0.47),),
+    "semicon_t2_watch_medic": ((0.5, 0.46, 0.55),),
     "semicon_t3_aphone_soldier": ((0.53, 0.58, 0.55),),
     "semicon_t4_sphone_sniper": ((0.57, 0.59, 0.50),),
     "semicon_t5_fold": ((0.72, 0.49, 0.47),),
     "semicon_t6_tab_artillery": ((0.50, 0.50, 0.34),),
-    "semicon_t7_workstation": ((0.50, 0.34, 0.36),),
+    "semicon_t7_workstation": ((0.57, 0.48, 0.36),),
     "semicon_t8_ai_assistant": ((0.64, 0.48, 0.38),),
     "orchard_t1_airpod_duo": ((0.31, 0.57, 0.28), (0.72, 0.25, 0.28)),
-    "orchard_t2_watch_trainer": ((0.29, 0.49, 0.29),),
+    "orchard_t2_watch_trainer": ((0.73, 0.43, 0.28),),
     "orchard_t3_phone": ((0.72, 0.56, 0.53),),
     "orchard_t4_phone_pro": ((0.68, 0.56, 0.44),),
-    "orchard_t5_pad_guard": ((0.50, 0.50, 0.41),),
+    "orchard_t5_pad_guard": ((0.74, 0.25, 0.35),),
     "orchard_t6_vision": ((0.22, 0.54, 0.30),),
-    "orchard_t7_air_laptop": ((0.50, 0.36, 0.36),),
-    "orchard_t8_pro_laptop": ((0.50, 0.37, 0.36),),
+    "orchard_t7_air_laptop": ((0.50, 0.38, 0.50),),
+    "orchard_t8_pro_laptop": ((0.72, 0.33, 0.34),),
 }
-SCREEN_FACE_UNITS = {
-    "semicon_t2_watch_medic", "semicon_t6_tab_artillery", "semicon_t7_workstation",
-    "orchard_t2_watch_trainer", "orchard_t3_phone", "orchard_t5_pad_guard",
-    "orchard_t7_air_laptop", "orchard_t8_pro_laptop",
-}
-
 # Keep the recognisable photo geometry; crop only unused promotional layout.
 CROPS = {
     "semicon_t6_tab_artillery": (35, 175, 765, 480),  # remove headline
@@ -203,14 +197,6 @@ def draw_expression(size: int, box: tuple[int, int, int, int], unit_id: str, sta
         cy = y + height * fy
         face_width = min(width * fraction, height * 0.94)
         scale = face_width / 32
-        if unit_id in SCREEN_FACE_UNITS:
-            draw.rounded_rectangle(
-                (*point(cx - 16.8 * scale, cy - 12.5 * scale),
-                 *point(cx + 16.8 * scale, cy + 18.0 * scale)),
-                radius=max(2, round(7 * scale * factor)),
-                fill=(247, 242, 220, 234), outline=ink,
-                width=max(2, round(1.5 * scale * factor)),
-            )
         eye_dx, eye_w, eye_h = 7.1 * scale, 7.0 * scale, (4.8 if angry else 5.8) * scale
         brow_top = (8.6 if angry else 7.6) * scale
         for side in (-1, 1):
@@ -241,22 +227,18 @@ def draw_expression(size: int, box: tuple[int, int, int, int], unit_id: str, sta
             draw.arc((*point(cx - 5.5 * scale, mouth_y - 1 * scale),
                       *point(cx + 5.5 * scale, mouth_y + 5.5 * scale)),
                      start=200, end=340, fill=ink, width=max(2, round(2.2 * scale * factor)))
-        elif angry:
-            mouth_h = (6.0, 7.0, 9.0, 6.5)[frame % 4] * scale
-            mouth_box = (*point(cx - 5.3 * scale, mouth_y - 1.5 * scale),
-                         *point(cx + 5.3 * scale, mouth_y + mouth_h))
-            draw.ellipse(mouth_box, fill=(122, 36, 42, 255), outline=ink,
+        else:
+            mouth_h = ((6.0, 7.0, 9.0, 6.5)[frame % 4] if angry else 4.8) * scale
+            draw.ellipse((*point(cx - 7.0 * scale, mouth_y - 3.2 * scale),
+                          *point(cx + 7.0 * scale, mouth_y + mouth_h + 1.7 * scale)),
+                         fill=paper)
+            draw.ellipse((*point(cx - 5.3 * scale, mouth_y - 1.5 * scale),
+                          *point(cx + 5.3 * scale, mouth_y + mouth_h)),
+                         fill=(122, 36, 42, 255), outline=ink,
                          width=max(2, round(2.0 * scale * factor)))
             draw.line([point(cx - 3.7 * scale, mouth_y + 0.7 * scale),
                        point(cx + 3.7 * scale, mouth_y + 0.7 * scale)],
                       fill=paper, width=max(2, round(1.7 * scale * factor)))
-        else:
-            mouth_box = (*point(cx - 5.2 * scale, mouth_y - 1.2 * scale),
-                         *point(cx + 5.2 * scale, mouth_y + 2.6 * scale))
-            draw.rounded_rectangle(mouth_box, radius=max(1, round(1.6 * scale * factor)), fill=paper,
-                                   outline=ink, width=max(2, round(2.0 * scale * factor)))
-            draw.line([point(cx, mouth_y - 0.7 * scale), point(cx, mouth_y + 2 * scale)],
-                      fill=ink, width=max(1, round(0.8 * scale * factor)))
     return layer.resize((size, size), Image.Resampling.LANCZOS)
 
 
@@ -351,7 +333,9 @@ def render_person(head: Image.Image, unit_id: str, state: str, frame: int) -> Im
                                radius=8 * factor, fill=(49, 52, 58, 255), outline=(120, 127, 139, 255), width=2 * factor)
         draw.line([point(65, 137), point(127, 137)], fill=(95, 101, 110, 255), width=2 * factor)
 
-    head_width = 78 if is_lee else 84
+    # Both source portraits contain faint alpha specks beyond the visible head.
+    # The cropped opaque heads are about 66 px wide in the existing sprites.
+    head_width = 66
     head_height = round(head.height * head_width / head.width)
     portrait = head.resize((head_width * factor, head_height * factor), Image.Resampling.LANCZOS)
     head_y = (5 if is_lee else 8) - bob
@@ -372,7 +356,10 @@ def main() -> None:
         photo = None
         if unit_id in BOSS_HEADS:
             portrait = Image.open(PORTRAITS / BOSS_HEADS[unit_id]).convert("RGBA")
-            head = portrait.crop(portrait.getchannel("A").getbbox())
+            # Ignore nearly transparent edge pixels; otherwise an off-canvas
+            # speck shifts the visible portrait and neck away from the torso.
+            visible = portrait.getchannel("A").point(lambda alpha: 255 if alpha >= 16 else 0)
+            head = portrait.crop(visible.getbbox())
         else:
             photo = make_cutout(unit_id)
             photo.save(CUTOUT / f"{unit_id}.png")

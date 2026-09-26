@@ -1573,42 +1573,6 @@
             }
           ]
         },
-        "move": {
-          "fps": 12,
-          "loop": true,
-          "frames": [
-            {
-              "atlas": "semicon_t7_t9.json",
-              "frame": "semicon_t9_trifold_move_00.png",
-              "source": "frames/units/semicon/semicon_t9_trifold_move_00.png"
-            },
-            {
-              "atlas": "semicon_t7_t9.json",
-              "frame": "semicon_t9_trifold_move_01.png",
-              "source": "frames/units/semicon/semicon_t9_trifold_move_01.png"
-            },
-            {
-              "atlas": "semicon_t7_t9.json",
-              "frame": "semicon_t9_trifold_move_02.png",
-              "source": "frames/units/semicon/semicon_t9_trifold_move_02.png"
-            },
-            {
-              "atlas": "semicon_t7_t9.json",
-              "frame": "semicon_t9_trifold_move_03.png",
-              "source": "frames/units/semicon/semicon_t9_trifold_move_03.png"
-            },
-            {
-              "atlas": "semicon_t7_t9.json",
-              "frame": "semicon_t9_trifold_move_04.png",
-              "source": "frames/units/semicon/semicon_t9_trifold_move_04.png"
-            },
-            {
-              "atlas": "semicon_t7_t9.json",
-              "frame": "semicon_t9_trifold_move_05.png",
-              "source": "frames/units/semicon/semicon_t9_trifold_move_05.png"
-            }
-          ]
-        },
         "attack": {
           "fps": 12,
           "loop": false,
@@ -1659,6 +1623,42 @@
               "atlas": "semicon_t7_t9.json",
               "frame": "semicon_t9_trifold_cast_03.png",
               "source": "frames/units/semicon/semicon_t9_trifold_cast_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_move_00.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_move_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_move_01.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_move_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_move_02.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_move_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_move_03.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_move_03.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_move_04.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_move_04.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_move_05.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_move_05.png"
             }
           ]
         }
@@ -3104,6 +3104,42 @@
         1.0
       ],
       "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_die_00.png",
+              "source": "frames/units/orchard/orchard_t9_imac_die_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_die_01.png",
+              "source": "frames/units/orchard/orchard_t9_imac_die_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_die_02.png",
+              "source": "frames/units/orchard/orchard_t9_imac_die_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_die_03.png",
+              "source": "frames/units/orchard/orchard_t9_imac_die_03.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_die_04.png",
+              "source": "frames/units/orchard/orchard_t9_imac_die_04.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_die_05.png",
+              "source": "frames/units/orchard/orchard_t9_imac_die_05.png"
+            }
+          ]
+        },
         "idle": {
           "fps": 12,
           "loop": true,
@@ -3163,42 +3199,6 @@
               "atlas": "orchard_t7_t9.json",
               "frame": "orchard_t9_imac_move_05.png",
               "source": "frames/units/orchard/orchard_t9_imac_move_05.png"
-            }
-          ]
-        },
-        "die": {
-          "fps": 15,
-          "loop": false,
-          "frames": [
-            {
-              "atlas": "orchard_t7_t9.json",
-              "frame": "orchard_t9_imac_die_00.png",
-              "source": "frames/units/orchard/orchard_t9_imac_die_00.png"
-            },
-            {
-              "atlas": "orchard_t7_t9.json",
-              "frame": "orchard_t9_imac_die_01.png",
-              "source": "frames/units/orchard/orchard_t9_imac_die_01.png"
-            },
-            {
-              "atlas": "orchard_t7_t9.json",
-              "frame": "orchard_t9_imac_die_02.png",
-              "source": "frames/units/orchard/orchard_t9_imac_die_02.png"
-            },
-            {
-              "atlas": "orchard_t7_t9.json",
-              "frame": "orchard_t9_imac_die_03.png",
-              "source": "frames/units/orchard/orchard_t9_imac_die_03.png"
-            },
-            {
-              "atlas": "orchard_t7_t9.json",
-              "frame": "orchard_t9_imac_die_04.png",
-              "source": "frames/units/orchard/orchard_t9_imac_die_04.png"
-            },
-            {
-              "atlas": "orchard_t7_t9.json",
-              "frame": "orchard_t9_imac_die_05.png",
-              "source": "frames/units/orchard/orchard_t9_imac_die_05.png"
             }
           ]
         },

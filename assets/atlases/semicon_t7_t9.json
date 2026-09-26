@@ -3,7 +3,7 @@
     "semicon_t7_workstation_attack_00.png": {
       "frame": {
         "x": 862,
-        "y": 623,
+        "y": 625,
         "w": 168,
         "h": 121
       },
@@ -27,7 +27,7 @@
     "semicon_t7_workstation_attack_01.png": {
       "frame": {
         "x": 1034,
-        "y": 623,
+        "y": 625,
         "w": 168,
         "h": 121
       },
@@ -51,7 +51,7 @@
     "semicon_t7_workstation_attack_02.png": {
       "frame": {
         "x": 1206,
-        "y": 623,
+        "y": 625,
         "w": 168,
         "h": 121
       },
@@ -75,7 +75,7 @@
     "semicon_t7_workstation_attack_03.png": {
       "frame": {
         "x": 1378,
-        "y": 623,
+        "y": 625,
         "w": 168,
         "h": 121
       },
@@ -99,7 +99,7 @@
     "semicon_t7_workstation_cast_00.png": {
       "frame": {
         "x": 1550,
-        "y": 623,
+        "y": 625,
         "w": 168,
         "h": 121
       },
@@ -123,7 +123,7 @@
     "semicon_t7_workstation_cast_01.png": {
       "frame": {
         "x": 1722,
-        "y": 623,
+        "y": 625,
         "w": 168,
         "h": 121
       },
@@ -147,7 +147,7 @@
     "semicon_t7_workstation_cast_02.png": {
       "frame": {
         "x": 2,
-        "y": 750,
+        "y": 752,
         "w": 168,
         "h": 121
       },
@@ -171,7 +171,7 @@
     "semicon_t7_workstation_cast_03.png": {
       "frame": {
         "x": 174,
-        "y": 750,
+        "y": 752,
         "w": 168,
         "h": 121
       },
@@ -195,7 +195,7 @@
     "semicon_t7_workstation_deploy_00.png": {
       "frame": {
         "x": 346,
-        "y": 750,
+        "y": 752,
         "w": 168,
         "h": 121
       },
@@ -219,7 +219,7 @@
     "semicon_t7_workstation_deploy_01.png": {
       "frame": {
         "x": 518,
-        "y": 750,
+        "y": 752,
         "w": 168,
         "h": 121
       },
@@ -243,7 +243,7 @@
     "semicon_t7_workstation_deploy_02.png": {
       "frame": {
         "x": 690,
-        "y": 750,
+        "y": 752,
         "w": 168,
         "h": 121
       },
@@ -267,7 +267,7 @@
     "semicon_t7_workstation_deploy_03.png": {
       "frame": {
         "x": 862,
-        "y": 750,
+        "y": 752,
         "w": 168,
         "h": 121
       },
@@ -291,7 +291,7 @@
     "semicon_t7_workstation_die_00.png": {
       "frame": {
         "x": 1034,
-        "y": 750,
+        "y": 752,
         "w": 168,
         "h": 121
       },
@@ -315,7 +315,7 @@
     "semicon_t7_workstation_die_01.png": {
       "frame": {
         "x": 1564,
-        "y": 478,
+        "y": 480,
         "w": 168,
         "h": 127
       },
@@ -339,7 +339,7 @@
     "semicon_t7_workstation_die_02.png": {
       "frame": {
         "x": 1396,
-        "y": 478,
+        "y": 480,
         "w": 164,
         "h": 134
       },
@@ -363,7 +363,7 @@
     "semicon_t7_workstation_die_03.png": {
       "frame": {
         "x": 1084,
-        "y": 478,
+        "y": 480,
         "w": 159,
         "h": 138
       },
@@ -387,7 +387,7 @@
     "semicon_t7_workstation_die_04.png": {
       "frame": {
         "x": 777,
-        "y": 478,
+        "y": 480,
         "w": 154,
         "h": 140
       },
@@ -410,8 +410,8 @@
     },
     "semicon_t7_workstation_die_05.png": {
       "frame": {
-        "x": 1164,
-        "y": 168,
+        "x": 1144,
+        "y": 169,
         "w": 148,
         "h": 145
       },
@@ -435,7 +435,7 @@
     "semicon_t7_workstation_idle_00.png": {
       "frame": {
         "x": 1206,
-        "y": 750,
+        "y": 752,
         "w": 168,
         "h": 121
       },
@@ -459,7 +459,7 @@
     "semicon_t7_workstation_idle_01.png": {
       "frame": {
         "x": 518,
-        "y": 623,
+        "y": 625,
         "w": 168,
         "h": 122
       },
@@ -483,7 +483,7 @@
     "semicon_t7_workstation_idle_02.png": {
       "frame": {
         "x": 1736,
-        "y": 478,
+        "y": 480,
         "w": 168,
         "h": 123
       },
@@ -507,7 +507,7 @@
     "semicon_t7_workstation_idle_03.png": {
       "frame": {
         "x": 690,
-        "y": 623,
+        "y": 625,
         "w": 168,
         "h": 122
       },
@@ -531,7 +531,7 @@
     "semicon_t7_workstation_move_00.png": {
       "frame": {
         "x": 1378,
-        "y": 750,
+        "y": 752,
         "w": 168,
         "h": 121
       },
@@ -555,7 +555,7 @@
     "semicon_t7_workstation_move_01.png": {
       "frame": {
         "x": 2,
-        "y": 623,
+        "y": 625,
         "w": 168,
         "h": 123
       },
@@ -579,7 +579,7 @@
     "semicon_t7_workstation_move_02.png": {
       "frame": {
         "x": 1550,
-        "y": 750,
+        "y": 752,
         "w": 168,
         "h": 121
       },
@@ -603,7 +603,7 @@
     "semicon_t7_workstation_move_03.png": {
       "frame": {
         "x": 174,
-        "y": 623,
+        "y": 625,
         "w": 168,
         "h": 123
       },
@@ -627,7 +627,7 @@
     "semicon_t7_workstation_move_04.png": {
       "frame": {
         "x": 1722,
-        "y": 750,
+        "y": 752,
         "w": 168,
         "h": 121
       },
@@ -651,7 +651,7 @@
     "semicon_t7_workstation_move_05.png": {
       "frame": {
         "x": 346,
-        "y": 623,
+        "y": 625,
         "w": 168,
         "h": 123
       },
@@ -675,7 +675,7 @@
     "semicon_t8_ai_assistant_attack_00.png": {
       "frame": {
         "x": 766,
-        "y": 332,
+        "y": 334,
         "w": 151,
         "h": 141
       },
@@ -699,7 +699,7 @@
     "semicon_t8_ai_assistant_attack_01.png": {
       "frame": {
         "x": 921,
-        "y": 332,
+        "y": 334,
         "w": 151,
         "h": 141
       },
@@ -723,7 +723,7 @@
     "semicon_t8_ai_assistant_attack_02.png": {
       "frame": {
         "x": 1076,
-        "y": 332,
+        "y": 334,
         "w": 150,
         "h": 141
       },
@@ -747,7 +747,7 @@
     "semicon_t8_ai_assistant_attack_03.png": {
       "frame": {
         "x": 1230,
-        "y": 332,
+        "y": 334,
         "w": 151,
         "h": 141
       },
@@ -771,7 +771,7 @@
     "semicon_t8_ai_assistant_cast_00.png": {
       "frame": {
         "x": 1385,
-        "y": 332,
+        "y": 334,
         "w": 151,
         "h": 141
       },
@@ -795,7 +795,7 @@
     "semicon_t8_ai_assistant_cast_01.png": {
       "frame": {
         "x": 1540,
-        "y": 332,
+        "y": 334,
         "w": 151,
         "h": 141
       },
@@ -819,7 +819,7 @@
     "semicon_t8_ai_assistant_cast_02.png": {
       "frame": {
         "x": 1695,
-        "y": 332,
+        "y": 334,
         "w": 150,
         "h": 141
       },
@@ -843,7 +843,7 @@
     "semicon_t8_ai_assistant_cast_03.png": {
       "frame": {
         "x": 1849,
-        "y": 332,
+        "y": 334,
         "w": 151,
         "h": 141
       },
@@ -867,7 +867,7 @@
     "semicon_t8_ai_assistant_die_00.png": {
       "frame": {
         "x": 2,
-        "y": 478,
+        "y": 480,
         "w": 151,
         "h": 141
       },
@@ -891,7 +891,7 @@
     "semicon_t8_ai_assistant_die_01.png": {
       "frame": {
         "x": 2,
-        "y": 332,
+        "y": 334,
         "w": 150,
         "h": 142
       },
@@ -915,7 +915,7 @@
     "semicon_t8_ai_assistant_die_02.png": {
       "frame": {
         "x": 156,
-        "y": 332,
+        "y": 334,
         "w": 147,
         "h": 142
       },
@@ -939,7 +939,7 @@
     "semicon_t8_ai_assistant_die_03.png": {
       "frame": {
         "x": 307,
-        "y": 332,
+        "y": 334,
         "w": 145,
         "h": 142
       },
@@ -963,7 +963,7 @@
     "semicon_t8_ai_assistant_die_04.png": {
       "frame": {
         "x": 935,
-        "y": 478,
+        "y": 480,
         "w": 145,
         "h": 139
       },
@@ -987,7 +987,7 @@
     "semicon_t8_ai_assistant_die_05.png": {
       "frame": {
         "x": 1247,
-        "y": 478,
+        "y": 480,
         "w": 145,
         "h": 136
       },
@@ -1011,7 +1011,7 @@
     "semicon_t8_ai_assistant_idle_00.png": {
       "frame": {
         "x": 157,
-        "y": 478,
+        "y": 480,
         "w": 151,
         "h": 141
       },
@@ -1035,7 +1035,7 @@
     "semicon_t8_ai_assistant_idle_01.png": {
       "frame": {
         "x": 456,
-        "y": 332,
+        "y": 334,
         "w": 151,
         "h": 142
       },
@@ -1058,8 +1058,8 @@
     },
     "semicon_t8_ai_assistant_idle_02.png": {
       "frame": {
-        "x": 1316,
-        "y": 168,
+        "x": 1296,
+        "y": 169,
         "w": 151,
         "h": 143
       },
@@ -1083,7 +1083,7 @@
     "semicon_t8_ai_assistant_idle_03.png": {
       "frame": {
         "x": 611,
-        "y": 332,
+        "y": 334,
         "w": 151,
         "h": 142
       },
@@ -1107,7 +1107,7 @@
     "semicon_t8_ai_assistant_move_00.png": {
       "frame": {
         "x": 312,
-        "y": 478,
+        "y": 480,
         "w": 151,
         "h": 141
       },
@@ -1130,8 +1130,8 @@
     },
     "semicon_t8_ai_assistant_move_01.png": {
       "frame": {
-        "x": 1471,
-        "y": 168,
+        "x": 1451,
+        "y": 169,
         "w": 151,
         "h": 143
       },
@@ -1155,7 +1155,7 @@
     "semicon_t8_ai_assistant_move_02.png": {
       "frame": {
         "x": 467,
-        "y": 478,
+        "y": 480,
         "w": 151,
         "h": 141
       },
@@ -1178,8 +1178,8 @@
     },
     "semicon_t8_ai_assistant_move_03.png": {
       "frame": {
-        "x": 1626,
-        "y": 168,
+        "x": 1606,
+        "y": 169,
         "w": 151,
         "h": 143
       },
@@ -1203,7 +1203,7 @@
     "semicon_t8_ai_assistant_move_04.png": {
       "frame": {
         "x": 622,
-        "y": 478,
+        "y": 480,
         "w": 151,
         "h": 141
       },
@@ -1226,8 +1226,8 @@
     },
     "semicon_t8_ai_assistant_move_05.png": {
       "frame": {
-        "x": 1781,
-        "y": 168,
+        "x": 1761,
+        "y": 169,
         "w": 151,
         "h": 143
       },
@@ -1250,18 +1250,18 @@
     },
     "semicon_t9_trifold_attack_00.png": {
       "frame": {
-        "x": 1021,
+        "x": 509,
         "y": 2,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 31,
-        "y": 14,
+        "y": 13,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "sourceSize": {
         "w": 192,
@@ -1274,18 +1274,18 @@
     },
     "semicon_t9_trifold_attack_01.png": {
       "frame": {
-        "x": 1155,
+        "x": 643,
         "y": 2,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 31,
-        "y": 14,
+        "y": 13,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "sourceSize": {
         "w": 192,
@@ -1298,18 +1298,18 @@
     },
     "semicon_t9_trifold_attack_02.png": {
       "frame": {
-        "x": 1289,
+        "x": 777,
         "y": 2,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 31,
-        "y": 14,
+        "y": 13,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "sourceSize": {
         "w": 192,
@@ -1322,18 +1322,18 @@
     },
     "semicon_t9_trifold_attack_03.png": {
       "frame": {
-        "x": 1423,
+        "x": 911,
         "y": 2,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 31,
-        "y": 14,
+        "y": 13,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "sourceSize": {
         "w": 192,
@@ -1346,18 +1346,18 @@
     },
     "semicon_t9_trifold_cast_00.png": {
       "frame": {
-        "x": 1557,
+        "x": 1045,
         "y": 2,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 31,
-        "y": 14,
+        "y": 13,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "sourceSize": {
         "w": 192,
@@ -1370,18 +1370,18 @@
     },
     "semicon_t9_trifold_cast_01.png": {
       "frame": {
-        "x": 1691,
+        "x": 1179,
         "y": 2,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 31,
-        "y": 14,
+        "y": 13,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "sourceSize": {
         "w": 192,
@@ -1394,18 +1394,18 @@
     },
     "semicon_t9_trifold_cast_02.png": {
       "frame": {
-        "x": 1825,
+        "x": 1313,
         "y": 2,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 31,
-        "y": 14,
+        "y": 13,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "sourceSize": {
         "w": 192,
@@ -1418,18 +1418,18 @@
     },
     "semicon_t9_trifold_cast_03.png": {
       "frame": {
-        "x": 2,
-        "y": 168,
+        "x": 1447,
+        "y": 2,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 31,
-        "y": 14,
+        "y": 13,
         "w": 130,
-        "h": 160
+        "h": 161
       },
       "sourceSize": {
         "w": 192,
@@ -1442,18 +1442,18 @@
     },
     "semicon_t9_trifold_die_00.png": {
       "frame": {
-        "x": 136,
-        "y": 168,
+        "x": 1581,
+        "y": 2,
         "w": 124,
-        "h": 160
+        "h": 161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 34,
-        "y": 14,
+        "y": 13,
         "w": 124,
-        "h": 160
+        "h": 161
       },
       "sourceSize": {
         "w": 192,
@@ -1469,15 +1469,15 @@
         "x": 2,
         "y": 2,
         "w": 123,
-        "h": 162
+        "h": 163
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 32,
-        "y": 15,
+        "y": 14,
         "w": 123,
-        "h": 162
+        "h": 163
       },
       "sourceSize": {
         "w": 192,
@@ -1490,18 +1490,18 @@
     },
     "semicon_t9_trifold_die_02.png": {
       "frame": {
-        "x": 385,
+        "x": 129,
         "y": 2,
         "w": 120,
-        "h": 161
+        "h": 163
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 31,
-        "y": 17,
+        "y": 15,
         "w": 120,
-        "h": 161
+        "h": 163
       },
       "sourceSize": {
         "w": 192,
@@ -1514,18 +1514,18 @@
     },
     "semicon_t9_trifold_die_03.png": {
       "frame": {
-        "x": 776,
-        "y": 168,
-        "w": 120,
-        "h": 158
+        "x": 770,
+        "y": 169,
+        "w": 116,
+        "h": 160
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 30,
-        "y": 20,
-        "w": 120,
-        "h": 158
+        "y": 18,
+        "w": 116,
+        "h": 160
       },
       "sourceSize": {
         "w": 192,
@@ -1538,18 +1538,18 @@
     },
     "semicon_t9_trifold_die_04.png": {
       "frame": {
-        "x": 900,
-        "y": 168,
-        "w": 124,
-        "h": 154
+        "x": 890,
+        "y": 169,
+        "w": 119,
+        "h": 157
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 31,
-        "y": 23,
-        "w": 124,
-        "h": 154
+        "y": 20,
+        "w": 119,
+        "h": 157
       },
       "sourceSize": {
         "w": 192,
@@ -1562,18 +1562,18 @@
     },
     "semicon_t9_trifold_die_05.png": {
       "frame": {
-        "x": 1028,
-        "y": 168,
-        "w": 132,
-        "h": 146
+        "x": 1013,
+        "y": 169,
+        "w": 127,
+        "h": 149
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 28,
-        "y": 28,
-        "w": 132,
-        "h": 146
+        "y": 25,
+        "w": 127,
+        "h": 149
       },
       "sourceSize": {
         "w": 192,
@@ -1586,18 +1586,18 @@
     },
     "semicon_t9_trifold_idle_00.png": {
       "frame": {
-        "x": 264,
-        "y": 168,
+        "x": 1709,
+        "y": 2,
         "w": 124,
-        "h": 160
+        "h": 161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 34,
-        "y": 14,
+        "y": 13,
         "w": 124,
-        "h": 160
+        "h": 161
       },
       "sourceSize": {
         "w": 192,
@@ -1610,7 +1610,7 @@
     },
     "semicon_t9_trifold_idle_01.png": {
       "frame": {
-        "x": 129,
+        "x": 253,
         "y": 2,
         "w": 124,
         "h": 162
@@ -1634,7 +1634,7 @@
     },
     "semicon_t9_trifold_idle_02.png": {
       "frame": {
-        "x": 509,
+        "x": 1837,
         "y": 2,
         "w": 124,
         "h": 161
@@ -1658,7 +1658,7 @@
     },
     "semicon_t9_trifold_idle_03.png": {
       "frame": {
-        "x": 257,
+        "x": 381,
         "y": 2,
         "w": 124,
         "h": 162
@@ -1682,18 +1682,18 @@
     },
     "semicon_t9_trifold_move_00.png": {
       "frame": {
-        "x": 392,
-        "y": 168,
+        "x": 2,
+        "y": 169,
         "w": 124,
-        "h": 160
+        "h": 161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 34,
-        "y": 14,
+        "y": 13,
         "w": 124,
-        "h": 160
+        "h": 161
       },
       "sourceSize": {
         "w": 192,
@@ -1706,8 +1706,8 @@
     },
     "semicon_t9_trifold_move_01.png": {
       "frame": {
-        "x": 637,
-        "y": 2,
+        "x": 130,
+        "y": 169,
         "w": 124,
         "h": 161
       },
@@ -1730,18 +1730,18 @@
     },
     "semicon_t9_trifold_move_02.png": {
       "frame": {
-        "x": 520,
-        "y": 168,
+        "x": 258,
+        "y": 169,
         "w": 124,
-        "h": 160
+        "h": 161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 34,
-        "y": 14,
+        "y": 13,
         "w": 124,
-        "h": 160
+        "h": 161
       },
       "sourceSize": {
         "w": 192,
@@ -1754,8 +1754,8 @@
     },
     "semicon_t9_trifold_move_03.png": {
       "frame": {
-        "x": 765,
-        "y": 2,
+        "x": 386,
+        "y": 169,
         "w": 124,
         "h": 161
       },
@@ -1778,18 +1778,18 @@
     },
     "semicon_t9_trifold_move_04.png": {
       "frame": {
-        "x": 648,
-        "y": 168,
+        "x": 514,
+        "y": 169,
         "w": 124,
-        "h": 160
+        "h": 161
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 34,
-        "y": 14,
+        "y": 13,
         "w": 124,
-        "h": 160
+        "h": 161
       },
       "sourceSize": {
         "w": 192,
@@ -1802,8 +1802,8 @@
     },
     "semicon_t9_trifold_move_05.png": {
       "frame": {
-        "x": 893,
-        "y": 2,
+        "x": 642,
+        "y": 169,
         "w": 124,
         "h": 161
       },

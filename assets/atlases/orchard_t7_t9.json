@@ -266,7 +266,7 @@
     },
     "orchard_t7_air_laptop_die_03.png": {
       "frame": {
-        "x": 1744,
+        "x": 1754,
         "y": 166,
         "w": 156,
         "h": 123
@@ -290,7 +290,7 @@
     },
     "orchard_t7_air_laptop_die_04.png": {
       "frame": {
-        "x": 1438,
+        "x": 1448,
         "y": 166,
         "w": 149,
         "h": 128
@@ -314,7 +314,7 @@
     },
     "orchard_t7_air_laptop_die_05.png": {
       "frame": {
-        "x": 1148,
+        "x": 1158,
         "y": 166,
         "w": 141,
         "h": 133
@@ -866,7 +866,7 @@
     },
     "orchard_t8_pro_laptop_die_04.png": {
       "frame": {
-        "x": 1591,
+        "x": 1601,
         "y": 166,
         "w": 149,
         "h": 127
@@ -890,7 +890,7 @@
     },
     "orchard_t8_pro_laptop_die_05.png": {
       "frame": {
-        "x": 1293,
+        "x": 1303,
         "y": 166,
         "w": 141,
         "h": 132
@@ -1154,7 +1154,7 @@
     },
     "orchard_t9_imac_attack_00.png": {
       "frame": {
-        "x": 1021,
+        "x": 1141,
         "y": 2,
         "w": 130,
         "h": 157
@@ -1178,7 +1178,7 @@
     },
     "orchard_t9_imac_attack_01.png": {
       "frame": {
-        "x": 1155,
+        "x": 1275,
         "y": 2,
         "w": 130,
         "h": 157
@@ -1202,7 +1202,7 @@
     },
     "orchard_t9_imac_attack_02.png": {
       "frame": {
-        "x": 1289,
+        "x": 1409,
         "y": 2,
         "w": 130,
         "h": 157
@@ -1226,7 +1226,7 @@
     },
     "orchard_t9_imac_attack_03.png": {
       "frame": {
-        "x": 1423,
+        "x": 1543,
         "y": 2,
         "w": 130,
         "h": 157
@@ -1250,7 +1250,7 @@
     },
     "orchard_t9_imac_cast_00.png": {
       "frame": {
-        "x": 1557,
+        "x": 1677,
         "y": 2,
         "w": 130,
         "h": 157
@@ -1274,7 +1274,7 @@
     },
     "orchard_t9_imac_cast_01.png": {
       "frame": {
-        "x": 1691,
+        "x": 1811,
         "y": 2,
         "w": 130,
         "h": 157
@@ -1298,8 +1298,8 @@
     },
     "orchard_t9_imac_cast_02.png": {
       "frame": {
-        "x": 1825,
-        "y": 2,
+        "x": 2,
+        "y": 166,
         "w": 130,
         "h": 157
       },
@@ -1322,7 +1322,7 @@
     },
     "orchard_t9_imac_cast_03.png": {
       "frame": {
-        "x": 2,
+        "x": 136,
         "y": 166,
         "w": 130,
         "h": 157
@@ -1346,7 +1346,7 @@
     },
     "orchard_t9_imac_die_00.png": {
       "frame": {
-        "x": 136,
+        "x": 270,
         "y": 166,
         "w": 124,
         "h": 157
@@ -1370,18 +1370,18 @@
     },
     "orchard_t9_imac_die_01.png": {
       "frame": {
-        "x": 514,
+        "x": 2,
         "y": 2,
         "w": 123,
-        "h": 159
+        "h": 160
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 32,
-        "y": 18,
+        "y": 17,
         "w": 123,
-        "h": 159
+        "h": 160
       },
       "sourceSize": {
         "w": 192,
@@ -1394,18 +1394,18 @@
     },
     "orchard_t9_imac_die_02.png": {
       "frame": {
-        "x": 641,
+        "x": 129,
         "y": 2,
         "w": 120,
-        "h": 159
+        "h": 160
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 31,
-        "y": 19,
+        "y": 18,
         "w": 120,
-        "h": 159
+        "h": 160
       },
       "sourceSize": {
         "w": 192,
@@ -1418,18 +1418,18 @@
     },
     "orchard_t9_imac_die_03.png": {
       "frame": {
-        "x": 776,
-        "y": 166,
+        "x": 1021,
+        "y": 2,
         "w": 116,
-        "h": 156
+        "h": 158
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 30,
-        "y": 22,
+        "y": 20,
         "w": 116,
-        "h": 156
+        "h": 158
       },
       "sourceSize": {
         "w": 192,
@@ -1442,18 +1442,18 @@
     },
     "orchard_t9_imac_die_04.png": {
       "frame": {
-        "x": 896,
+        "x": 910,
         "y": 166,
-        "w": 118,
-        "h": 152
+        "w": 116,
+        "h": 153
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 31,
-        "y": 25,
-        "w": 118,
-        "h": 152
+        "y": 24,
+        "w": 116,
+        "h": 153
       },
       "sourceSize": {
         "w": 192,
@@ -1466,18 +1466,18 @@
     },
     "orchard_t9_imac_die_05.png": {
       "frame": {
-        "x": 1018,
+        "x": 1030,
         "y": 166,
-        "w": 126,
-        "h": 146
+        "w": 124,
+        "h": 147
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
         "x": 28,
-        "y": 28,
-        "w": 126,
-        "h": 146
+        "y": 27,
+        "w": 124,
+        "h": 147
       },
       "sourceSize": {
         "w": 192,
@@ -1490,7 +1490,7 @@
     },
     "orchard_t9_imac_idle_00.png": {
       "frame": {
-        "x": 264,
+        "x": 398,
         "y": 166,
         "w": 124,
         "h": 157
@@ -1538,7 +1538,7 @@
     },
     "orchard_t9_imac_idle_02.png": {
       "frame": {
-        "x": 2,
+        "x": 253,
         "y": 2,
         "w": 124,
         "h": 160
@@ -1586,7 +1586,7 @@
     },
     "orchard_t9_imac_move_00.png": {
       "frame": {
-        "x": 392,
+        "x": 526,
         "y": 166,
         "w": 124,
         "h": 157
@@ -1610,7 +1610,7 @@
     },
     "orchard_t9_imac_move_01.png": {
       "frame": {
-        "x": 130,
+        "x": 381,
         "y": 2,
         "w": 124,
         "h": 160
@@ -1634,7 +1634,7 @@
     },
     "orchard_t9_imac_move_02.png": {
       "frame": {
-        "x": 520,
+        "x": 654,
         "y": 166,
         "w": 124,
         "h": 157
@@ -1658,7 +1658,7 @@
     },
     "orchard_t9_imac_move_03.png": {
       "frame": {
-        "x": 258,
+        "x": 509,
         "y": 2,
         "w": 124,
         "h": 160
@@ -1682,7 +1682,7 @@
     },
     "orchard_t9_imac_move_04.png": {
       "frame": {
-        "x": 648,
+        "x": 782,
         "y": 166,
         "w": 124,
         "h": 157
@@ -1706,7 +1706,7 @@
     },
     "orchard_t9_imac_move_05.png": {
       "frame": {
-        "x": 386,
+        "x": 637,
         "y": 2,
         "w": 124,
         "h": 160
