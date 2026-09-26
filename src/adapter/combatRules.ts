@@ -2,9 +2,9 @@ import type { ProjectileStyle, UnitDef } from '../sim/contracts';
 
 export const SKILL_EVERY_ATTACKS = 4;
 
-/** 사거리 100 이상인 공격만 비행 시간이 있는 원거리 공격으로 다룬다. */
+/** 짧은 사거리로 조정된 원거리 보병도 투사체 표현은 유지한다. */
 export function isRangedAttack(def: UnitDef): boolean {
-  return def.range >= 100;
+  return def.range >= 100 || def.roles.includes('ranged');
 }
 
 export function projectileStyleFor(def: UnitDef, skill: boolean): ProjectileStyle {

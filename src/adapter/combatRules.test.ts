@@ -18,12 +18,14 @@ describe('combat presentation rules', () => {
     expect(projectileStyleFor(unit('orchard_t9_founder'), true)).toBe('skill');
   });
 
-  it('keeps the shortened ranged roster inside the new 255-unit maximum', () => {
+  it('keeps the shortened ranged roster and preserves tier-3 projectiles', () => {
     const ranged = BALANCE_DATA.units.filter(isRangedAttack);
     expect(ranged).toHaveLength(11);
     expect(Math.max(...ranged.map((definition) => definition.range))).toBe(255);
-    expect(unit('semicon_t3_aphone').range).toBe(135);
-    expect(unit('orchard_t3_phone').range).toBe(145);
+    expect(unit('semicon_t3_aphone').range).toBe(80);
+    expect(unit('orchard_t3_phone').range).toBe(85);
+    expect(isRangedAttack(unit('semicon_t3_aphone'))).toBe(true);
+    expect(isRangedAttack(unit('orchard_t3_phone'))).toBe(true);
   });
 
   it('gives tanks a clearly higher block chance', () => {

@@ -21,7 +21,7 @@
       "id": "orchard_t3_phone", "faction": "orchard", "tier": 3,
       "name": "폰 기본형", "desc": "생태계 보호를 받는 안정적인 원거리 보병",
       "cost": 150, "supply": 1, "cooldown": 1.8, "roles": ["ranged"],
-      "stats": { "hp": 190, "armor": 2, "armorClass": "light", "atk": 26, "atkSpeed": 0.95, "range": 145, "moveSpeed": 68, "dmgType": "ranged", "targetType": "single", "targetPolicy": "nearest" },
+      "stats": { "hp": 190, "armor": 2, "armorClass": "light", "atk": 26, "atkSpeed": 0.95, "range": 85, "moveSpeed": 68, "dmgType": "ranged", "targetType": "single", "targetPolicy": "nearest" },
       "skills": ["orchard_ecosystem_protection"], "traits": [],
       "assets": { "sprite": "units.orchard.phone", "sfxAttack": "sfx.phone.attack", "sfxDeath": "sfx.phone.death" }
     },

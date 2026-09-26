@@ -2,7 +2,7 @@ import { Container } from 'pixi.js';
 import type { BalanceData, Command, PlayerId, SimEvent, Snapshot, UnitDef } from '../sim/contracts';
 import { FACTION_OF_PLAYER } from '../data/placeholderBalance';
 import { Minimap } from './Minimap';
-import { AgeUpButton, PauseMenu, StrategyButtons, UnitInfoPopup, UpgradePanel } from './Panels';
+import { AgeUpButton, PauseMenu, UnitInfoPopup, UpgradePanel } from './Panels';
 import { ResourceBar } from './ResourceBar';
 import { REJECT_TEXT, ToastStack } from './ToastStack';
 import { BAR_MARGIN, BUTTON_H } from './theme';
@@ -18,8 +18,8 @@ export interface HudCallbacks {
 
 /**
  * HUD 루트. (§2.3 레이어 9 — 카메라를 따라가지 않는 고정 컨테이너)
- * §4의 캐시·인구·시대·본진 HP·타이머·전략 버튼·유닛 버튼·업그레이드·일시정지를 담는다.
- * 생산 큐는 중앙 전투를 가려 사용자 요청에 따라 화면에서 제거했다.
+ * §4의 캐시·인구·시대·본진 HP·타이머·유닛 버튼·업그레이드·일시정지를 담는다.
+ * 생산 큐와 전략 버튼은 전투 및 유닛 카드를 가려 사용자 요청에 따라 화면에서 제거했다.
  */
 export class Hud {
   readonly root = new Container();
@@ -28,7 +28,6 @@ export class Hud {
   private readonly resources = new ResourceBar();
   private readonly unitBar: UnitBar;
   private readonly minimap: Minimap;
-  private readonly strategy: StrategyButtons;
   private readonly ageUp: AgeUpButton;
   private readonly upgrades: UpgradePanel;
   private readonly pause: PauseMenu;
@@ -47,7 +46,6 @@ export class Hud {
       callbacks.send({ type: 'SPAWN_UNIT', defId: def.id });
     });
     this.minimap = new Minimap(camera);
-    this.strategy = new StrategyButtons(callbacks.send);
     this.ageUp = new AgeUpButton(balance, callbacks.send);
     this.upgrades = new UpgradePanel(balance, callbacks.send);
     this.pause = new PauseMenu(
@@ -64,7 +62,6 @@ export class Hud {
       this.resources.root,
       this.unitBar.root,
       this.minimap.root,
-      this.strategy.root,
       this.ageUp.root,
       this.toasts.root,
       this.upgrades.root,
@@ -80,7 +77,6 @@ export class Hud {
     this.unitBar.layout(width, height, BAR_MARGIN);
 
     this.minimap.layout(width, height, BUTTON_H + BAR_MARGIN + 8);
-    this.strategy.layout(width, height, BAR_MARGIN);
     this.ageUp.layout(width, height, BAR_MARGIN);
     this.toasts.layout(width, height, BUTTON_H + BAR_MARGIN + 24);
     this.upgrades.layout(width, height);
@@ -138,7 +134,6 @@ export class Hud {
       this.upgrades.hitTest(x, y) ||
       this.unitBar.hitTest(x, y) ||
       this.minimap.hitTest(x, y) ||
-      this.strategy.hitTest(x, y) ||
       this.ageUp.hitTest(x, y)
     );
   }

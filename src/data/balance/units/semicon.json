@@ -21,7 +21,7 @@
       "id": "semicon_t3_aphone", "faction": "semicon", "tier": 3,
       "name": "A폰 보병", "desc": "빠르게 생산되고 무리 지을수록 강해지는 원거리 보병",
       "cost": 140, "supply": 1, "cooldown": 1.2, "roles": ["ranged"],
-      "stats": { "hp": 200, "armor": 2, "armorClass": "light", "atk": 22, "atkSpeed": 1.0, "range": 135, "moveSpeed": 70, "dmgType": "ranged", "targetType": "single", "targetPolicy": "nearest" },
+      "stats": { "hp": 200, "armor": 2, "armorClass": "light", "atk": 22, "atkSpeed": 1.0, "range": 80, "moveSpeed": 70, "dmgType": "ranged", "targetType": "single", "targetPolicy": "nearest" },
       "skills": ["semicon_crowd_mode"], "traits": [],
       "assets": { "sprite": "units.semicon.aphone", "sfxAttack": "sfx.aphone.attack", "sfxDeath": "sfx.aphone.death" }
     },
