@@ -52,6 +52,8 @@ export interface UnitAnimationClip {
   readonly loop: boolean;
 }
 
+export type UnitAnimationState = UnitState | 'folded' | 'unfolded';
+
 export interface UnitPreviewFrame {
   readonly imageUrl: string;
   readonly frame: AtlasFrame['frame'];
@@ -76,7 +78,7 @@ export function initUnitAssets(): Promise<void> {
   return loading;
 }
 
-export function getUnitClip(gameplayId: string, state: UnitState | 'idle'): UnitAnimationClip | undefined {
+export function getUnitClip(gameplayId: string, state: UnitAnimationState): UnitAnimationClip | undefined {
   const requested = clips.get(clipKey(gameplayId, state));
   if (requested) return requested;
 

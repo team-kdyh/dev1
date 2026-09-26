@@ -18,6 +18,8 @@ describe('active track data integration', () => {
       expect(unit.description.length).toBeGreaterThan(0);
       expect(unit.roles.length).toBeGreaterThan(0);
       expect(unit.skills.length).toBeGreaterThan(0);
+      expect(unit.skillIds).toHaveLength(unit.skills.length);
+      expect(unit.attackIntervalMs).toBeGreaterThan(0);
     }
   });
 

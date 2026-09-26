@@ -1,5 +1,6 @@
 import type { BalanceData, UnitDef } from '../sim/contracts';
 import { getUnitPreviewFrame } from '../render/unitAssets';
+import { SKILL_EVERY_ATTACKS, isRangedAttack, projectileStyleFor } from '../adapter/combatRules';
 import { button, el, uiRoot } from './dom';
 
 /**
@@ -92,6 +93,8 @@ export class Codex {
       ['인구', String(unit.supply)],
       ['HP', String(unit.hp)],
       ['DPS', String(unit.dps)],
+      ['공격 방식', attackLabel(unit)],
+      ['공격 주기', `${(unit.attackIntervalMs / 1000).toFixed(2)}s`],
       ['사거리', String(unit.range)],
       ['이동속도', unit.speed.toFixed(1)],
       ['생산시간', `${(unit.buildMs / 1000).toFixed(1)}s`],
@@ -112,7 +115,10 @@ export class Codex {
 
     const skills = el('div', 'sw-skill-list');
     skills.append(el('b', undefined, '스킬'));
-    skills.append(el('span', undefined, unit.skills.length > 0 ? unit.skills.join(' · ') : '기본 공격'));
+    const skillText = unit.skills.length > 0
+      ? `${unit.skills.join(' · ')} (${SKILL_EVERY_ATTACKS}번째 공격마다 강화 발동)`
+      : '기본 공격';
+    skills.append(el('span', undefined, skillText));
     card.append(skills);
 
     return card;
@@ -152,4 +158,12 @@ export class Codex {
   unmount(): void {
     this.node.remove();
   }
+}
+
+function attackLabel(unit: UnitDef): string {
+  if (!isRangedAttack(unit)) return '근접 타격';
+  const style = projectileStyleFor(unit, false);
+  if (style === 'shell') return '포물선 포탄';
+  if (style === 'pulse') return '에너지 펄스';
+  return '직선 탄환';
 }

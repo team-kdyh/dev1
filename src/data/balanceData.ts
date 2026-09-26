@@ -21,6 +21,7 @@ interface SourceUnit {
     hp: number;
     atk: number;
     atkSpeed: number;
+    dmgType: 'melee' | 'ranged' | 'magic' | 'siege';
     range: number;
     moveSpeed: number;
   };
@@ -51,9 +52,12 @@ function toClientUnit(unit: SourceUnit): UnitDef {
     cooldownMs: Math.round(unit.cooldown * 1000),
     hp: unit.stats.hp,
     dps: Number((unit.stats.atk * unit.stats.atkSpeed).toFixed(2)),
+    attackIntervalMs: Math.round(1000 / unit.stats.atkSpeed),
+    damageType: unit.stats.dmgType,
     range: unit.stats.range,
     speed: unit.stats.moveSpeed,
     roles: unit.roles,
+    skillIds: unit.skills,
     skills: unit.skills.map((skillId) => skillNames.get(skillId) ?? skillId),
   };
 }

@@ -23,6 +23,7 @@
     "src/main.ts",
     "src/adapter/**/*.ts",
     "src/app/**/*.ts",
+    "src/audio/**/*.ts",
     "src/input/**/*.ts",
     "src/render/**/*.ts",
     "src/screens/**/*.ts",

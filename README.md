@@ -24,7 +24,7 @@ npm run check     # 밸런스 검증, A·C 타입 검사, 테스트, 두 웹 빌
 
 `npm run build`는 웹 클라이언트를 `dist/`에, `npm run build:editor`는 편집기를 `dist/balance-editor/`에 만듭니다. 두 산출물이 필요하면 클라이언트 빌드 후 편집기를 빌드합니다. A·C의 타입 검사 옵션은 `tsconfig.json`과 `tsconfig.track-c.json`에서 각각 유지합니다.
 
-웹 클라이언트는 C의 정식 18종 밸런스와 D의 4개 캐릭터 아틀라스를 직접 사용합니다. 전투의 이동·공격·사망 애니메이션, 생산 버튼·큐, 도감 프리뷰가 모두 같은 캐릭터 ID 매핑을 공유합니다. 현재 전투 상태 공급자는 여전히 TypeScript `FakeSimAdapter`이며, B의 Unity/C# 시뮬레이션을 웹에 연결하려면 별도 포팅 또는 프로세스 브리지가 필요합니다.
+웹 클라이언트는 C의 정식 18종 밸런스와 D의 4개 캐릭터 아틀라스·전투 오디오를 직접 사용합니다. 이동·공격·방어·사망 애니메이션, 직선 탄환·에너지 펄스·포물선 포탄·스킬탄, 유닛별 효과음과 시대별 레이어 BGM이 연결되어 있습니다. 현재 전투 상태 공급자는 TypeScript `FakeSimAdapter`이며, B의 Unity/C# 시뮬레이션을 웹에 연결하려면 별도 포팅 또는 프로세스 브리지가 필요합니다. 세부 규칙은 [전투 표현 규칙](docs/COMBAT_PRESENTATION.md)을 참고하세요.
 
 ## Unity 시뮬레이션
 
