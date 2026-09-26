@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>StickWar — Track A</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #0d1220;
+        /* 캔버스 위 드래그로 카메라를 움직이므로 브라우저 제스처를 막는다 */
+        touch-action: none;
+        overscroll-behavior: none;
+      }
+      #app {
+        width: 100%;
+        height: 100%;
+      }
+      #app canvas {
+        display: block;
+      }
+      /* M1에서 메뉴·도감·결과 화면이 들어올 DOM 레이어 */
+      #ui-root {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        font-family: system-ui, "Malgun Gothic", sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="ui-root"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
