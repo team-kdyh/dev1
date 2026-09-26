@@ -14,6 +14,8 @@ const HIT_RECOIL_MS = 150;
 const DEVICE_FX_MS = 280;
 const DISPLAY_BASE_HEIGHT = 76;
 const DISPLAY_TIER_STEP = 8;
+const GENERATED_ATTACK_CONTENT_HEIGHT = 525;
+const GENERATED_ATTACK_BASELINE_OFFSET = 15;
 
 /**
  * 유닛 한 기의 화면 표현. 스냅샷을 절대 쓰지 않고 읽기만 한다. (§0-1)
@@ -86,7 +88,7 @@ export class UnitView {
     this.currentState = '';
     this.logicalState = unit.state;
     this.currentTier = unit.tier;
-    this.bodyScale = characterScale(unit.tier);
+    this.bodyScale = characterScale(unit.defId, unit.tier, unit.state);
     this.displayHeight = characterDisplayHeight(unit.tier);
     this.body.stop();
     this.body.textures = [unitTexture(unit.defId, faction, unit.tier)];
@@ -129,7 +131,9 @@ export class UnitView {
     this.facing = curr.facing;
     if (this.reactionMs <= 0) this.setAnimation(curr.defId, curr.state, curr.tier);
     this.body.scale.set(curr.facing * this.bodyScale, this.bodyScale);
-    this.body.y = 0;
+    this.body.y = usesGeneratedTankAttack(curr.defId, this.currentState)
+      ? GENERATED_ATTACK_BASELINE_OFFSET
+      : 0;
     this.body.rotation = 0;
 
     const ratio = curr.maxHp > 0 ? Math.max(0, curr.hp / curr.maxHp) : 0;
@@ -226,18 +230,23 @@ export class UnitView {
       const windup = Math.min(1, p / 0.3);
       const strike = Math.min(1, Math.max(0, (p - 0.3) / 0.28));
       const recover = Math.min(1, Math.max(0, (p - 0.58) / 0.42));
-      const drive = p < 0.3
-        ? -7 * windup
-        : p < 0.58
-          ? -7 + 25 * easeOut(strike)
-          : 18 * (1 - recover);
+      const articulated = usesGeneratedTankAttack(this.currentDefId, this.currentState);
+      const drive = articulated
+        ? 0
+        : p < 0.3
+          ? -7 * windup
+          : p < 0.58
+            ? -7 + 25 * easeOut(strike)
+            : 18 * (1 - recover);
 
       this.body.x = this.facing * drive;
-      this.body.rotation = this.facing * (-0.12 * (1 - strike) + 0.18 * strike) * (1 - recover);
+      this.body.rotation = this.facing
+        * (articulated ? -0.025 * (1 - strike) + 0.04 * strike : -0.12 * (1 - strike) + 0.18 * strike)
+        * (1 - recover);
       const squash = Math.sin(Math.PI * Math.min(1, strike)) * (1 - recover);
       this.body.scale.set(
-        this.facing * this.bodyScale * (1 + squash * 0.12),
-        this.bodyScale * (1 - squash * 0.08),
+        this.facing * this.bodyScale * (1 + squash * (articulated ? 0.03 : 0.12)),
+        this.bodyScale * (1 - squash * (articulated ? 0.02 : 0.08)),
       );
 
       const arcVisible = p >= 0.28 && p <= 0.72;
@@ -310,7 +319,7 @@ export class UnitView {
     this.currentDefId = defId;
     this.currentState = state;
     this.currentTier = tier;
-    this.bodyScale = characterScale(tier);
+    this.bodyScale = characterScale(defId, tier, state);
     this.displayHeight = characterDisplayHeight(tier);
     this.body.textures = [...clip.textures];
     this.body.animationSpeed = clip.fps / 60;
@@ -322,10 +331,9 @@ export class UnitView {
     this.attackArc.clear();
     this.attackArc.rotation = 0;
     if (defId === 'orchard_t5_pad_shield') {
-      // 패드는 방패를 열고 펜을 크게 휘두른다.
-      this.attackArc.roundRect(-4, -38, 8, 76, 4).fill(0xffffff);
-      this.attackArc.moveTo(-13, -29).lineTo(12, 28).stroke({ width: 3, color: 0xffd36a, alpha: 0.8 });
-      this.attackArc.rotation = -0.72;
+      // 새 프레임에 펜이 직접 그려져 있으므로 여기서는 베기 궤적만 보강한다.
+      this.attackArc.arc(0, 0, 35, -1.2, 1.2).stroke({ width: 6, color: 0xffffff, alpha: 0.85 });
+      this.attackArc.arc(0, 0, 43, -1.05, 1.05).stroke({ width: 3, color: 0x83c9ff, alpha: 0.65 });
     } else {
       // 폴드는 힌지를 축으로 펼쳐지는 방패 충격파를 만든다.
       this.attackArc.arc(0, 0, 27, -1.08, 1.08).stroke({ width: 5, color: 0x76c6ff, alpha: 0.85 });
@@ -345,13 +353,21 @@ export class UnitView {
   }
 }
 
-function characterScale(tier: number): number {
+function characterScale(defId: string, tier: number, state: UnitAnimationState | ''): number {
+  if (usesGeneratedTankAttack(defId, state)) {
+    return characterDisplayHeight(tier) / GENERATED_ATTACK_CONTENT_HEIGHT;
+  }
   const sourceSize = tier >= 7 ? 192 : 128;
   return characterDisplayHeight(tier) / sourceSize;
 }
 
 function characterDisplayHeight(tier: number): number {
   return DISPLAY_BASE_HEIGHT + tier * DISPLAY_TIER_STEP;
+}
+
+function usesGeneratedTankAttack(defId: string, state: UnitAnimationState | ''): boolean {
+  return (state === 'attack' || state === 'cast')
+    && (defId === 'semicon_t5_fold' || defId === 'orchard_t5_pad_shield');
 }
 
 function easeOut(t: number): number {

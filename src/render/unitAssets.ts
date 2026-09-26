@@ -1,4 +1,4 @@
-import { Assets, Spritesheet, Texture, type SpritesheetData } from 'pixi.js';
+import { Assets, Rectangle, Spritesheet, Texture, type SpritesheetData } from 'pixi.js';
 import manifestSource from '../../assets/manifest.json';
 import orchardT1T6Source from '../../assets/atlases/orchard_t1_t6.json';
 import orchardT7T9Source from '../../assets/atlases/orchard_t7_t9.json';
@@ -8,6 +8,8 @@ import orchardT1T6Url from '../../assets/atlases/orchard_t1_t6.png?url';
 import orchardT7T9Url from '../../assets/atlases/orchard_t7_t9.png?url';
 import semiconT1T6Url from '../../assets/atlases/semicon_t1_t6.png?url';
 import semiconT7T9Url from '../../assets/atlases/semicon_t7_t9.png?url';
+import orchardPadAttackUrl from '../../assets/generated/tank-attacks/orchard_pad_attack_v2.png?url';
+import semiconFoldAttackUrl from '../../assets/generated/tank-attacks/semicon_fold_attack_v2.png?url';
 import { resolveAssetUnitId } from '../data/assetMap';
 import type { UnitState } from '../sim/contracts';
 
@@ -134,6 +136,34 @@ async function loadUnitAssets(): Promise<void> {
       }
     }
   }
+
+  // 기존 T5 프레임은 팔이 거의 고정되어 있어 손·무기 동작이 분명한 2x2 전용 시트로 덮어쓴다.
+  try {
+    const [foldSheet, padSheet] = await Promise.all([
+      Assets.load<Texture>(semiconFoldAttackUrl),
+      Assets.load<Texture>(orchardPadAttackUrl),
+    ]);
+    registerTankAttack('semicon_t5_fold', foldSheet);
+    registerTankAttack('orchard_t5_pad_guard', padSheet);
+  } catch (error) {
+    console.warn('탱커 전용 공격 시트를 읽지 못해 기존 attack 클립을 사용합니다.', error);
+  }
+}
+
+function registerTankAttack(assetId: string, sheet: Texture): void {
+  const textures = sliceTwoByTwo(sheet);
+  const clip: UnitAnimationClip = { textures, fps: 7.5, loop: false };
+  clips.set(`${assetId}:attack`, clip);
+  clips.set(`${assetId}:cast`, clip);
+}
+
+function sliceTwoByTwo(sheet: Texture): Texture[] {
+  const width = sheet.source.width / 2;
+  const height = sheet.source.height / 2;
+  return [0, 1, 2, 3].map((index) => new Texture({
+    source: sheet.source,
+    frame: new Rectangle((index % 2) * width, Math.floor(index / 2) * height, width, height),
+  }));
 }
 
 function clipKey(gameplayId: string, state: string): string {
