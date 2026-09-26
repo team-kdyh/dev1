@@ -9,7 +9,7 @@ A 클라이언트, B Unity 시뮬레이션, C 밸런스·AI 도구, D 아트·�
 | C · 밸런스·AI·도구 | `src/ai`, `src/data`, `tools/` | [C 핸드오프](docs/TRACK_C_HANDOFF.md) · [C 제작 설명](README.track-c.md) |
 | D · 아트·사운드 | `assets/` | [D 핸드오프](HANDOFF.md) · [D 제작 설명](README.track-d.md) |
 
-병합 대상·충돌 해결·검증 결과와 남은 연결 작업은 [통합 기록](docs/INTEGRATION.md)에 정리했습니다.
+병합 대상·충돌 해결·검증 결과와 남은 연결 작업은 [통합 기록](docs/INTEGRATION.md)에, 캐릭터 런타임 연결과 후속 작업은 [통합 핸드오프](docs/ACTIVE_TRACKS_HANDOFF.md)에 정리했습니다.
 
 ## 웹 클라이언트와 밸런스 도구
 
@@ -24,7 +24,7 @@ npm run check     # 밸런스 검증, A·C 타입 검사, 테스트, 두 웹 빌
 
 `npm run build`는 웹 클라이언트를 `dist/`에, `npm run build:editor`는 편집기를 `dist/balance-editor/`에 만듭니다. 두 산출물이 필요하면 클라이언트 빌드 후 편집기를 빌드합니다. A·C의 타입 검사 옵션은 `tsconfig.json`과 `tsconfig.track-c.json`에서 각각 유지합니다.
 
-현재 웹 클라이언트는 `FakeSimAdapter`와 임시 밸런스·텍스처를 사용합니다. B의 C# 시뮬레이션, C의 정식 데이터, D의 스프라이트·오디오를 실제 게임에 연결하는 작업은 남아 있습니다. 트랙별 핸드오프의 미결 계약을 확인하세요.
+웹 클라이언트는 C의 정식 18종 밸런스와 D의 4개 캐릭터 아틀라스를 직접 사용합니다. 전투의 이동·공격·사망 애니메이션, 생산 버튼·큐, 도감 프리뷰가 모두 같은 캐릭터 ID 매핑을 공유합니다. 현재 전투 상태 공급자는 여전히 TypeScript `FakeSimAdapter`이며, B의 Unity/C# 시뮬레이션을 웹에 연결하려면 별도 포팅 또는 프로세스 브리지가 필요합니다.
 
 ## Unity 시뮬레이션
 

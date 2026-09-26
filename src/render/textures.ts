@@ -1,4 +1,5 @@
 import { Container, Graphics, Text, Texture, type Renderer } from 'pixi.js';
+import { getUnitTexture, initUnitAssets } from './unitAssets';
 
 /**
  * D의 정식 아틀라스가 오기 전까지 쓰는 플레이스홀더. (명세 §0-5, §8)
@@ -9,13 +10,13 @@ import { Container, Graphics, Text, Texture, type Renderer } from 'pixi.js';
  */
 
 export const FACTION_COLOR: Record<string, number> = {
-  blue: 0x4a9eff,
-  red: 0xff5a4a,
+  semicon: 0x4a9eff,
+  orchard: 0xff5a4a,
 };
 
 const cache = new Map<string, Texture>();
 
-export function initTextures(renderer: Renderer): void {
+export async function initTextures(renderer: Renderer): Promise<void> {
   cache.clear();
   for (const faction of Object.keys(FACTION_COLOR)) {
     for (let tier = 1; tier <= 9; tier += 1) {
@@ -23,9 +24,17 @@ export function initTextures(renderer: Renderer): void {
     }
     cache.set(`base:${faction}`, makeBaseTexture(renderer, faction));
   }
+  try {
+    await initUnitAssets();
+  } catch (error) {
+    // 배포 중 개별 에셋이 깨져도 전투 자체는 기존 도형 텍스처로 부팅한다.
+    console.warn('캐릭터 아틀라스를 읽지 못해 대체 텍스처를 사용합니다.', error);
+  }
 }
 
-export function unitTexture(faction: string, tier: number): Texture {
+export function unitTexture(defId: string, faction: string, tier: number): Texture {
+  const character = getUnitTexture(defId);
+  if (character) return character;
   return cache.get(`unit:${faction}:${tier}`) ?? Texture.WHITE;
 }
 

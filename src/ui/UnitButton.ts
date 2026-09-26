@@ -39,7 +39,7 @@ export class UnitButton {
     this.bg.roundRect(0, 0, BUTTON_W, BUTTON_H, 8).fill(COLOR.panel);
     this.bg.roundRect(0, 0, BUTTON_W, BUTTON_H, 8).stroke({ width: 2, color: COLOR.panelEdge, alignment: 1 });
 
-    this.icon.texture = unitTexture(def.faction, def.tier);
+    this.icon.texture = unitTexture(def.id, def.faction, def.tier);
     this.icon.anchor.set(0.5, 1);
     // 티어마다 원본 크기가 달라서(30~66px) 고정 높이에 맞춰 스케일을 맞춘다
     const fit = Math.min(44 / this.icon.texture.height, 40 / this.icon.texture.width);

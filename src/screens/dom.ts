@@ -43,14 +43,32 @@ const CSS = `
 .sw-panel-body { overflow: auto; padding: 16px 18px; }
 .sw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
 .sw-card { border: 1px solid #2c3852; border-radius: 10px; padding: 12px; background: #131b2d; }
-.sw-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.sw-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .sw-chip { font-size: 11px; padding: 2px 7px; border-radius: 999px; background: #26406b; color: #bcd6ff; }
 .sw-card-name { font-weight: 700; font-size: 14px; }
-.sw-preview { width: 100%; height: 76px; display: block; background: #0b1020; border-radius: 6px; }
+.sw-preview {
+  width: 100%; height: 116px; display: block; position: relative; overflow: hidden;
+  background: radial-gradient(circle at 50% 82%, #263652 0, #10192b 38%, #0b1020 72%);
+  border-radius: 8px; border-bottom: 2px solid #2a3852;
+}
+.sw-preview-figure {
+  position: absolute; left: 50%; bottom: 1px; transform-origin: center bottom;
+  animation: sw-character-idle 1.8s ease-in-out infinite;
+}
+.sw-preview-sprite { position: absolute; background-repeat: no-repeat; image-rendering: auto; }
+.sw-preview-missing { position: absolute; inset: 0; display: grid; place-items: center; color: #8fa2c4; font-size: 12px; }
+@keyframes sw-character-idle {
+  0%, 100% { margin-bottom: 0; }
+  50% { margin-bottom: 3px; }
+}
+.sw-unit-desc { min-height: 34px; color: #b9c7df; font-size: 12px; line-height: 1.4; margin: 9px 0 0; }
 .sw-stats { list-style: none; margin: 10px 0 0; padding: 0; font-size: 12px; }
 .sw-stats li { display: flex; justify-content: space-between; padding: 2px 0; color: #8fa2c4; }
 .sw-stats li b { color: #e6eeff; font-weight: 600; font-family: Consolas, monospace; }
-.sw-missing { color: #8fa2c4; font-size: 12px; margin-top: 8px; font-style: italic; }
+.sw-unit-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; min-height: 20px; }
+.sw-role { padding: 2px 6px; border-radius: 999px; background: #22324e; color: #bdd5fa; font-size: 10px; }
+.sw-skill-list { display: flex; flex-direction: column; gap: 2px; margin-top: 7px; color: #8fa2c4; font-size: 11px; }
+.sw-skill-list b { color: #e6eeff; font-size: 11px; }
 .sw-result-rows { list-style: none; padding: 0; margin: 0 0 24px; width: 300px; font-size: 14px; }
 .sw-result-rows li { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #1d2740; }
 .sw-result-rows li b { font-family: Consolas, monospace; }

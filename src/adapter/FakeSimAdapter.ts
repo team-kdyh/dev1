@@ -10,7 +10,7 @@ import type {
   UnitSnapshot,
   UnitState,
 } from '../sim/contracts';
-import { FACTION_OF_PLAYER, unitsOfFaction } from '../data/placeholderBalance';
+import { FACTION_OF_PLAYER, unitsOfFaction } from '../data/balanceData';
 import { FixedStepLoop, LOGICAL_MAX, TICK_MS, type SimAdapter } from './SimAdapter';
 
 /**

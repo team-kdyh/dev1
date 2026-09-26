@@ -131,6 +131,10 @@ export interface UnitDef {
   readonly range: number;
   /** 논리 단위 / 초 */
   readonly speed: number;
+  /** C 밸런스 데이터의 설명과 스킬명. 도감과 툴팁이 사용한다. */
+  readonly description: string;
+  readonly roles: readonly string[];
+  readonly skills: readonly string[];
 }
 
 export interface BalanceData {

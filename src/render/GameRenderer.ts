@@ -1,7 +1,7 @@
 import { Container } from 'pixi.js';
 import type { BalanceData, SimEvent, Snapshot, UnitSnapshot } from '../sim/contracts';
 import { LOGICAL_MAX, type SimAdapter } from '../adapter/SimAdapter';
-import { FACTION_OF_PLAYER } from '../data/placeholderBalance';
+import { FACTION_OF_PLAYER } from '../data/balanceData';
 import { BaseView } from './BaseView';
 import type { Camera } from './Camera';
 import { toPixel } from './coords';
