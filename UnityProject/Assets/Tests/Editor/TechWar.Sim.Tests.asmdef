@@ -1,0 +1,6 @@
+{
+  "name": "TechWar.Sim.Tests",
+  "references": ["TechWar.Sim", "TechWar.Play"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}

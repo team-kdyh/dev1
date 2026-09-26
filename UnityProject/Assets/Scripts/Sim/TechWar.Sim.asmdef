@@ -1,0 +1,5 @@
+{
+  "name": "TechWar.Sim",
+  "rootNamespace": "TechWar.Sim",
+  "noEngineReferences": true
+}
