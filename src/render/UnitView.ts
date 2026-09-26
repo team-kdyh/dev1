@@ -25,6 +25,7 @@ export class UnitView {
   readonly bar = new Container();
 
   private readonly body = new AnimatedSprite([Texture.WHITE]);
+  private readonly attackArc = new Graphics();
   private readonly shield = new Graphics();
   private readonly hpBg = new Sprite(Texture.WHITE);
   private readonly hpFill = new Sprite(Texture.WHITE);
@@ -43,6 +44,9 @@ export class UnitView {
   private reactionMs = 0;
   private reactionTotalMs = 0;
   private blocking = false;
+  private tank = false;
+  private attackMotionMs = 0;
+  private attackMotionTotalMs = 0;
 
   /** 현재 이 뷰가 담당하는 유닛. 풀 반환 시 -1. */
   unitId = -1;
@@ -52,10 +56,13 @@ export class UnitView {
   constructor() {
     this.body.updateAnchor = true;
     this.body.anchor.set(0.5, 1); // 앵커 하단 중앙 (§8)
+    this.attackArc.arc(0, 0, 27, -1.08, 1.08).stroke({ width: 5, color: 0xffd36a, alpha: 0.8 });
+    this.attackArc.arc(0, 0, 36, -0.92, 0.92).stroke({ width: 2, color: 0xffffff, alpha: 0.65 });
+    this.attackArc.visible = false;
     this.shield.circle(0, 0, 27).fill({ color: 0x83c9ff, alpha: 0.12 });
     this.shield.circle(0, 0, 30).stroke({ width: 3, color: 0xbce5ff, alpha: 0.9 });
     this.shield.visible = false;
-    this.root.addChild(this.body, this.shield);
+    this.root.addChild(this.body, this.attackArc, this.shield);
 
     this.hpBg.anchor.set(0.5, 0.5);
     this.hpBg.tint = 0x000000;
@@ -69,7 +76,7 @@ export class UnitView {
     this.bar.addChild(this.hpBg, this.hpFill);
   }
 
-  reset(unit: UnitSnapshot, faction: string): void {
+  reset(unit: UnitSnapshot, faction: string, tank: boolean): void {
     this.unitId = unit.id;
     this.currentDefId = unit.defId;
     this.currentState = '';
@@ -95,6 +102,10 @@ export class UnitView {
     this.reactionMs = 0;
     this.reactionTotalMs = 0;
     this.blocking = false;
+    this.tank = tank;
+    this.attackMotionMs = 0;
+    this.attackMotionTotalMs = 0;
+    this.attackArc.visible = false;
     this.shield.visible = false;
     this.shield.alpha = 1;
     this.shield.scale.set(1);
@@ -136,6 +147,10 @@ export class UnitView {
     if (this.deathMs >= 0) return;
     this.currentState = '';
     this.setAnimation(this.currentDefId, skill ? 'cast' : 'attack', this.currentTier);
+    if (this.tank) {
+      this.attackMotionTotalMs = skill ? 620 : 480;
+      this.attackMotionMs = this.attackMotionTotalMs;
+    }
   }
 
   /** 피격은 뒤로 밀리고, 방어 성공 시에는 방패 링과 folded 클립을 사용한다. */
@@ -144,6 +159,8 @@ export class UnitView {
     this.blocking = blocked;
     this.reactionTotalMs = blocked ? BLOCK_MS : HIT_RECOIL_MS;
     this.reactionMs = this.reactionTotalMs;
+    this.attackMotionMs = 0;
+    this.attackArc.visible = false;
     this.flashMs = blocked ? 0 : FLASH_MS;
     this.shield.visible = blocked;
     if (blocked) {
@@ -159,6 +176,8 @@ export class UnitView {
     if (this.deathMs < 0) {
       this.deathMs = 0;
       this.reactionMs = 0;
+      this.attackMotionMs = 0;
+      this.attackArc.visible = false;
       this.shield.visible = false;
       this.setAnimation(this.currentDefId, 'die', this.currentTier);
     }
@@ -185,6 +204,40 @@ export class UnitView {
       const t = 1 - Math.max(0, this.spawnMs / SPAWN_MS);
       this.root.scale.set(0.7 + t * 0.3, 0.55 + t * 0.45);
       this.root.alpha = 0.35 + t * 0.65;
+    }
+    if (this.attackMotionMs > 0 && this.reactionMs <= 0) {
+      this.attackMotionMs -= deltaMs;
+      const p = 1 - Math.max(0, this.attackMotionMs / this.attackMotionTotalMs);
+      const windup = Math.min(1, p / 0.3);
+      const strike = Math.min(1, Math.max(0, (p - 0.3) / 0.28));
+      const recover = Math.min(1, Math.max(0, (p - 0.58) / 0.42));
+      const drive = p < 0.3
+        ? -7 * windup
+        : p < 0.58
+          ? -7 + 25 * easeOut(strike)
+          : 18 * (1 - recover);
+
+      this.body.x = this.facing * drive;
+      this.body.rotation = this.facing * (-0.12 * (1 - strike) + 0.18 * strike) * (1 - recover);
+      const squash = Math.sin(Math.PI * Math.min(1, strike)) * (1 - recover);
+      this.body.scale.set(
+        this.facing * this.bodyScale * (1 + squash * 0.12),
+        this.bodyScale * (1 - squash * 0.08),
+      );
+
+      const arcVisible = p >= 0.28 && p <= 0.72;
+      this.attackArc.visible = arcVisible;
+      if (arcVisible) {
+        const arcT = (p - 0.28) / 0.44;
+        this.attackArc.position.set(this.facing * (20 + arcT * 17), -this.displayHeight * 0.48);
+        this.attackArc.scale.set(this.facing * (0.78 + arcT * 0.48), 0.78 + arcT * 0.48);
+        this.attackArc.alpha = Math.sin(Math.PI * arcT);
+      }
+      if (this.attackMotionMs <= 0) {
+        this.body.x = 0;
+        this.body.rotation = 0;
+        this.attackArc.visible = false;
+      }
     }
     if (this.reactionMs > 0) {
       this.reactionMs -= deltaMs;
@@ -245,4 +298,8 @@ export class UnitView {
 function characterScale(tier: number): number {
   const sourceSize = tier >= 7 ? 192 : 128;
   return (64 + tier * 7) / sourceSize;
+}
+
+function easeOut(t: number): number {
+  return 1 - (1 - t) * (1 - t);
 }

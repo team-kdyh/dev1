@@ -3,7 +3,6 @@ import type { BalanceData, Command, PlayerId, SimEvent, Snapshot, UnitDef } from
 import { FACTION_OF_PLAYER } from '../data/placeholderBalance';
 import { Minimap } from './Minimap';
 import { AgeUpButton, PauseMenu, StrategyButtons, UnitInfoPopup, UpgradePanel } from './Panels';
-import { QueueBar } from './QueueBar';
 import { ResourceBar } from './ResourceBar';
 import { REJECT_TEXT, ToastStack } from './ToastStack';
 import { BAR_MARGIN, BUTTON_H } from './theme';
@@ -19,7 +18,8 @@ export interface HudCallbacks {
 
 /**
  * HUD 루트. (§2.3 레이어 9 — 카메라를 따라가지 않는 고정 컨테이너)
- * §4의 캐시·인구·시대·본진 HP·타이머·전략 버튼·유닛 버튼·생산 큐·업그레이드·일시정지를 모두 담는다.
+ * §4의 캐시·인구·시대·본진 HP·타이머·전략 버튼·유닛 버튼·업그레이드·일시정지를 담는다.
+ * 생산 큐는 중앙 전투를 가려 사용자 요청에 따라 화면에서 제거했다.
  */
 export class Hud {
   readonly root = new Container();
@@ -27,7 +27,6 @@ export class Hud {
   private readonly warnings = new Warnings();
   private readonly resources = new ResourceBar();
   private readonly unitBar: UnitBar;
-  private readonly queueBar: QueueBar;
   private readonly minimap: Minimap;
   private readonly strategy: StrategyButtons;
   private readonly ageUp: AgeUpButton;
@@ -47,10 +46,6 @@ export class Hud {
       // 판정과 무관하게 항상 보낸다. 거부는 시뮬의 몫 (§4.1)
       callbacks.send({ type: 'SPAWN_UNIT', defId: def.id });
     });
-    this.queueBar = new QueueBar(balance, (index) => {
-      // 환불 80%는 시뮬이 처리한다 (§4.2)
-      callbacks.send({ type: 'CANCEL_QUEUE', index });
-    });
     this.minimap = new Minimap(camera);
     this.strategy = new StrategyButtons(callbacks.send);
     this.ageUp = new AgeUpButton(balance, callbacks.send);
@@ -68,7 +63,6 @@ export class Hud {
       this.warnings.root,
       this.resources.root,
       this.unitBar.root,
-      this.queueBar.root,
       this.minimap.root,
       this.strategy.root,
       this.ageUp.root,
@@ -85,12 +79,10 @@ export class Hud {
     this.resources.layout(width);
     this.unitBar.layout(width, height, BAR_MARGIN);
 
-    const unitBarTop = height - BUTTON_H - BAR_MARGIN;
-    this.queueBar.layout(width, unitBarTop - 6);
     this.minimap.layout(width, height, BUTTON_H + BAR_MARGIN + 8);
     this.strategy.layout(width, height, BAR_MARGIN);
     this.ageUp.layout(width, height, BAR_MARGIN);
-    this.toasts.layout(width, height, BUTTON_H + BAR_MARGIN + this.queueBar.barHeight + 24);
+    this.toasts.layout(width, height, BUTTON_H + BAR_MARGIN + 24);
     this.upgrades.layout(width, height);
     this.pause.layout(width, height);
   }
@@ -100,7 +92,6 @@ export class Hud {
     this.warnings.update(snapshot, deltaMs);
     this.resources.update(snapshot, this.warnings.cashHighlight, deltaMs);
     this.unitBar.update(snapshot, deltaMs);
-    this.queueBar.update(player);
     this.minimap.update(snapshot);
     this.ageUp.update(player);
     this.toasts.tick(deltaMs);
@@ -146,7 +137,6 @@ export class Hud {
       this.pause.hitTest(x, y) ||
       this.upgrades.hitTest(x, y) ||
       this.unitBar.hitTest(x, y) ||
-      this.queueBar.hitTest(x, y) ||
       this.minimap.hitTest(x, y) ||
       this.strategy.hitTest(x, y) ||
       this.ageUp.hitTest(x, y)
