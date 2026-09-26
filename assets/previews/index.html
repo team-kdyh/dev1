@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TECH WAR 에셋 미리보기</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #171b27; color: #f3f4f7; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px; }
+    h1 { margin: 0 0 8px; font-size: 22px; }
+    p { color: #b7c0d0; line-height: 1.5; }
+    main { max-width: 1280px; margin: auto; }
+    .panel { display: flex; gap: 12px; flex-wrap: wrap; align-items: end; margin: 20px 0; }
+    label { display: grid; gap: 5px; font-size: 13px; color: #c4ccda; }
+    select, button, input { font: inherit; }
+    select, button { min-height: 38px; padding: 7px 10px; border: 1px solid #576177; border-radius: 6px; color: #fff; background: #283044; }
+    button { cursor: pointer; }
+    button:hover { background: #35415b; }
+    .check { display: flex; gap: 7px; align-items: center; min-height: 38px; }
+    .stage { border: 1px solid #59647b; border-radius: 8px; overflow: hidden; background: #404653; }
+    .comparison { display: grid; grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr); gap: 16px; }
+    .comparison figure { margin: 0; }
+    .comparison figcaption { margin: 0 0 8px; color: #dce6f5; font-weight: 700; }
+    .photo { display: grid; place-items: center; height: 100%; min-height: 240px; padding: 12px; border: 1px solid #59647b; border-radius: 8px; background: #f5f5f5; }
+    .photo img { display: block; max-width: 100%; max-height: 350px; object-fit: contain; }
+    canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; }
+    #info { margin-top: 12px; font-family: ui-monospace, monospace; font-size: 13px; }
+    .links { display: flex; gap: 16px; flex-wrap: wrap; }
+    a { color: #9dd3ff; }
+    @media (max-width: 720px) { .comparison { grid-template-columns: 1fr; } .photo { min-height: 200px; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>TECH WAR 에셋 미리보기</h1>
+  <p>참조 사진과 게임 애니메이션을 나란히 비교합니다. 일반 유닛은 제품 사진을 살짝 일러스트처럼 처리했고, T9는 제품 없이 이재용·스티브 잡스 캐릭터로 만들었습니다.</p>
+  <div class="panel">
+    <label>유닛<select id="unit"></select></label>
+    <label>상태<select id="clip"></select></label>
+    <label>배율<input id="scale" type="range" min="50" max="250" value="150"><span id="scale-value">150%</span></label>
+    <label class="check"><input id="mirror" type="checkbox"> 좌우 반전</label>
+    <button id="toggle" type="button">일시정지</button>
+  </div>
+  <div class="comparison">
+    <figure><figcaption id="source-caption">참조 사진</figcaption><a id="source-link" class="photo" target="_blank" rel="noopener"><img id="source-photo" alt="선택한 캐릭터의 참조 사진"></a></figure>
+    <figure><figcaption>게임 애니메이션</figcaption><div class="stage"><canvas id="stage" width="900" height="440"></canvas></div></figure>
+  </div>
+  <p id="info" role="status">미리보기 데이터 로딩 중…</p>
+  <p class="links"><a href="photo-animation-gallery.html">18종 사진·애니메이션 한눈에 보기</a><a href="unit-art-contact-sheet.png">캐릭터 시트</a><a href="../image-gallery.html">전체 이미지 파일</a><a href="../model-references.md">참조 자료</a></p>
+</main>
+<script src="preview-data.js"></script>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const canvas = $('stage');
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  const atlasCache = new Map();
+  const models = {
+    semicon: ['Galaxy Buds3 Pro', 'Galaxy Watch Ultra', 'Galaxy A56', 'Galaxy S25 Ultra', 'Galaxy Z Fold6', 'Galaxy Tab S10 Ultra', 'Galaxy Book4 Ultra', 'Ballie', '이재용'],
+    orchard: ['AirPods Pro 2', 'Apple Watch Ultra 2', 'iPhone 16', 'iPhone 16 Pro', 'iPad Pro M4', 'Vision Pro', 'MacBook Air M3', 'MacBook Pro M4', '스티브 잡스']
+  };
+  const bossPortraits = { semicon_t9_trifold: 'lee_jae_yong.jpg', orchard_t9_imac: 'steve_jobs.jpg' };
+  let manifest;
+  let loadedFrames = [];
+  let activeClip;
+  let frameIndex = 0;
+  let lastStep = 0;
+  let playing = true;
+  let loadToken = 0;
+
+  async function atlas(name) {
+    if (!atlasCache.has(name)) {
+      atlasCache.set(name, (async () => {
+        const data = window.TECH_WAR_PREVIEW_DATA?.atlases[name];
+        if (!data) throw new Error(`아틀라스 데이터 누락: ${name}`);
+        const image = new Image();
+        image.src = `../atlases/${data.meta.image}`;
+        await image.decode();
+        return { data, image };
+      })());
+    }
+    return atlasCache.get(name);
+  }
+
+  function currentUnit() { return manifest.units[$('unit').value]; }
+  function setClipOptions() {
+    const unit = currentUnit();
+    $('clip').replaceChildren(...Object.keys(unit.clips).map((state) => {
+      const option = document.createElement('option');
+      option.value = state;
+      option.textContent = state;
+      return option;
+    }));
+    if (unit.clips.idle) $('clip').value = 'idle';
+  }
+
+  async function loadClip() {
+    const token = ++loadToken;
+    const unit = currentUnit();
+    const state = $('clip').value;
+    const portrait = bossPortraits[unit.id];
+    const photo = portrait ? `../source/boss-portraits/${portrait}` :
+      `../source/product-photos/${unit.id}${state === 'folded' && unit.id === 'semicon_t5_fold' ? '_closed' : ''}.jpg`;
+    $('source-caption').textContent = portrait ? '인물 참조 사진' : '원본 제품 사진';
+    $('source-photo').src = photo;
+    $('source-photo').alt = `${models[unit.faction][unit.tier - 1]} 참조 사진`;
+    $('source-link').href = photo;
+    activeClip = unit.clips[state];
+    loadedFrames = [];
+    $('info').textContent = `${unit.name} · ${state} 로딩 중…`;
+    try {
+      const frames = await Promise.all(activeClip.frames.map(async (reference) => ({ reference, atlas: await atlas(reference.atlas) })));
+      if (token !== loadToken) return;
+      loadedFrames = frames;
+      frameIndex = 0;
+      lastStep = performance.now();
+      draw();
+    } catch (error) {
+      if (token === loadToken) $('info').textContent = String(error);
+    }
+  }
+
+  function draw() {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = '#404653';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const baseline = 370;
+    ctx.strokeStyle = '#788397';
+    ctx.beginPath();
+    ctx.moveTo(0, baseline + 0.5);
+    ctx.lineTo(canvas.width, baseline + 0.5);
+    ctx.stroke();
+    if (!loadedFrames.length) return;
+    const { reference, atlas: selected } = loadedFrames[frameIndex];
+    const frame = selected.data.frames[reference.frame];
+    if (!frame) throw new Error(`프레임 누락: ${reference.frame}`);
+    const scale = Number($('scale').value) / 100;
+    const source = frame.sourceSize;
+    const trim = frame.spriteSourceSize;
+    const rect = frame.frame;
+    const anchorX = canvas.width / 2;
+    ctx.save();
+    if ($('mirror').checked) {
+      ctx.translate(anchorX * 2, 0);
+      ctx.scale(-1, 1);
+    }
+    ctx.drawImage(
+      selected.image, rect.x, rect.y, rect.w, rect.h,
+      anchorX - source.w * 0.5 * scale + trim.x * scale,
+      baseline - source.h * scale + trim.y * scale,
+      rect.w * scale, rect.h * scale
+    );
+    ctx.restore();
+    ctx.fillStyle = '#ffcc66';
+    ctx.fillRect(anchorX - 3, baseline - 3, 6, 6);
+    const unit = currentUnit();
+    const hit = activeClip.hitFrame === frameIndex ? ' · 명중 프레임' : '';
+    $('info').textContent = `${unit.name} · 참조: ${models[unit.faction][unit.tier - 1]} · ${$('clip').value} ${frameIndex + 1}/${loadedFrames.length} · ${activeClip.fps}fps${hit} · ${reference.atlas}`;
+  }
+
+  function animate(now) {
+    if (playing && loadedFrames.length && now - lastStep >= 1000 / activeClip.fps) {
+      frameIndex = activeClip.loop ? (frameIndex + 1) % loadedFrames.length : Math.min(frameIndex + 1, loadedFrames.length - 1);
+      lastStep = now;
+      draw();
+    }
+    requestAnimationFrame(animate);
+  }
+
+  $('unit').addEventListener('change', () => { setClipOptions(); loadClip(); });
+  $('clip').addEventListener('change', loadClip);
+  $('scale').addEventListener('input', () => { $('scale-value').textContent = `${$('scale').value}%`; draw(); });
+  $('mirror').addEventListener('change', draw);
+  $('toggle').addEventListener('click', () => {
+    playing = !playing;
+    $('toggle').textContent = playing ? '일시정지' : '재생';
+    lastStep = performance.now();
+  });
+
+  async function init() {
+    try {
+      if (!window.TECH_WAR_PREVIEW_DATA) throw new Error('preview-data.js 로딩 실패. assets/tools/pack_assets.py를 다시 실행하세요.');
+      manifest = window.TECH_WAR_PREVIEW_DATA.manifest;
+      $('unit').replaceChildren(...Object.values(manifest.units).map((unit) => {
+        const option = document.createElement('option');
+        option.value = unit.id;
+        option.textContent = `${unit.faction === 'semicon' ? '세미콘' : '오차드'} T${unit.tier} · ${models[unit.faction][unit.tier - 1]}`;
+        return option;
+      }));
+      const requestedUnit = new URLSearchParams(location.search).get('unit');
+      if (requestedUnit && manifest.units[requestedUnit]) $('unit').value = requestedUnit;
+      setClipOptions();
+      await loadClip();
+      requestAnimationFrame(animate);
+    } catch (error) {
+      $('info').textContent = String(error);
+    }
+  }
+  init();
+</script>
+</body>
+</html>

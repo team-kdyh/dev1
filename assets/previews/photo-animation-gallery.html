@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TECH WAR · 참조 사진과 애니메이션 18종</title>
+  <style>
+    :root { color-scheme: dark; font: 15px system-ui, sans-serif; background: #171b27; color: #f4f6fa; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px; }
+    main { max-width: 1440px; margin: auto; }
+    h1 { margin: 0 0 8px; font-size: 28px; }
+    p { color: #c2cad8; line-height: 1.5; }
+    a { color: #a8d8ff; }
+    .toolbar { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      padding: 12px; margin: 20px 0; border: 1px solid #536079; border-radius: 9px; background: #283246; }
+    select, button { padding: 8px 12px; border: 1px solid #6d7b96; border-radius: 6px; background: #172134; color: #fff; font: inherit; }
+    button { cursor: pointer; }
+    #status { color: #d5deed; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 16px; }
+    article { padding: 14px; border: 1px solid #46536d; border-radius: 10px; background: #232d3f; }
+    h2 { margin: 0 0 12px; font-size: 18px; }
+    .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    figure { margin: 0; min-width: 0; }
+    figcaption { margin-bottom: 7px; font-size: 13px; font-weight: 700; }
+    .picture, canvas { display: block; width: 100%; height: 185px; border-radius: 6px; }
+    .picture { object-fit: contain; padding: 6px; background: #f6f6f6; }
+    canvas { border: 1px solid #59647b; background: #404653; }
+    .files { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; font-size: 12px; }
+    @media (max-width: 420px) { body { padding: 12px; } h1 { font-size: 23px; } }
+  </style>
+</head>
+<body><main>
+  <h1>참조 사진 ↔ 게임 애니메이션</h1>
+  <p>일반 유닛 16종은 제품 사진을 살짝 일러스트처럼 처리했습니다. T9 두 보스는 제품 없이 이재용·스티브 잡스만 등장합니다. 사진이나 프레임을 누르면 원본 파일이 열립니다.</p>
+  <div class="toolbar">
+    <label>동작 <select id="state"><option value="idle">대기</option><option value="move">이동</option><option value="attack">공격</option><option value="die">사망</option></select></label>
+    <button id="play" type="button">일시정지</button>
+    <span id="status" role="status">이미지 로딩 중…</span>
+    <a href="index.html">한 캐릭터 자세히 보기</a>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+<script src="preview-data.js"></script>
+<script>
+  const data = window.TECH_WAR_PREVIEW_DATA;
+  const status = document.getElementById('status');
+  const grid = document.getElementById('grid');
+  const stateSelect = document.getElementById('state');
+  const playButton = document.getElementById('play');
+  const models = {
+    semicon: ['Galaxy Buds3 Pro', 'Galaxy Watch Ultra', 'Galaxy A56', 'Galaxy S25 Ultra', 'Galaxy Z Fold6', 'Galaxy Tab S10 Ultra', 'Galaxy Book4 Ultra', 'Ballie', '이재용'],
+    orchard: ['AirPods Pro 2', 'Apple Watch Ultra 2', 'iPhone 16', 'iPhone 16 Pro', 'iPad Pro M4', 'Vision Pro', 'MacBook Air M3', 'MacBook Pro M4', '스티브 잡스']
+  };
+  const bossPortraits = { semicon_t9_trifold: 'lee_jae_yong.jpg', orchard_t9_imac: 'steve_jobs.jpg' };
+  const atlasImages = new Map();
+  const cards = [];
+  let start = performance.now();
+  let pauseAt = 0;
+  let playing = true;
+  let lastDraw = 0;
+  let ready = false;
+
+  function createCard(unit) {
+    const article = document.createElement('article');
+    const title = document.createElement('h2');
+    const model = models[unit.faction][unit.tier - 1];
+    title.textContent = `${unit.faction === 'semicon' ? '삼성' : '애플'} T${unit.tier} · ${model}`;
+    article.append(title);
+    const compare = document.createElement('div');
+    compare.className = 'compare';
+    const photoFigure = document.createElement('figure');
+    const photoLabel = document.createElement('figcaption');
+    photoLabel.textContent = bossPortraits[unit.id] ? '인물 참조 사진' : '제품 사진 원본';
+    const photoLink = document.createElement('a');
+    const photoPath = bossPortraits[unit.id] ? `../source/boss-portraits/${bossPortraits[unit.id]}` :
+      `../source/product-photos/${unit.id}.jpg`;
+    photoLink.href = photoPath;
+    photoLink.target = '_blank';
+    const photo = document.createElement('img');
+    photo.className = 'picture';
+    photo.src = photoPath;
+    photo.alt = `${model} 참조 사진`;
+    photo.loading = 'lazy';
+    photoLink.append(photo);
+    photoFigure.append(photoLabel, photoLink);
+    const animationFigure = document.createElement('figure');
+    const animationLabel = document.createElement('figcaption');
+    animationLabel.textContent = '게임 애니메이션';
+    const canvas = document.createElement('canvas');
+    canvas.width = 220;
+    canvas.height = 200;
+    const animationLink = document.createElement('a');
+    animationLink.href = `../frames/units/${unit.faction}/${unit.id}_idle_00.png`;
+    animationLink.target = '_blank';
+    animationLink.setAttribute('aria-label', `${model} 현재 애니메이션 프레임 PNG`);
+    animationLink.append(canvas);
+    animationFigure.append(animationLabel, animationLink);
+    compare.append(photoFigure, animationFigure);
+    article.append(compare);
+    const files = document.createElement('div');
+    files.className = 'files';
+    const frameLink = document.createElement('a');
+    frameLink.href = `../frames/units/${unit.faction}/${unit.id}_idle_00.png`;
+    frameLink.textContent = '스프라이트 PNG';
+    const sourceLink = document.createElement('a');
+    sourceLink.href = photoPath;
+    sourceLink.textContent = bossPortraits[unit.id] ? '인물 사진 JPG' : '제품 사진 JPG';
+    files.append(sourceLink, frameLink);
+    article.append(files);
+    grid.append(article);
+    const context = canvas.getContext('2d');
+    context.imageSmoothingEnabled = false;
+    return { unit, canvas, context, animationLink, frameLink };
+  }
+
+  function drawCard(card, now) {
+    const { unit, canvas, context } = card;
+    const clip = unit.clips[stateSelect.value] || unit.clips.idle;
+    const index = Math.floor((now - start) * clip.fps / 1000) % clip.frames.length;
+    const reference = clip.frames[index];
+    card.animationLink.href = `../${reference.source}`;
+    card.frameLink.href = card.animationLink.href;
+    const atlas = data.atlases[reference.atlas];
+    const frame = atlas.frames[reference.frame];
+    const image = atlasImages.get(reference.atlas);
+    context.fillStyle = '#404653';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.strokeStyle = '#8390a5';
+    context.beginPath();
+    context.moveTo(0, 185.5);
+    context.lineTo(canvas.width, 185.5);
+    context.stroke();
+    const scale = Math.min(1.12, 176 / frame.sourceSize.w, 158 / frame.sourceSize.h);
+    const trim = frame.spriteSourceSize;
+    const rect = frame.frame;
+    context.drawImage(image, rect.x, rect.y, rect.w, rect.h,
+      110 - frame.sourceSize.w * scale / 2 + trim.x * scale,
+      185 - frame.sourceSize.h * scale + trim.y * scale,
+      rect.w * scale, rect.h * scale);
+  }
+
+  function tick(now) {
+    if (playing && now - lastDraw >= 65) {
+      for (const card of cards) drawCard(card, now);
+      lastDraw = now;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  async function init() {
+    if (!data) { status.textContent = '미리보기 데이터가 없습니다. pack_assets.py를 다시 실행하세요.'; return; }
+    for (const unit of Object.values(data.manifest.units)) cards.push(createCard(unit));
+    try {
+      await Promise.all(Object.entries(data.atlases).map(async ([name, atlas]) => {
+        const image = new Image();
+        image.src = `../atlases/${atlas.meta.image}`;
+        await image.decode();
+        atlasImages.set(name, image);
+      }));
+      ready = true;
+      start = performance.now();
+      status.textContent = '18종 재생 중 · 클립별 FPS';
+      requestAnimationFrame(tick);
+    } catch (error) {
+      status.textContent = `이미지 로딩 실패: ${error}`;
+    }
+  }
+
+  stateSelect.addEventListener('change', () => {
+    start = performance.now();
+    if (!playing) pauseAt = start;
+    if (ready) for (const card of cards) drawCard(card, start);
+  });
+  playButton.addEventListener('click', () => {
+    const now = performance.now();
+    playing = !playing;
+    if (playing) {
+      start += now - pauseAt;
+      status.textContent = '18종 재생 중 · 클립별 FPS';
+    } else {
+      pauseAt = now;
+      status.textContent = '일시정지';
+    }
+    playButton.textContent = playing ? '일시정지' : '재생';
+  });
+  init();
+</script>
+</body></html>

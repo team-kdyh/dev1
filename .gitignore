@@ -8,3 +8,5 @@ Thumbs.db
 .idea/
 coverage/
 reports/
+__pycache__/
+*.pyc

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TECH WAR 사운드 미리듣기</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #171b27; color: #f2f4f7; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px; }
+    main { max-width: 850px; margin: auto; }
+    h1 { margin: 0 0 8px; font-size: 24px; }
+    p { color: #bbc5d5; line-height: 1.5; }
+    label { display: grid; gap: 8px; margin: 20px 0; }
+    select { font: inherit; min-height: 42px; padding: 8px; color: #fff; border: 1px solid #627089; border-radius: 6px; background: #293248; }
+    audio { display: block; width: 100%; margin: 16px 0; }
+    .mix { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin: 22px 0; }
+    .mix label { margin: 0; }
+    button { font: inherit; min-height: 42px; padding: 8px 14px; border: 1px solid #627089; border-radius: 6px; color: #fff; background: #293248; cursor: pointer; }
+    a { color: #a9d9ff; margin-right: 18px; }
+    #detail { font-family: ui-monospace, monospace; font-size: 13px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>TECH WAR 사운드 미리듣기</h1>
+  <p>67개 효과음과 8개 BGM 트랙을 확인할 수 있습니다. 새 음악은 150 BPM의 25.6초 전투 전자음악입니다. 아래에서 Age별 레이어를 같은 박자에 맞춰 들을 수 있습니다.</p>
+  <div class="mix">
+    <label>진영<select id="faction"><option value="semicon">세미콘</option><option value="orchard">오차드</option></select></label>
+    <label>시대<select id="age"><option value="1">Age 1 · 드럼/베이스</option><option value="2">Age 2 · +신스</option><option value="3">Age 3 · +스트링/브라스</option><option value="4">Age 4 · 보스 전용</option></select></label>
+    <button id="mix-play" type="button">전투 BGM 재생</button>
+    <button id="mix-stop" type="button">정지</button>
+  </div>
+  <label>사운드 선택<select id="sound"></select></label>
+  <audio id="player" controls preload="none"></audio>
+  <p id="detail">manifest 로딩 중…</p>
+  <p><a id="ogg" download>OGG 내려받기</a><a id="mp3" download>MP3 내려받기</a></p>
+  <p><a href="../image-gallery.html">캐릭터와 이미지 전체 보기</a></p>
+</main>
+<script type="module">
+  const selector = document.getElementById('sound');
+  const player = document.getElementById('player');
+  const detail = document.getElementById('detail');
+  const options = [];
+  let mixContext;
+  let mixSources = [];
+  const decoded = new Map();
+  let manifestData;
+  function stopMix() {
+    for (const source of mixSources) {
+      try { source.stop(); } catch {}
+    }
+    mixSources = [];
+  }
+  try {
+    const response = await fetch('manifest.json');
+    if (!response.ok) throw new Error('오디오 manifest를 읽을 수 없습니다');
+    const manifest = await response.json();
+    manifestData = manifest;
+    for (const [unitId, actions] of Object.entries(manifest.sfx)) {
+      for (const [action, entry] of Object.entries(actions)) {
+        options.push({ label: `SFX · ${unitId} · ${action}`, entry });
+      }
+    }
+    for (const [faction, layers] of Object.entries(manifest.bgm)) {
+      for (const [layer, entry] of Object.entries(layers)) {
+        options.push({ label: `BGM · ${faction} · ${layer}`, entry });
+      }
+    }
+    selector.replaceChildren(...options.map((option, index) => {
+      const element = document.createElement('option');
+      element.value = String(index);
+      element.textContent = option.label;
+      return element;
+    }));
+    function choose() {
+      const { label, entry } = options[Number(selector.value)];
+      player.pause();
+      player.src = `../${entry.ogg}`;
+      player.loop = label.startsWith('BGM');
+      player.load();
+      document.getElementById('ogg').href = `../${entry.ogg}`;
+      document.getElementById('mp3').href = `../${entry.mp3}`;
+      detail.textContent = `${label} · ${entry.frames} samples · ${entry.channels}ch · 44.1kHz`;
+    }
+    selector.addEventListener('change', choose);
+    document.getElementById('mix-stop').addEventListener('click', stopMix);
+    document.getElementById('mix-play').addEventListener('click', async () => {
+      const button = document.getElementById('mix-play');
+      button.disabled = true;
+      stopMix();
+      player.pause();
+      try {
+        mixContext ??= new AudioContext();
+        await mixContext.resume();
+        const faction = document.getElementById('faction').value;
+        const age = Number(document.getElementById('age').value);
+        const names = age === 4 ? ['age4'] : ['bass_drums', ...(age >= 2 ? ['synth'] : []), ...(age >= 3 ? ['strings'] : [])];
+        const extension = document.createElement('audio').canPlayType('audio/ogg; codecs="vorbis"') ? 'ogg' : 'mp3';
+        const buffers = await Promise.all(names.map(async (name) => {
+          const path = manifestData.bgm[faction][name][extension];
+          if (!decoded.has(path)) {
+            decoded.set(path, fetch(`../${path}`).then((res) => {
+              if (!res.ok) throw new Error(`음악 로딩 실패: ${path}`);
+              return res.arrayBuffer();
+            }).then((data) => mixContext.decodeAudioData(data)));
+          }
+          return decoded.get(path);
+        }));
+        const at = mixContext.currentTime + 0.08;
+        for (const buffer of buffers) {
+          const source = mixContext.createBufferSource();
+          source.buffer = buffer;
+          source.loop = true;
+          const gain = mixContext.createGain();
+          gain.gain.value = 0.5;
+          source.connect(gain).connect(mixContext.destination);
+          source.start(at);
+          mixSources.push(source);
+        }
+        detail.textContent = `${faction} · Age ${age} · ${names.join(' + ')} · 150 BPM`;
+      } catch (error) {
+        detail.textContent = String(error);
+      } finally {
+        button.disabled = false;
+      }
+    });
+    choose();
+  } catch (error) {
+    detail.textContent = String(error);
+  }
+</script>
+</body>
+</html>

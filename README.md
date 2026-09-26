@@ -7,7 +7,7 @@ A 클라이언트, B Unity 시뮬레이션, C 밸런스·AI 도구, D 아트·�
 | A · 웹 클라이언트 | `src/app`, `src/render`, `src/ui` | [A 핸드오프](docs/HANDOFF.md) · [A 제작 설명](README.track-a.md) |
 | B · Unity/C# 시뮬레이션 | `UnityProject/` | [B 핸드오프](TRACK_B_HANDOFF.md) |
 | C · 밸런스·AI·도구 | `src/ai`, `src/data`, `tools/` | [C 핸드오프](docs/TRACK_C_HANDOFF.md) · [C 제작 설명](README.track-c.md) |
-| D · 아트·사운드 | `assets/` | [D 핸드오프](HANDOFF.md) |
+| D · 아트·사운드 | `assets/` | [D 핸드오프](HANDOFF.md) · [D 제작 설명](README.track-d.md) |
 
 ## 웹 클라이언트와 밸런스 도구
 

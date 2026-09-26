@@ -16,7 +16,15 @@
     "build:editor": "vite build --config tools/balance-editor/vite.config.ts",
     "check": "npm run validate:balance && npm run typecheck && npm run test && npm run build && npm run build:editor",
     "typecheck:client": "tsc --noEmit -p tsconfig.json",
-    "typecheck:track-c": "tsc --noEmit -p tsconfig.track-c.json"
+    "typecheck:track-c": "tsc --noEmit -p tsconfig.track-c.json",
+    "generate:placeholders": "python3 assets/tools/generate_placeholders.py",
+    "generate:unit-art": "python3 assets/tools/generate_unit_art.py",
+    "generate:audio": "python3 assets/tools/generate_audio.py",
+    "validate:audio": "python3 assets/tools/validate_audio.py",
+    "preview:assets": "python3 assets/tools/make_previews.py",
+    "preview:images": "python3 assets/tools/make_image_gallery.py",
+    "pack:assets": "python3 assets/tools/pack_assets.py",
+    "validate:assets": "python3 assets/tools/validate_assets.py"
   },
   "dependencies": {
     "pixi.js": "^8.0.0",

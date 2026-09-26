@@ -1,0 +1,1743 @@
+{
+  "frames": {
+    "orchard_t7_air_laptop_attack_00.png": {
+      "frame": {
+        "x": 862,
+        "y": 453,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_attack_01.png": {
+      "frame": {
+        "x": 1034,
+        "y": 453,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_attack_02.png": {
+      "frame": {
+        "x": 1206,
+        "y": 453,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_attack_03.png": {
+      "frame": {
+        "x": 1378,
+        "y": 453,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_cast_00.png": {
+      "frame": {
+        "x": 1550,
+        "y": 453,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_cast_01.png": {
+      "frame": {
+        "x": 1722,
+        "y": 453,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_cast_02.png": {
+      "frame": {
+        "x": 2,
+        "y": 563,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_cast_03.png": {
+      "frame": {
+        "x": 174,
+        "y": 563,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_die_00.png": {
+      "frame": {
+        "x": 346,
+        "y": 563,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_die_01.png": {
+      "frame": {
+        "x": 496,
+        "y": 327,
+        "w": 167,
+        "h": 112
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 68,
+        "w": 167,
+        "h": 112
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_die_02.png": {
+      "frame": {
+        "x": 162,
+        "y": 327,
+        "w": 163,
+        "h": 118
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 62,
+        "w": 163,
+        "h": 118
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_die_03.png": {
+      "frame": {
+        "x": 1754,
+        "y": 166,
+        "w": 156,
+        "h": 123
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 57,
+        "w": 156,
+        "h": 123
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_die_04.png": {
+      "frame": {
+        "x": 1448,
+        "y": 166,
+        "w": 149,
+        "h": 128
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 52,
+        "w": 149,
+        "h": 128
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_die_05.png": {
+      "frame": {
+        "x": 1158,
+        "y": 166,
+        "w": 141,
+        "h": 133
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 47,
+        "w": 141,
+        "h": 133
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_idle_00.png": {
+      "frame": {
+        "x": 518,
+        "y": 563,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_idle_01.png": {
+      "frame": {
+        "x": 174,
+        "y": 453,
+        "w": 168,
+        "h": 105
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 74,
+        "w": 168,
+        "h": 105
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_idle_02.png": {
+      "frame": {
+        "x": 838,
+        "y": 327,
+        "w": 168,
+        "h": 106
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 73,
+        "w": 168,
+        "h": 106
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_idle_03.png": {
+      "frame": {
+        "x": 346,
+        "y": 453,
+        "w": 168,
+        "h": 105
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 74,
+        "w": 168,
+        "h": 105
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_move_00.png": {
+      "frame": {
+        "x": 690,
+        "y": 563,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_move_01.png": {
+      "frame": {
+        "x": 1010,
+        "y": 327,
+        "w": 168,
+        "h": 106
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 73,
+        "w": 168,
+        "h": 106
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_move_02.png": {
+      "frame": {
+        "x": 862,
+        "y": 563,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_move_03.png": {
+      "frame": {
+        "x": 1182,
+        "y": 327,
+        "w": 168,
+        "h": 106
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 73,
+        "w": 168,
+        "h": 106
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_move_04.png": {
+      "frame": {
+        "x": 1034,
+        "y": 563,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t7_air_laptop_move_05.png": {
+      "frame": {
+        "x": 1354,
+        "y": 327,
+        "w": 168,
+        "h": 106
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 73,
+        "w": 168,
+        "h": 106
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_attack_00.png": {
+      "frame": {
+        "x": 1206,
+        "y": 563,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_attack_01.png": {
+      "frame": {
+        "x": 1378,
+        "y": 563,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_attack_02.png": {
+      "frame": {
+        "x": 1550,
+        "y": 563,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_attack_03.png": {
+      "frame": {
+        "x": 1722,
+        "y": 563,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_cast_00.png": {
+      "frame": {
+        "x": 2,
+        "y": 671,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_cast_01.png": {
+      "frame": {
+        "x": 174,
+        "y": 671,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_cast_02.png": {
+      "frame": {
+        "x": 346,
+        "y": 671,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_cast_03.png": {
+      "frame": {
+        "x": 518,
+        "y": 671,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_die_00.png": {
+      "frame": {
+        "x": 690,
+        "y": 671,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_die_01.png": {
+      "frame": {
+        "x": 667,
+        "y": 327,
+        "w": 167,
+        "h": 111
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 69,
+        "w": 167,
+        "h": 111
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_die_02.png": {
+      "frame": {
+        "x": 329,
+        "y": 327,
+        "w": 163,
+        "h": 117
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 63,
+        "w": 163,
+        "h": 117
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_die_03.png": {
+      "frame": {
+        "x": 2,
+        "y": 327,
+        "w": 156,
+        "h": 122
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 58,
+        "w": 156,
+        "h": 122
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_die_04.png": {
+      "frame": {
+        "x": 1601,
+        "y": 166,
+        "w": 149,
+        "h": 127
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 53,
+        "w": 149,
+        "h": 127
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_die_05.png": {
+      "frame": {
+        "x": 1303,
+        "y": 166,
+        "w": 141,
+        "h": 132
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 48,
+        "w": 141,
+        "h": 132
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_idle_00.png": {
+      "frame": {
+        "x": 862,
+        "y": 671,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_idle_01.png": {
+      "frame": {
+        "x": 518,
+        "y": 453,
+        "w": 168,
+        "h": 105
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 74,
+        "w": 168,
+        "h": 105
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_idle_02.png": {
+      "frame": {
+        "x": 1526,
+        "y": 327,
+        "w": 168,
+        "h": 106
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 73,
+        "w": 168,
+        "h": 106
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_idle_03.png": {
+      "frame": {
+        "x": 690,
+        "y": 453,
+        "w": 168,
+        "h": 105
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 74,
+        "w": 168,
+        "h": 105
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_move_00.png": {
+      "frame": {
+        "x": 1034,
+        "y": 671,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_move_01.png": {
+      "frame": {
+        "x": 1698,
+        "y": 327,
+        "w": 168,
+        "h": 106
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 73,
+        "w": 168,
+        "h": 106
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_move_02.png": {
+      "frame": {
+        "x": 1206,
+        "y": 671,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_move_03.png": {
+      "frame": {
+        "x": 1870,
+        "y": 327,
+        "w": 168,
+        "h": 106
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 73,
+        "w": 168,
+        "h": 106
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_move_04.png": {
+      "frame": {
+        "x": 1378,
+        "y": 671,
+        "w": 168,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 75,
+        "w": 168,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t8_pro_laptop_move_05.png": {
+      "frame": {
+        "x": 2,
+        "y": 453,
+        "w": 168,
+        "h": 106
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 12,
+        "y": 73,
+        "w": 168,
+        "h": 106
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_attack_00.png": {
+      "frame": {
+        "x": 1141,
+        "y": 2,
+        "w": 130,
+        "h": 157
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 17,
+        "w": 130,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_attack_01.png": {
+      "frame": {
+        "x": 1275,
+        "y": 2,
+        "w": 130,
+        "h": 157
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 17,
+        "w": 130,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_attack_02.png": {
+      "frame": {
+        "x": 1409,
+        "y": 2,
+        "w": 130,
+        "h": 157
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 17,
+        "w": 130,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_attack_03.png": {
+      "frame": {
+        "x": 1543,
+        "y": 2,
+        "w": 130,
+        "h": 157
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 17,
+        "w": 130,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_cast_00.png": {
+      "frame": {
+        "x": 1677,
+        "y": 2,
+        "w": 130,
+        "h": 157
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 17,
+        "w": 130,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_cast_01.png": {
+      "frame": {
+        "x": 1811,
+        "y": 2,
+        "w": 130,
+        "h": 157
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 17,
+        "w": 130,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_cast_02.png": {
+      "frame": {
+        "x": 2,
+        "y": 166,
+        "w": 130,
+        "h": 157
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 17,
+        "w": 130,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_cast_03.png": {
+      "frame": {
+        "x": 136,
+        "y": 166,
+        "w": 130,
+        "h": 157
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 17,
+        "w": 130,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_die_00.png": {
+      "frame": {
+        "x": 270,
+        "y": 166,
+        "w": 124,
+        "h": 157
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 17,
+        "w": 124,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_die_01.png": {
+      "frame": {
+        "x": 2,
+        "y": 2,
+        "w": 123,
+        "h": 160
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 32,
+        "y": 17,
+        "w": 123,
+        "h": 160
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_die_02.png": {
+      "frame": {
+        "x": 129,
+        "y": 2,
+        "w": 120,
+        "h": 160
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 18,
+        "w": 120,
+        "h": 160
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_die_03.png": {
+      "frame": {
+        "x": 1021,
+        "y": 2,
+        "w": 116,
+        "h": 158
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 30,
+        "y": 20,
+        "w": 116,
+        "h": 158
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_die_04.png": {
+      "frame": {
+        "x": 910,
+        "y": 166,
+        "w": 116,
+        "h": 153
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 31,
+        "y": 24,
+        "w": 116,
+        "h": 153
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_die_05.png": {
+      "frame": {
+        "x": 1030,
+        "y": 166,
+        "w": 124,
+        "h": 147
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 28,
+        "y": 27,
+        "w": 124,
+        "h": 147
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_idle_00.png": {
+      "frame": {
+        "x": 398,
+        "y": 166,
+        "w": 124,
+        "h": 157
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 17,
+        "w": 124,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_idle_01.png": {
+      "frame": {
+        "x": 765,
+        "y": 2,
+        "w": 124,
+        "h": 159
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 15,
+        "w": 124,
+        "h": 159
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_idle_02.png": {
+      "frame": {
+        "x": 253,
+        "y": 2,
+        "w": 124,
+        "h": 160
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 13,
+        "w": 124,
+        "h": 160
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_idle_03.png": {
+      "frame": {
+        "x": 893,
+        "y": 2,
+        "w": 124,
+        "h": 159
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 15,
+        "w": 124,
+        "h": 159
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_move_00.png": {
+      "frame": {
+        "x": 526,
+        "y": 166,
+        "w": 124,
+        "h": 157
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 17,
+        "w": 124,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_move_01.png": {
+      "frame": {
+        "x": 381,
+        "y": 2,
+        "w": 124,
+        "h": 160
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 13,
+        "w": 124,
+        "h": 160
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_move_02.png": {
+      "frame": {
+        "x": 654,
+        "y": 166,
+        "w": 124,
+        "h": 157
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 17,
+        "w": 124,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_move_03.png": {
+      "frame": {
+        "x": 509,
+        "y": 2,
+        "w": 124,
+        "h": 160
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 13,
+        "w": 124,
+        "h": 160
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_move_04.png": {
+      "frame": {
+        "x": 782,
+        "y": 166,
+        "w": 124,
+        "h": 157
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 17,
+        "w": 124,
+        "h": 157
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    },
+    "orchard_t9_imac_move_05.png": {
+      "frame": {
+        "x": 637,
+        "y": 2,
+        "w": 124,
+        "h": 160
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 34,
+        "y": 13,
+        "w": 124,
+        "h": 160
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 192
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 1.0
+      }
+    }
+  },
+  "meta": {
+    "app": "TECH WAR asset pipeline",
+    "version": "0.1",
+    "image": "orchard_t7_t9.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2048,
+      "h": 1024
+    },
+    "scale": "1"
+  }
+}

@@ -1,0 +1,3277 @@
+{
+  "version": "0.1",
+  "atlases": [
+    "orchard_t1_t6.json",
+    "orchard_t7_t9.json",
+    "semicon_t1_t6.json",
+    "semicon_t7_t9.json"
+  ],
+  "units": {
+    "semicon_t1_buds": {
+      "id": "semicon_t1_buds",
+      "faction": "semicon",
+      "tier": 1,
+      "name": "버즈 트윈스",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_die_00.png",
+              "source": "frames/units/semicon/semicon_t1_buds_die_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_die_01.png",
+              "source": "frames/units/semicon/semicon_t1_buds_die_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_die_02.png",
+              "source": "frames/units/semicon/semicon_t1_buds_die_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_die_03.png",
+              "source": "frames/units/semicon/semicon_t1_buds_die_03.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_die_04.png",
+              "source": "frames/units/semicon/semicon_t1_buds_die_04.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_die_05.png",
+              "source": "frames/units/semicon/semicon_t1_buds_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_idle_00.png",
+              "source": "frames/units/semicon/semicon_t1_buds_idle_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_idle_01.png",
+              "source": "frames/units/semicon/semicon_t1_buds_idle_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_idle_02.png",
+              "source": "frames/units/semicon/semicon_t1_buds_idle_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_idle_03.png",
+              "source": "frames/units/semicon/semicon_t1_buds_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_move_00.png",
+              "source": "frames/units/semicon/semicon_t1_buds_move_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_move_01.png",
+              "source": "frames/units/semicon/semicon_t1_buds_move_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_move_02.png",
+              "source": "frames/units/semicon/semicon_t1_buds_move_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_move_03.png",
+              "source": "frames/units/semicon/semicon_t1_buds_move_03.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_move_04.png",
+              "source": "frames/units/semicon/semicon_t1_buds_move_04.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_move_05.png",
+              "source": "frames/units/semicon/semicon_t1_buds_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_attack_00.png",
+              "source": "frames/units/semicon/semicon_t1_buds_attack_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_attack_01.png",
+              "source": "frames/units/semicon/semicon_t1_buds_attack_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_attack_02.png",
+              "source": "frames/units/semicon/semicon_t1_buds_attack_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_attack_03.png",
+              "source": "frames/units/semicon/semicon_t1_buds_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_cast_00.png",
+              "source": "frames/units/semicon/semicon_t1_buds_cast_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_cast_01.png",
+              "source": "frames/units/semicon/semicon_t1_buds_cast_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_cast_02.png",
+              "source": "frames/units/semicon/semicon_t1_buds_cast_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t1_buds_cast_03.png",
+              "source": "frames/units/semicon/semicon_t1_buds_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_semicon_t1_buds_attack.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t1_buds_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_semicon_t1_buds_death.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t1_buds_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_semicon_t1_buds_skill.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t1_buds_skill.mp3"
+        }
+      }
+    },
+    "semicon_t2_watch_medic": {
+      "id": "semicon_t2_watch_medic",
+      "faction": "semicon",
+      "tier": 2,
+      "name": "워치 메딕",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_die_00.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_die_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_die_01.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_die_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_die_02.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_die_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_die_03.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_die_03.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_die_04.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_die_04.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_die_05.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_idle_00.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_idle_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_idle_01.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_idle_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_idle_02.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_idle_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_idle_03.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_move_00.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_move_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_move_01.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_move_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_move_02.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_move_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_move_03.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_move_03.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_move_04.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_move_04.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_move_05.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_attack_00.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_attack_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_attack_01.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_attack_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_attack_02.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_attack_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_attack_03.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_cast_00.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_cast_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_cast_01.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_cast_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_cast_02.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_cast_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t2_watch_medic_cast_03.png",
+              "source": "frames/units/semicon/semicon_t2_watch_medic_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_semicon_t2_watch_medic_attack.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t2_watch_medic_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_semicon_t2_watch_medic_death.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t2_watch_medic_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_semicon_t2_watch_medic_skill.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t2_watch_medic_skill.mp3"
+        }
+      }
+    },
+    "semicon_t3_aphone_soldier": {
+      "id": "semicon_t3_aphone_soldier",
+      "faction": "semicon",
+      "tier": 3,
+      "name": "A폰 보병",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_die_00.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_die_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_die_01.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_die_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_die_02.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_die_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_die_03.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_die_03.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_die_04.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_die_04.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_die_05.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_idle_00.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_idle_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_idle_01.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_idle_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_idle_02.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_idle_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_idle_03.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_move_00.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_move_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_move_01.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_move_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_move_02.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_move_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_move_03.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_move_03.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_move_04.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_move_04.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_move_05.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_attack_00.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_attack_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_attack_01.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_attack_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_attack_02.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_attack_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_attack_03.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_cast_00.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_cast_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_cast_01.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_cast_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_cast_02.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_cast_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t3_aphone_soldier_cast_03.png",
+              "source": "frames/units/semicon/semicon_t3_aphone_soldier_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_semicon_t3_aphone_soldier_attack.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t3_aphone_soldier_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_semicon_t3_aphone_soldier_death.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t3_aphone_soldier_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_semicon_t3_aphone_soldier_skill.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t3_aphone_soldier_skill.mp3"
+        }
+      }
+    },
+    "semicon_t4_sphone_sniper": {
+      "id": "semicon_t4_sphone_sniper",
+      "faction": "semicon",
+      "tier": 4,
+      "name": "S폰 저격수",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_die_00.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_die_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_die_01.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_die_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_die_02.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_die_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_die_03.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_die_03.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_die_04.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_die_04.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_die_05.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_idle_00.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_idle_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_idle_01.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_idle_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_idle_02.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_idle_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_idle_03.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_move_00.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_move_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_move_01.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_move_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_move_02.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_move_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_move_03.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_move_03.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_move_04.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_move_04.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_move_05.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_attack_00.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_attack_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_attack_01.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_attack_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_attack_02.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_attack_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_attack_03.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_cast_00.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_cast_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_cast_01.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_cast_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_cast_02.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_cast_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t4_sphone_sniper_cast_03.png",
+              "source": "frames/units/semicon/semicon_t4_sphone_sniper_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_semicon_t4_sphone_sniper_attack.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t4_sphone_sniper_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_semicon_t4_sphone_sniper_death.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t4_sphone_sniper_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_semicon_t4_sphone_sniper_skill.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t4_sphone_sniper_skill.mp3"
+        }
+      }
+    },
+    "semicon_t5_fold": {
+      "id": "semicon_t5_fold",
+      "faction": "semicon",
+      "tier": 5,
+      "name": "폴드 방패병",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_die_00.png",
+              "source": "frames/units/semicon/semicon_t5_fold_die_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_die_01.png",
+              "source": "frames/units/semicon/semicon_t5_fold_die_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_die_02.png",
+              "source": "frames/units/semicon/semicon_t5_fold_die_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_die_03.png",
+              "source": "frames/units/semicon/semicon_t5_fold_die_03.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_die_04.png",
+              "source": "frames/units/semicon/semicon_t5_fold_die_04.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_die_05.png",
+              "source": "frames/units/semicon/semicon_t5_fold_die_05.png"
+            }
+          ]
+        },
+        "folded": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_folded_00.png",
+              "source": "frames/units/semicon/semicon_t5_fold_folded_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_folded_01.png",
+              "source": "frames/units/semicon/semicon_t5_fold_folded_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_folded_02.png",
+              "source": "frames/units/semicon/semicon_t5_fold_folded_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_folded_03.png",
+              "source": "frames/units/semicon/semicon_t5_fold_folded_03.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_idle_00.png",
+              "source": "frames/units/semicon/semicon_t5_fold_idle_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_idle_01.png",
+              "source": "frames/units/semicon/semicon_t5_fold_idle_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_idle_02.png",
+              "source": "frames/units/semicon/semicon_t5_fold_idle_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_idle_03.png",
+              "source": "frames/units/semicon/semicon_t5_fold_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_move_00.png",
+              "source": "frames/units/semicon/semicon_t5_fold_move_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_move_01.png",
+              "source": "frames/units/semicon/semicon_t5_fold_move_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_move_02.png",
+              "source": "frames/units/semicon/semicon_t5_fold_move_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_move_03.png",
+              "source": "frames/units/semicon/semicon_t5_fold_move_03.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_move_04.png",
+              "source": "frames/units/semicon/semicon_t5_fold_move_04.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_move_05.png",
+              "source": "frames/units/semicon/semicon_t5_fold_move_05.png"
+            }
+          ]
+        },
+        "unfolded": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_unfolded_00.png",
+              "source": "frames/units/semicon/semicon_t5_fold_unfolded_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_unfolded_01.png",
+              "source": "frames/units/semicon/semicon_t5_fold_unfolded_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_unfolded_02.png",
+              "source": "frames/units/semicon/semicon_t5_fold_unfolded_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_unfolded_03.png",
+              "source": "frames/units/semicon/semicon_t5_fold_unfolded_03.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_attack_00.png",
+              "source": "frames/units/semicon/semicon_t5_fold_attack_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_attack_01.png",
+              "source": "frames/units/semicon/semicon_t5_fold_attack_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_attack_02.png",
+              "source": "frames/units/semicon/semicon_t5_fold_attack_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_attack_03.png",
+              "source": "frames/units/semicon/semicon_t5_fold_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_cast_00.png",
+              "source": "frames/units/semicon/semicon_t5_fold_cast_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_cast_01.png",
+              "source": "frames/units/semicon/semicon_t5_fold_cast_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_cast_02.png",
+              "source": "frames/units/semicon/semicon_t5_fold_cast_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t5_fold_cast_03.png",
+              "source": "frames/units/semicon/semicon_t5_fold_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_semicon_t5_fold_attack.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t5_fold_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_semicon_t5_fold_death.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t5_fold_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_semicon_t5_fold_skill.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t5_fold_skill.mp3"
+        }
+      }
+    },
+    "semicon_t6_tab_artillery": {
+      "id": "semicon_t6_tab_artillery",
+      "faction": "semicon",
+      "tier": 6,
+      "name": "탭 포병",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_die_00.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_die_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_die_01.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_die_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_die_02.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_die_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_die_03.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_die_03.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_die_04.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_die_04.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_die_05.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_idle_00.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_idle_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_idle_01.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_idle_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_idle_02.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_idle_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_idle_03.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_move_00.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_move_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_move_01.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_move_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_move_02.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_move_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_move_03.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_move_03.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_move_04.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_move_04.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_move_05.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_attack_00.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_attack_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_attack_01.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_attack_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_attack_02.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_attack_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_attack_03.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_cast_00.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_cast_00.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_cast_01.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_cast_01.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_cast_02.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_cast_02.png"
+            },
+            {
+              "atlas": "semicon_t1_t6.json",
+              "frame": "semicon_t6_tab_artillery_cast_03.png",
+              "source": "frames/units/semicon/semicon_t6_tab_artillery_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_semicon_t6_tab_artillery_attack.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t6_tab_artillery_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_semicon_t6_tab_artillery_death.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t6_tab_artillery_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_semicon_t6_tab_artillery_skill.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t6_tab_artillery_skill.mp3"
+        }
+      }
+    },
+    "semicon_t7_workstation": {
+      "id": "semicon_t7_workstation",
+      "faction": "semicon",
+      "tier": 7,
+      "name": "북 워크스테이션",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_die_00.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_die_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_die_01.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_die_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_die_02.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_die_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_die_03.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_die_03.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_die_04.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_die_04.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_die_05.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_idle_00.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_idle_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_idle_01.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_idle_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_idle_02.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_idle_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_idle_03.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_move_00.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_move_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_move_01.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_move_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_move_02.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_move_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_move_03.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_move_03.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_move_04.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_move_04.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_move_05.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_attack_00.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_attack_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_attack_01.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_attack_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_attack_02.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_attack_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_attack_03.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_cast_00.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_cast_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_cast_01.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_cast_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_cast_02.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_cast_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_cast_03.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_cast_03.png"
+            }
+          ]
+        },
+        "deploy": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_deploy_00.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_deploy_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_deploy_01.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_deploy_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_deploy_02.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_deploy_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t7_workstation_deploy_03.png",
+              "source": "frames/units/semicon/semicon_t7_workstation_deploy_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_semicon_t7_workstation_attack.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t7_workstation_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_semicon_t7_workstation_death.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t7_workstation_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_semicon_t7_workstation_skill.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t7_workstation_skill.mp3"
+        }
+      }
+    },
+    "semicon_t8_ai_assistant": {
+      "id": "semicon_t8_ai_assistant",
+      "faction": "semicon",
+      "tier": 8,
+      "name": "AI 어시스턴트",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_idle_00.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_idle_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_idle_01.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_idle_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_idle_02.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_idle_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_idle_03.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_move_00.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_move_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_move_01.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_move_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_move_02.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_move_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_move_03.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_move_03.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_move_04.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_move_04.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_move_05.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_move_05.png"
+            }
+          ]
+        },
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_die_00.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_die_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_die_01.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_die_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_die_02.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_die_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_die_03.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_die_03.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_die_04.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_die_04.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_die_05.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_die_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_attack_00.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_attack_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_attack_01.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_attack_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_attack_02.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_attack_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_attack_03.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_cast_00.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_cast_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_cast_01.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_cast_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_cast_02.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_cast_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t8_ai_assistant_cast_03.png",
+              "source": "frames/units/semicon/semicon_t8_ai_assistant_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_semicon_t8_ai_assistant_attack.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t8_ai_assistant_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_semicon_t8_ai_assistant_death.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t8_ai_assistant_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_semicon_t8_ai_assistant_skill.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t8_ai_assistant_skill.mp3"
+        }
+      }
+    },
+    "semicon_t9_trifold": {
+      "id": "semicon_t9_trifold",
+      "faction": "semicon",
+      "tier": 9,
+      "name": "이재용 보스",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_die_00.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_die_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_die_01.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_die_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_die_02.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_die_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_die_03.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_die_03.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_die_04.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_die_04.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_die_05.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_idle_00.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_idle_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_idle_01.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_idle_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_idle_02.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_idle_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_idle_03.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_idle_03.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_attack_00.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_attack_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_attack_01.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_attack_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_attack_02.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_attack_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_attack_03.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_cast_00.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_cast_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_cast_01.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_cast_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_cast_02.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_cast_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_cast_03.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_cast_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_move_00.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_move_00.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_move_01.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_move_01.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_move_02.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_move_02.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_move_03.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_move_03.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_move_04.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_move_04.png"
+            },
+            {
+              "atlas": "semicon_t7_t9.json",
+              "frame": "semicon_t9_trifold_move_05.png",
+              "source": "frames/units/semicon/semicon_t9_trifold_move_05.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_semicon_t9_trifold_attack.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t9_trifold_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_semicon_t9_trifold_death.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t9_trifold_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_semicon_t9_trifold_skill.ogg",
+          "mp3": "audio/sfx/sfx_semicon_t9_trifold_skill.mp3"
+        }
+      }
+    },
+    "orchard_t1_airpod_duo": {
+      "id": "orchard_t1_airpod_duo",
+      "faction": "orchard",
+      "tier": 1,
+      "name": "에어팟 듀오",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_idle_00.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_idle_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_idle_01.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_idle_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_idle_02.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_idle_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_idle_03.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_move_00.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_move_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_move_01.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_move_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_move_02.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_move_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_move_03.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_move_03.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_move_04.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_move_04.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_move_05.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_attack_00.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_attack_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_attack_01.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_attack_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_attack_02.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_attack_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_attack_03.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_cast_00.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_cast_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_cast_01.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_cast_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_cast_02.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_cast_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_cast_03.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_cast_03.png"
+            }
+          ]
+        },
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_die_00.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_die_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_die_01.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_die_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_die_02.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_die_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_die_03.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_die_03.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_die_04.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_die_04.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t1_airpod_duo_die_05.png",
+              "source": "frames/units/orchard/orchard_t1_airpod_duo_die_05.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_orchard_t1_airpod_duo_attack.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t1_airpod_duo_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_orchard_t1_airpod_duo_death.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t1_airpod_duo_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_orchard_t1_airpod_duo_skill.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t1_airpod_duo_skill.mp3"
+        }
+      }
+    },
+    "orchard_t2_watch_trainer": {
+      "id": "orchard_t2_watch_trainer",
+      "faction": "orchard",
+      "tier": 2,
+      "name": "워치 트레이너",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_idle_00.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_idle_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_idle_01.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_idle_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_idle_02.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_idle_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_idle_03.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_move_00.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_move_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_move_01.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_move_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_move_02.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_move_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_move_03.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_move_03.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_move_04.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_move_04.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_move_05.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_move_05.png"
+            }
+          ]
+        },
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_die_00.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_die_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_die_01.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_die_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_die_02.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_die_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_die_03.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_die_03.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_die_04.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_die_04.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_die_05.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_die_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_attack_00.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_attack_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_attack_01.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_attack_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_attack_02.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_attack_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_attack_03.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_cast_00.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_cast_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_cast_01.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_cast_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_cast_02.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_cast_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t2_watch_trainer_cast_03.png",
+              "source": "frames/units/orchard/orchard_t2_watch_trainer_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_orchard_t2_watch_trainer_attack.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t2_watch_trainer_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_orchard_t2_watch_trainer_death.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t2_watch_trainer_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_orchard_t2_watch_trainer_skill.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t2_watch_trainer_skill.mp3"
+        }
+      }
+    },
+    "orchard_t3_phone": {
+      "id": "orchard_t3_phone",
+      "faction": "orchard",
+      "tier": 3,
+      "name": "폰 기본형",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_die_00.png",
+              "source": "frames/units/orchard/orchard_t3_phone_die_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_die_01.png",
+              "source": "frames/units/orchard/orchard_t3_phone_die_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_die_02.png",
+              "source": "frames/units/orchard/orchard_t3_phone_die_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_die_03.png",
+              "source": "frames/units/orchard/orchard_t3_phone_die_03.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_die_04.png",
+              "source": "frames/units/orchard/orchard_t3_phone_die_04.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_die_05.png",
+              "source": "frames/units/orchard/orchard_t3_phone_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_idle_00.png",
+              "source": "frames/units/orchard/orchard_t3_phone_idle_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_idle_01.png",
+              "source": "frames/units/orchard/orchard_t3_phone_idle_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_idle_02.png",
+              "source": "frames/units/orchard/orchard_t3_phone_idle_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_idle_03.png",
+              "source": "frames/units/orchard/orchard_t3_phone_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_move_00.png",
+              "source": "frames/units/orchard/orchard_t3_phone_move_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_move_01.png",
+              "source": "frames/units/orchard/orchard_t3_phone_move_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_move_02.png",
+              "source": "frames/units/orchard/orchard_t3_phone_move_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_move_03.png",
+              "source": "frames/units/orchard/orchard_t3_phone_move_03.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_move_04.png",
+              "source": "frames/units/orchard/orchard_t3_phone_move_04.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_move_05.png",
+              "source": "frames/units/orchard/orchard_t3_phone_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_attack_00.png",
+              "source": "frames/units/orchard/orchard_t3_phone_attack_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_attack_01.png",
+              "source": "frames/units/orchard/orchard_t3_phone_attack_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_attack_02.png",
+              "source": "frames/units/orchard/orchard_t3_phone_attack_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_attack_03.png",
+              "source": "frames/units/orchard/orchard_t3_phone_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_cast_00.png",
+              "source": "frames/units/orchard/orchard_t3_phone_cast_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_cast_01.png",
+              "source": "frames/units/orchard/orchard_t3_phone_cast_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_cast_02.png",
+              "source": "frames/units/orchard/orchard_t3_phone_cast_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t3_phone_cast_03.png",
+              "source": "frames/units/orchard/orchard_t3_phone_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_orchard_t3_phone_attack.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t3_phone_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_orchard_t3_phone_death.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t3_phone_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_orchard_t3_phone_skill.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t3_phone_skill.mp3"
+        }
+      }
+    },
+    "orchard_t4_phone_pro": {
+      "id": "orchard_t4_phone_pro",
+      "faction": "orchard",
+      "tier": 4,
+      "name": "폰 프로",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_die_00.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_die_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_die_01.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_die_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_die_02.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_die_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_die_03.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_die_03.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_die_04.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_die_04.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_die_05.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_idle_00.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_idle_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_idle_01.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_idle_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_idle_02.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_idle_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_idle_03.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_move_00.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_move_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_move_01.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_move_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_move_02.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_move_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_move_03.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_move_03.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_move_04.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_move_04.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_move_05.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_attack_00.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_attack_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_attack_01.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_attack_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_attack_02.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_attack_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_attack_03.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_cast_00.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_cast_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_cast_01.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_cast_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_cast_02.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_cast_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t4_phone_pro_cast_03.png",
+              "source": "frames/units/orchard/orchard_t4_phone_pro_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_orchard_t4_phone_pro_attack.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t4_phone_pro_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_orchard_t4_phone_pro_death.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t4_phone_pro_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_orchard_t4_phone_pro_skill.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t4_phone_pro_skill.mp3"
+        }
+      }
+    },
+    "orchard_t5_pad_guard": {
+      "id": "orchard_t5_pad_guard",
+      "faction": "orchard",
+      "tier": 5,
+      "name": "패드 방패병",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_die_00.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_die_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_die_01.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_die_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_die_02.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_die_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_die_03.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_die_03.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_die_04.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_die_04.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_die_05.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_idle_00.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_idle_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_idle_01.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_idle_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_idle_02.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_idle_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_idle_03.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_move_00.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_move_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_move_01.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_move_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_move_02.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_move_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_move_03.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_move_03.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_move_04.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_move_04.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_move_05.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_attack_00.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_attack_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_attack_01.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_attack_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_attack_02.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_attack_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_attack_03.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_cast_00.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_cast_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_cast_01.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_cast_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_cast_02.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_cast_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t5_pad_guard_cast_03.png",
+              "source": "frames/units/orchard/orchard_t5_pad_guard_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_orchard_t5_pad_guard_attack.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t5_pad_guard_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_orchard_t5_pad_guard_death.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t5_pad_guard_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_orchard_t5_pad_guard_skill.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t5_pad_guard_skill.mp3"
+        }
+      }
+    },
+    "orchard_t6_vision": {
+      "id": "orchard_t6_vision",
+      "faction": "orchard",
+      "tier": 6,
+      "name": "비전 헤드셋",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_die_00.png",
+              "source": "frames/units/orchard/orchard_t6_vision_die_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_die_01.png",
+              "source": "frames/units/orchard/orchard_t6_vision_die_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_die_02.png",
+              "source": "frames/units/orchard/orchard_t6_vision_die_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_die_03.png",
+              "source": "frames/units/orchard/orchard_t6_vision_die_03.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_die_04.png",
+              "source": "frames/units/orchard/orchard_t6_vision_die_04.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_die_05.png",
+              "source": "frames/units/orchard/orchard_t6_vision_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_idle_00.png",
+              "source": "frames/units/orchard/orchard_t6_vision_idle_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_idle_01.png",
+              "source": "frames/units/orchard/orchard_t6_vision_idle_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_idle_02.png",
+              "source": "frames/units/orchard/orchard_t6_vision_idle_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_idle_03.png",
+              "source": "frames/units/orchard/orchard_t6_vision_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_move_00.png",
+              "source": "frames/units/orchard/orchard_t6_vision_move_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_move_01.png",
+              "source": "frames/units/orchard/orchard_t6_vision_move_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_move_02.png",
+              "source": "frames/units/orchard/orchard_t6_vision_move_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_move_03.png",
+              "source": "frames/units/orchard/orchard_t6_vision_move_03.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_move_04.png",
+              "source": "frames/units/orchard/orchard_t6_vision_move_04.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_move_05.png",
+              "source": "frames/units/orchard/orchard_t6_vision_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_attack_00.png",
+              "source": "frames/units/orchard/orchard_t6_vision_attack_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_attack_01.png",
+              "source": "frames/units/orchard/orchard_t6_vision_attack_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_attack_02.png",
+              "source": "frames/units/orchard/orchard_t6_vision_attack_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_attack_03.png",
+              "source": "frames/units/orchard/orchard_t6_vision_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_cast_00.png",
+              "source": "frames/units/orchard/orchard_t6_vision_cast_00.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_cast_01.png",
+              "source": "frames/units/orchard/orchard_t6_vision_cast_01.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_cast_02.png",
+              "source": "frames/units/orchard/orchard_t6_vision_cast_02.png"
+            },
+            {
+              "atlas": "orchard_t1_t6.json",
+              "frame": "orchard_t6_vision_cast_03.png",
+              "source": "frames/units/orchard/orchard_t6_vision_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_orchard_t6_vision_attack.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t6_vision_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_orchard_t6_vision_death.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t6_vision_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_orchard_t6_vision_skill.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t6_vision_skill.mp3"
+        }
+      }
+    },
+    "orchard_t7_air_laptop": {
+      "id": "orchard_t7_air_laptop",
+      "faction": "orchard",
+      "tier": 7,
+      "name": "에어 노트북",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_die_00.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_die_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_die_01.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_die_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_die_02.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_die_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_die_03.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_die_03.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_die_04.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_die_04.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_die_05.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_idle_00.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_idle_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_idle_01.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_idle_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_idle_02.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_idle_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_idle_03.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_move_00.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_move_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_move_01.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_move_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_move_02.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_move_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_move_03.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_move_03.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_move_04.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_move_04.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_move_05.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_attack_00.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_attack_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_attack_01.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_attack_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_attack_02.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_attack_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_attack_03.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_cast_00.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_cast_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_cast_01.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_cast_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_cast_02.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_cast_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t7_air_laptop_cast_03.png",
+              "source": "frames/units/orchard/orchard_t7_air_laptop_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_orchard_t7_air_laptop_attack.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t7_air_laptop_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_orchard_t7_air_laptop_death.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t7_air_laptop_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_orchard_t7_air_laptop_skill.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t7_air_laptop_skill.mp3"
+        }
+      }
+    },
+    "orchard_t8_pro_laptop": {
+      "id": "orchard_t8_pro_laptop",
+      "faction": "orchard",
+      "tier": 8,
+      "name": "프로 노트북",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_die_00.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_die_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_die_01.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_die_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_die_02.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_die_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_die_03.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_die_03.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_die_04.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_die_04.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_die_05.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_idle_00.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_idle_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_idle_01.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_idle_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_idle_02.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_idle_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_idle_03.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_move_00.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_move_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_move_01.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_move_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_move_02.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_move_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_move_03.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_move_03.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_move_04.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_move_04.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_move_05.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_attack_00.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_attack_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_attack_01.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_attack_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_attack_02.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_attack_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_attack_03.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_cast_00.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_cast_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_cast_01.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_cast_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_cast_02.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_cast_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t8_pro_laptop_cast_03.png",
+              "source": "frames/units/orchard/orchard_t8_pro_laptop_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_orchard_t8_pro_laptop_attack.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t8_pro_laptop_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_orchard_t8_pro_laptop_death.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t8_pro_laptop_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_orchard_t8_pro_laptop_skill.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t8_pro_laptop_skill.mp3"
+        }
+      }
+    },
+    "orchard_t9_imac": {
+      "id": "orchard_t9_imac",
+      "faction": "orchard",
+      "tier": 9,
+      "name": "스티브 잡스 보스",
+      "anchor": [
+        0.5,
+        1.0
+      ],
+      "clips": {
+        "die": {
+          "fps": 15,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_die_00.png",
+              "source": "frames/units/orchard/orchard_t9_imac_die_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_die_01.png",
+              "source": "frames/units/orchard/orchard_t9_imac_die_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_die_02.png",
+              "source": "frames/units/orchard/orchard_t9_imac_die_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_die_03.png",
+              "source": "frames/units/orchard/orchard_t9_imac_die_03.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_die_04.png",
+              "source": "frames/units/orchard/orchard_t9_imac_die_04.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_die_05.png",
+              "source": "frames/units/orchard/orchard_t9_imac_die_05.png"
+            }
+          ]
+        },
+        "idle": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_idle_00.png",
+              "source": "frames/units/orchard/orchard_t9_imac_idle_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_idle_01.png",
+              "source": "frames/units/orchard/orchard_t9_imac_idle_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_idle_02.png",
+              "source": "frames/units/orchard/orchard_t9_imac_idle_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_idle_03.png",
+              "source": "frames/units/orchard/orchard_t9_imac_idle_03.png"
+            }
+          ]
+        },
+        "move": {
+          "fps": 12,
+          "loop": true,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_move_00.png",
+              "source": "frames/units/orchard/orchard_t9_imac_move_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_move_01.png",
+              "source": "frames/units/orchard/orchard_t9_imac_move_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_move_02.png",
+              "source": "frames/units/orchard/orchard_t9_imac_move_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_move_03.png",
+              "source": "frames/units/orchard/orchard_t9_imac_move_03.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_move_04.png",
+              "source": "frames/units/orchard/orchard_t9_imac_move_04.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_move_05.png",
+              "source": "frames/units/orchard/orchard_t9_imac_move_05.png"
+            }
+          ]
+        },
+        "attack": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_attack_00.png",
+              "source": "frames/units/orchard/orchard_t9_imac_attack_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_attack_01.png",
+              "source": "frames/units/orchard/orchard_t9_imac_attack_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_attack_02.png",
+              "source": "frames/units/orchard/orchard_t9_imac_attack_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_attack_03.png",
+              "source": "frames/units/orchard/orchard_t9_imac_attack_03.png"
+            }
+          ],
+          "hitFrame": 2
+        },
+        "cast": {
+          "fps": 12,
+          "loop": false,
+          "frames": [
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_cast_00.png",
+              "source": "frames/units/orchard/orchard_t9_imac_cast_00.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_cast_01.png",
+              "source": "frames/units/orchard/orchard_t9_imac_cast_01.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_cast_02.png",
+              "source": "frames/units/orchard/orchard_t9_imac_cast_02.png"
+            },
+            {
+              "atlas": "orchard_t7_t9.json",
+              "frame": "orchard_t9_imac_cast_03.png",
+              "source": "frames/units/orchard/orchard_t9_imac_cast_03.png"
+            }
+          ]
+        }
+      },
+      "sfx": {
+        "attack": {
+          "ogg": "audio/sfx/sfx_orchard_t9_imac_attack.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t9_imac_attack.mp3"
+        },
+        "death": {
+          "ogg": "audio/sfx/sfx_orchard_t9_imac_death.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t9_imac_death.mp3"
+        },
+        "skill": {
+          "ogg": "audio/sfx/sfx_orchard_t9_imac_skill.ogg",
+          "mp3": "audio/sfx/sfx_orchard_t9_imac_skill.mp3"
+        }
+      }
+    }
+  },
+  "otherFrames": {},
+  "audioManifest": "audio/manifest.json"
+}
