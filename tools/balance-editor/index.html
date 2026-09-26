@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>TECH WAR Balance Console</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">TRACK C · BALANCE OPERATIONS</p>
+        <h1>Balance Console</h1>
+        <p class="subtitle">같은 티어를 나란히 보고, 수치 변경이 효율과 검증 결과에 미치는 영향을 즉시 확인합니다.</p>
+      </div>
+      <div class="hero-actions">
+        <button id="reset" class="secondary">원본으로 되돌리기</button>
+        <button id="export-semicon">세미콘 JSON 내보내기</button>
+        <button id="export-orchard">오차드 JSON 내보내기</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="status-panel">
+        <div>
+          <span class="status-label">VALIDATION</span>
+          <strong id="validation-status">데이터 불러오는 중</strong>
+        </div>
+        <div class="legend">
+          <span><i class="dot semicon"></i>SEMICON</span>
+          <span><i class="dot orchard"></i>ORCHARD</span>
+          <span>효율 = 기본 스탯 기준, 스킬 미반영</span>
+        </div>
+      </section>
+
+      <section id="messages" class="messages" aria-live="polite"></section>
+      <section id="editor" class="tier-grid" aria-label="유닛 밸런스 편집기"></section>
+    </main>
+
+    <template id="loading-template">
+      <div class="loading">밸런스 데이터를 불러오고 있습니다…</div>
+    </template>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/counter.schema.json",
+  "counters": {
+    "melee_heavy": [
+      { "unitRole": "siege", "weight": 40 },
+      { "unitRole": "ranged", "weight": 30 }
+    ],
+    "ranged_heavy": [
+      { "unitRole": "tank", "weight": 50 },
+      { "unitRole": "melee", "weight": 20 }
+    ],
+    "siege_heavy": [
+      { "unitRole": "control", "weight": 45 },
+      { "unitRole": "ranged", "weight": 30 }
+    ],
+    "tank_heavy": [
+      { "unitRole": "siege", "weight": 55 },
+      { "unitRole": "control", "weight": 25 }
+    ],
+    "ultimate": [
+      { "unitRole": "control", "weight": 60 }
+    ]
+  }
+}

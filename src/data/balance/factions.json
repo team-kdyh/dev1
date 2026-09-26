@@ -1,0 +1,39 @@
+{
+  "$schema": "../schema/faction.schema.json",
+  "factions": [
+    {
+      "id": "semicon",
+      "name": "세미콘",
+      "colorPrimary": "#1428A0",
+      "colorSecondary": "#C8C8C8",
+      "baseHp": 5000,
+      "units": [
+        "semicon_t1_buds", "semicon_t2_watch_medic", "semicon_t3_aphone",
+        "semicon_t4_sphone_sniper", "semicon_t5_fold", "semicon_t6_tab_artillery",
+        "semicon_t7_book_station", "semicon_t8_ai_assistant", "semicon_t9_chairman"
+      ],
+      "strategySkills": ["fast_charge", "mass_production"],
+      "baseSprites": {
+        "age1": "bases.semicon.age1", "age2": "bases.semicon.age2",
+        "age3": "bases.semicon.age3", "age4": "bases.semicon.age4"
+      }
+    },
+    {
+      "id": "orchard",
+      "name": "오차드",
+      "colorPrimary": "#F5F5F7",
+      "colorSecondary": "#3A3A3C",
+      "baseHp": 5000,
+      "units": [
+        "orchard_t1_airpods", "orchard_t2_watch_trainer", "orchard_t3_phone",
+        "orchard_t4_phone_pro", "orchard_t5_pad_shield", "orchard_t6_vision",
+        "orchard_t7_air_notebook", "orchard_t8_pro_notebook", "orchard_t9_founder"
+      ],
+      "strategySkills": ["airdrop", "ota_update"],
+      "baseSprites": {
+        "age1": "bases.orchard.age1", "age2": "bases.orchard.age2",
+        "age3": "bases.orchard.age3", "age4": "bases.orchard.age4"
+      }
+    }
+  ]
+}

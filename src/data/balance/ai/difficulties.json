@@ -1,0 +1,9 @@
+{
+  "$schema": "../../schema/ai.schema.json",
+  "difficulties": [
+    { "id": "easy", "reactionDelaySeconds": 2.5, "resourceEfficiency": 0.6, "counterAccuracy": 0.3, "strategyUseChance": 0.1, "activeUseChance": 0.0 },
+    { "id": "normal", "reactionDelaySeconds": 1.2, "resourceEfficiency": 0.85, "counterAccuracy": 0.6, "strategyUseChance": 0.55, "activeUseChance": 0.3 },
+    { "id": "hard", "reactionDelaySeconds": 0.5, "resourceEfficiency": 0.98, "counterAccuracy": 0.85, "strategyUseChance": 0.85, "activeUseChance": 0.8 },
+    { "id": "expert", "reactionDelaySeconds": 0.3, "resourceEfficiency": 0.95, "counterAccuracy": 0.95, "strategyUseChance": 1.0, "activeUseChance": 1.0 }
+  ]
+}

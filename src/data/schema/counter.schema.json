@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tech-war.local/schema/counter.schema.json",
+  "type": "object", "additionalProperties": false, "required": ["$schema", "counters"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "counters": {
+      "type": "object", "minProperties": 1,
+      "additionalProperties": {
+        "type": "array", "minItems": 1,
+        "items": {
+          "type": "object", "additionalProperties": false, "required": ["unitRole", "weight"],
+          "properties": {
+            "unitRole": { "enum": ["melee", "ranged", "siege", "support", "tank", "control", "ultimate"] },
+            "weight": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        }
+      }
+    }
+  }
+}

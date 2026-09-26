@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tech-war.local/schema/faction.schema.json",
+  "type": "object", "additionalProperties": false, "required": ["$schema", "factions"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "factions": {
+      "type": "array", "minItems": 2, "maxItems": 2,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "name", "colorPrimary", "colorSecondary", "baseHp", "units", "strategySkills", "baseSprites"],
+        "properties": {
+          "id": { "enum": ["semicon", "orchard"] }, "name": { "type": "string", "minLength": 1 },
+          "colorPrimary": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" }, "colorSecondary": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+          "baseHp": { "type": "number", "exclusiveMinimum": 0 },
+          "units": { "type": "array", "minItems": 9, "maxItems": 9, "uniqueItems": true, "items": { "type": "string" } },
+          "strategySkills": { "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": { "type": "string" } },
+          "baseSprites": {
+            "type": "object", "additionalProperties": false, "required": ["age1", "age2", "age3", "age4"],
+            "properties": { "age1": { "type": "string" }, "age2": { "type": "string" }, "age3": { "type": "string" }, "age4": { "type": "string" } }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "$schema": "../../schema/unit.schema.json",
+  "units": [
+    {
+      "id": "orchard_t1_airpods", "faction": "orchard", "tier": 1,
+      "name": "에어팟 듀오", "desc": "빠르게 진입하고 사망 시 적 스킬을 끊는 근접 소모 유닛",
+      "cost": 65, "supply": 1, "cooldown": 1.6, "roles": ["melee", "control"],
+      "stats": { "hp": 160, "armor": 1, "armorClass": "light", "atk": 16, "atkSpeed": 1.1, "range": 20, "moveSpeed": 105, "dmgType": "melee", "targetType": "single", "targetPolicy": "nearest" },
+      "skills": ["orchard_noise_cancel"], "traits": ["paired"],
+      "assets": { "sprite": "units.orchard.airpods", "sfxAttack": "sfx.airpods.attack", "sfxDeath": "sfx.airpods.death" }
+    },
+    {
+      "id": "orchard_t2_watch_trainer", "faction": "orchard", "tier": 2,
+      "name": "워치 트레이너", "desc": "회복과 처치 누적 성장으로 정예 유닛을 키우는 서포터",
+      "cost": 130, "supply": 1, "cooldown": 3.0, "roles": ["support"],
+      "stats": { "hp": 210, "armor": 2, "armorClass": "light", "atk": 10, "atkSpeed": 1.0, "range": 70, "moveSpeed": 90, "dmgType": "magic", "targetType": "single", "targetPolicy": "nearest" },
+      "skills": ["orchard_trainer_heal", "orchard_close_rings"], "traits": [],
+      "assets": { "sprite": "units.orchard.watch_trainer", "sfxAttack": "sfx.watch_trainer.attack", "sfxDeath": "sfx.watch_trainer.death" }
+    },
+    {
+      "id": "orchard_t3_phone", "faction": "orchard", "tier": 3,
+      "name": "폰 기본형", "desc": "생태계 보호를 받는 안정적인 원거리 보병",
+      "cost": 150, "supply": 1, "cooldown": 1.8, "roles": ["ranged"],
+      "stats": { "hp": 190, "armor": 2, "armorClass": "light", "atk": 26, "atkSpeed": 0.95, "range": 170, "moveSpeed": 68, "dmgType": "ranged", "targetType": "single", "targetPolicy": "nearest" },
+      "skills": ["orchard_ecosystem_protection"], "traits": [],
+      "assets": { "sprite": "units.orchard.phone", "sfxAttack": "sfx.phone.attack", "sfxDeath": "sfx.phone.death" }
+    },
+    {
+      "id": "orchard_t4_phone_pro", "faction": "orchard", "tier": 4,
+      "name": "폰 프로", "desc": "약해진 적을 연쇄 처치하는 단일 고화력 딜러",
+      "cost": 280, "supply": 2, "cooldown": 3.7, "roles": ["ranged"],
+      "stats": { "hp": 240, "armor": 3, "armorClass": "light", "atk": 62, "atkSpeed": 0.65, "range": 250, "moveSpeed": 62, "dmgType": "ranged", "targetType": "single", "targetPolicy": "lowestHpRatio" },
+      "skills": ["orchard_dynamic_aim"], "traits": [],
+      "assets": { "sprite": "units.orchard.phone_pro", "sfxAttack": "sfx.phone_pro.attack", "sfxDeath": "sfx.phone_pro.death" }
+    },
+    {
+      "id": "orchard_t5_pad_shield", "faction": "orchard", "tier": 5,
+      "name": "패드 방패병", "desc": "후방을 원거리 피해에서 보호하고 적을 기절시키는 탱커",
+      "cost": 330, "supply": 2, "cooldown": 4.2, "roles": ["melee", "tank", "control"],
+      "stats": { "hp": 850, "armor": 11, "armorClass": "heavy", "atk": 36, "atkSpeed": 0.75, "range": 30, "moveSpeed": 58, "dmgType": "melee", "targetType": "single", "targetPolicy": "nearest" },
+      "skills": ["orchard_large_screen", "orchard_pencil_stab"], "traits": [],
+      "assets": { "sprite": "units.orchard.pad_shield", "sfxAttack": "sfx.pad_shield.attack", "sfxDeath": "sfx.pad_shield.death" }
+    },
+    {
+      "id": "orchard_t6_vision", "faction": "orchard", "tier": 6,
+      "name": "비전 헤드셋", "desc": "전선을 통과해 환영으로 적의 공격을 낭비시키는 기만 유닛",
+      "cost": 420, "supply": 2, "cooldown": 5.2, "roles": ["control"],
+      "stats": { "hp": 380, "armor": 4, "armorClass": "light", "atk": 34, "atkSpeed": 0.9, "range": 140, "moveSpeed": 60, "dmgType": "magic", "targetType": "single", "targetPolicy": "nearest" },
+      "skills": ["orchard_illusion", "orchard_spawn_ghost"], "traits": ["ghost"],
+      "assets": { "sprite": "units.orchard.vision", "sfxAttack": "sfx.vision.attack", "sfxDeath": "sfx.vision.death" }
+    },
+    {
+      "id": "orchard_t7_air_notebook", "faction": "orchard", "tier": 7,
+      "name": "에어 노트북", "desc": "기동성을 살려 전선을 따라붙는 안정적인 공성 유닛",
+      "cost": 500, "supply": 2, "cooldown": 6.0, "roles": ["siege"],
+      "stats": { "hp": 520, "armor": 6, "armorClass": "light", "atk": 66, "atkSpeed": 0.8, "range": 240, "moveSpeed": 72, "dmgType": "siege", "targetType": "single", "targetPolicy": "nearest" },
+      "skills": ["orchard_fanless"], "traits": [],
+      "assets": { "sprite": "units.orchard.air_notebook", "sfxAttack": "sfx.air_notebook.attack", "sfxDeath": "sfx.air_notebook.death" }
+    },
+    {
+      "id": "orchard_t8_pro_notebook", "faction": "orchard", "tier": 8,
+      "name": "프로 노트북", "desc": "과열을 감수하고 화력을 누적하는 중장 공성 유닛",
+      "cost": 640, "supply": 3, "cooldown": 7.5, "roles": ["siege"],
+      "stats": { "hp": 820, "armor": 9, "armorClass": "heavy", "atk": 95, "atkSpeed": 0.65, "range": 290, "moveSpeed": 38, "dmgType": "siege", "targetType": "single", "targetPolicy": "nearest" },
+      "skills": ["orchard_performance_mode", "orchard_structure_bonus"], "traits": [],
+      "assets": { "sprite": "units.orchard.pro_notebook", "sfxAttack": "sfx.pro_notebook.attack", "sfxDeath": "sfx.pro_notebook.death" }
+    },
+    {
+      "id": "orchard_t9_founder", "faction": "orchard", "tier": 9,
+      "name": "창업자", "desc": "현실 왜곡과 전장 전체 회복으로 정예군을 완성하는 궁극 유닛",
+      "cost": 1700, "supply": 3, "cooldown": 18.0, "roles": ["ultimate", "support", "control"],
+      "stats": { "hp": 2400, "armor": 15, "armorClass": "heavy", "atk": 100, "atkSpeed": 0.75, "range": 200, "moveSpeed": 52, "dmgType": "magic", "targetType": "splash", "splashRadius": 100, "targetPolicy": "nearest" },
+      "skills": ["orchard_reality_distortion", "orchard_presentation", "orchard_one_more_thing"], "traits": ["ultimate_immunity"],
+      "assets": { "sprite": "units.orchard.founder", "sfxAttack": "sfx.founder.attack", "sfxDeath": "sfx.founder.death" }
+    }
+  ]
+}

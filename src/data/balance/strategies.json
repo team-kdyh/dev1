@@ -1,0 +1,25 @@
+{
+  "$schema": "../schema/strategy.schema.json",
+  "strategies": [
+    {
+      "id": "fast_charge", "faction": "semicon", "name": "초고속 충전", "cooldown": 60,
+      "trigger": "active", "target": { "type": "selfPlayer" },
+      "effects": [{ "type": "statMod", "stat": "cashRate", "mode": "multiply", "value": 3, "duration": 5 }]
+    },
+    {
+      "id": "mass_production", "faction": "semicon", "name": "물량 공세", "cooldown": 45,
+      "trigger": "active", "target": { "type": "selfPlayer" },
+      "effects": [{ "type": "resetCooldown", "scope": "nextProduction", "charges": 3 }]
+    },
+    {
+      "id": "airdrop", "faction": "orchard", "name": "에어드롭", "cooldown": 50,
+      "trigger": "active", "target": { "type": "friendlyUnitAtBase", "count": 1 },
+      "effects": [{ "type": "statMod", "stat": "position", "mode": "setFrontLineOffset", "value": -20 }]
+    },
+    {
+      "id": "ota_update", "faction": "orchard", "name": "OTA 업데이트", "cooldown": 70,
+      "trigger": "active", "target": { "type": "allFriendlyUnits" },
+      "effects": [{ "type": "healAll", "maxHpRatio": 0.3 }]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+name: Track C checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Verify batch reporting pipeline
+        run: npm run batch -- --adapter smoke --n 20 --seed 1000 --out reports/ci-smoke.csv
+
+  # 트랙 B의 권위 있는 headless 어댑터가 연결되면 데이터 변경 PR에서
+  # 200판 회귀 실행을 추가한다. smoke 어댑터 결과는 밸런스 게이트가 아니다.

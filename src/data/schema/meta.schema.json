@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tech-war.local/schema/meta.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "balanceVersion", "tickRate", "laneLength", "matchTimeLimitSeconds", "economy", "supply", "bases", "ai"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "balanceVersion": { "type": "string", "minLength": 1 },
+    "tickRate": { "type": "integer", "minimum": 1 },
+    "laneLength": { "type": "number", "exclusiveMinimum": 0 },
+    "matchTimeLimitSeconds": { "type": "number", "exclusiveMinimum": 0 },
+    "economy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["startCash", "baseCashPerSecond", "killRewardRate", "cashCap"],
+      "properties": {
+        "startCash": { "type": "number", "minimum": 0 },
+        "baseCashPerSecond": { "type": "number", "minimum": 0 },
+        "killRewardRate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "cashCap": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "supply": {
+      "type": "object", "additionalProperties": false, "required": ["base", "max"],
+      "properties": { "base": { "type": "integer", "minimum": 1 }, "max": { "type": "integer", "minimum": 1 } }
+    },
+    "bases": {
+      "type": "object", "additionalProperties": false, "required": ["hp", "spawnPoints", "turret"],
+      "properties": {
+        "hp": { "type": "number", "exclusiveMinimum": 0 },
+        "spawnPoints": {
+          "type": "object", "additionalProperties": false, "required": ["p0", "p1"],
+          "properties": { "p0": { "type": "number" }, "p1": { "type": "number" } }
+        },
+        "turret": {
+          "type": "object", "additionalProperties": false, "required": ["range", "dpsByLevel", "rangePerUpgrade"],
+          "properties": {
+            "range": { "type": "number", "exclusiveMinimum": 0 },
+            "dpsByLevel": { "type": "array", "minItems": 1, "items": { "type": "number", "exclusiveMinimum": 0 } },
+            "rangePerUpgrade": { "type": "number", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "ai": {
+      "type": "object", "additionalProperties": false, "required": ["evaluationIntervalTicks", "transitionLockTicks", "powerRatioCap"],
+      "properties": {
+        "evaluationIntervalTicks": { "type": "integer", "minimum": 1 },
+        "transitionLockTicks": { "type": "integer", "minimum": 0 },
+        "powerRatioCap": { "type": "number", "minimum": 1 }
+      }
+    }
+  }
+}

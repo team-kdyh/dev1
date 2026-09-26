@@ -1,0 +1,11 @@
+{
+  "$schema": "../schema/damage-matrix.schema.json",
+  "armorClasses": ["light", "heavy", "structure"],
+  "damageTypes": ["melee", "ranged", "siege", "magic"],
+  "matrix": {
+    "melee": { "light": 1.0, "heavy": 0.8, "structure": 0.6 },
+    "ranged": { "light": 1.2, "heavy": 0.7, "structure": 0.5 },
+    "siege": { "light": 0.6, "heavy": 1.4, "structure": 2.0 },
+    "magic": { "light": 1.0, "heavy": 1.0, "structure": 0.8 }
+  }
+}

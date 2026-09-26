@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://tech-war.local/schema/damage-matrix.schema.json",
+  "type": "object", "additionalProperties": false, "required": ["$schema", "armorClasses", "damageTypes", "matrix"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "armorClasses": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+    "damageTypes": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+    "matrix": { "type": "object", "minProperties": 1, "additionalProperties": { "type": "object", "minProperties": 1, "additionalProperties": { "type": "number", "exclusiveMinimum": 0 } } }
+  }
+}

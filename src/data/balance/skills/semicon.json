@@ -1,0 +1,98 @@
+{
+  "$schema": "../../schema/skill.schema.json",
+  "skills": [
+    {
+      "id": "semicon_buds_pair", "name": "양쪽 유닛", "trigger": "onSpawn",
+      "target": { "type": "self" }, "conditions": [],
+      "effects": [
+        { "type": "summon", "unitId": "semicon_t1_buds", "count": 1, "supplyCost": 0, "linkAsPartner": true },
+        { "type": "statMod", "stat": "atkSpeed", "mode": "multiply", "value": 1.5, "duration": -1, "when": "linkedPartnerDies" }
+      ]
+    },
+    {
+      "id": "semicon_heart_monitor", "name": "심박 모니터링", "trigger": "interval", "interval": 1,
+      "target": { "type": "friendlyUnitsInRadius", "radius": 100, "count": 3, "order": "lowestHpRatio" }, "conditions": [],
+      "effects": [{ "type": "heal", "amount": 6 }]
+    },
+    {
+      "id": "semicon_emergency_call", "name": "긴급 호출", "trigger": "automatic", "cooldown": 8,
+      "target": { "type": "friendlyUnitsInRadius", "radius": 100, "count": 1, "order": "lowestHpRatio" },
+      "conditions": [{ "type": "targetHpRatioAtMost", "value": 0.2 }],
+      "effects": [{ "type": "statMod", "stat": "moveSpeed", "mode": "multiply", "value": 1.4, "duration": 3 }]
+    },
+    {
+      "id": "semicon_crowd_mode", "name": "군중 모드", "trigger": "aura",
+      "target": { "type": "self" },
+      "conditions": [{ "type": "friendlySameUnitInRadiusAtLeast", "radius": 100, "count": 2 }],
+      "effects": [{ "type": "statMod", "stat": "atkSpeed", "mode": "multiply", "value": 1.25, "duration": 0.5 }]
+    },
+    {
+      "id": "semicon_long_exposure", "name": "야간 촬영 모드", "trigger": "beforeAttack",
+      "target": { "type": "currentTarget" },
+      "conditions": [{ "type": "stationarySecondsAtLeast", "value": 2.5 }],
+      "effects": [{ "type": "statMod", "stat": "criticalMultiplier", "mode": "set", "value": 3, "duration": 0 }],
+      "fallbackEffects": [{ "type": "statMod", "stat": "damageDealt", "mode": "multiply", "value": 0.8, "duration": 0, "when": "selfIsMoving" }]
+    },
+    {
+      "id": "semicon_fold_toggle", "name": "접었다 폈다", "trigger": "passiveToggle", "interval": 2,
+      "target": { "type": "self" }, "conditions": [],
+      "effects": [{
+        "type": "toggleState",
+        "states": [
+          { "name": "folded", "damageTakenMod": -0.4, "canAttack": false, "moveSpeedMod": 0.3 },
+          { "name": "unfolded", "damageTakenMod": 0, "canAttack": true, "moveSpeedMod": -1 }
+        ]
+      }]
+    },
+    {
+      "id": "semicon_pen_throw", "name": "S펜 투척", "trigger": "afterAttack",
+      "target": { "type": "currentTarget" },
+      "conditions": [{ "type": "attackCountModulo", "value": 3 }],
+      "effects": [{ "type": "statMod", "stat": "nextAttackTargetType", "mode": "set", "value": "pierce", "duration": 1, "maxTargets": 3 }],
+      "fallbackEffects": [{ "type": "statMod", "stat": "damageDealt", "mode": "multiply", "value": 0.5, "duration": 0, "when": "targetInsideMinimumRange", "minimumRange": 70 }]
+    },
+    {
+      "id": "semicon_dex_mode", "name": "덱스 모드", "trigger": "enemyEntersRange",
+      "target": { "type": "self" }, "conditions": [{ "type": "stateIsNot", "value": "deployed" }],
+      "effects": [{ "type": "toggleState", "states": [{ "name": "deployed", "armorFlat": 25, "canMove": false, "rangeSet": 300 }] }]
+    },
+    {
+      "id": "semicon_extended_display", "name": "확장 디스플레이", "trigger": "aura",
+      "target": { "type": "friendlyUnitsInRadius", "radius": 150, "includeSelf": false },
+      "conditions": [{ "type": "selfStateIs", "value": "deployed" }],
+      "effects": [
+        { "type": "statMod", "stat": "range", "mode": "add", "value": 40, "duration": 0.5 },
+        { "type": "statMod", "stat": "atk", "mode": "multiply", "value": 1.15, "duration": 0.5 }
+      ]
+    },
+    {
+      "id": "semicon_malfunction", "name": "음성 인식 방해", "trigger": "onHit",
+      "target": { "type": "enemyUnitsInRadiusOfTarget", "radius": 120 }, "conditions": [],
+      "effects": [{ "type": "applyStatus", "status": "malfunction", "duration": 4, "atkSpeedMod": -0.3, "stacking": "refresh" }]
+    },
+    {
+      "id": "semicon_routine_execute", "name": "루틴 실행", "trigger": "automatic", "cooldown": 10,
+      "target": { "type": "enemyUnitInRange", "count": 1, "order": "highestTier" }, "conditions": [],
+      "effects": [{ "type": "applyStatus", "status": "silence", "duration": 5, "stacking": "refresh" }]
+    },
+    {
+      "id": "semicon_vertical_integration", "name": "수직 계열화", "trigger": "aura",
+      "target": { "type": "allFriendlyUnits", "includeSelf": true }, "conditions": [],
+      "effects": [
+        { "type": "statMod", "stat": "atk", "mode": "multiply", "value": 1.2, "duration": 0.5 },
+        { "type": "statMod", "stat": "maxHp", "mode": "multiply", "value": 1.2, "duration": 0.5 }
+      ]
+    },
+    {
+      "id": "semicon_increase_production", "name": "증산 명령", "trigger": "active", "cooldown": 20,
+      "target": { "type": "selfSpawnPoint" }, "conditions": [],
+      "effects": [{ "type": "summon", "unitId": "semicon_t3_aphone", "count": 4, "supplyCost": 0 }]
+    },
+    {
+      "id": "semicon_acquisition", "name": "인수합병", "trigger": "active", "cooldown": 35,
+      "target": { "type": "enemyUnitInRange", "count": 1, "order": "highestPower" },
+      "conditions": [{ "type": "targetLacksTrait", "value": "ultimate_immunity" }],
+      "effects": [{ "type": "changeOwner", "duration": 8, "onExpire": "kill" }]
+    }
+  ]
+}
