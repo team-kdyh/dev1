@@ -7,7 +7,8 @@
 - 캐릭터: 세미콘·오차드 각 9종, 총 18종과 애니메이션 444프레임. 일반 유닛은 제품 형태와 전투 표정을, T9 보스는 이재용·스티브 잡스 캐리커처를 사용합니다.
 - 이미지 배포 파일: [`assets/manifest.json`](assets/manifest.json), [`assets/atlases`](assets/atlases), [`assets/frames`](assets/frames)
 - 사운드: 효과음 67개, 진영별 전투 BGM 4개씩 총 8개. [`assets/audio/manifest.json`](assets/audio/manifest.json)에서 경로를 확인할 수 있습니다.
-- 제작·연동 설명: [`assets/production-handoff.md`](assets/production-handoff.md), [`technical-artist-implementation-plan.md`](technical-artist-implementation-plan.md)
+- 팀 인계와 연동 항목: [`HANDOFF.md`](HANDOFF.md)
+- 제작 설명과 계획: [`assets/production-handoff.md`](assets/production-handoff.md), [`technical-artist-implementation-plan.md`](technical-artist-implementation-plan.md)
 
 ## 미리보기
 
