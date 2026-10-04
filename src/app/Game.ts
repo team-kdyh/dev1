@@ -11,6 +11,7 @@ import { Hud } from '../ui/Hud';
 import { GameAudio } from '../audio/GameAudio';
 import { FACTION_OF_PLAYER } from '../data/gameData';
 import type { MatchResult } from '../screens/Screens';
+import { TutorialHint } from '../screens/TutorialHint';
 
 /**
  * 인게임 한 판. 매 프레임 순서를 여기서 고정한다:
@@ -26,6 +27,7 @@ export class Game {
   private readonly gate: CommandGate;
   private readonly interpolator: Interpolator;
   private readonly audio: GameAudio;
+  private readonly tutorial: TutorialHint | null;
 
   /** onEvents는 step 중 동기로 불린다 — 여기 쌓아두고 프레임 경계에서 한 번에 소비한다. */
   private eventBuffer: SimEvent[] = [];
@@ -39,6 +41,7 @@ export class Game {
   private killed = 0;
   private maxFrontline = 0;
   private finished: MatchResult | null = null;
+  private resultTimer: number | null = null;
 
   constructor(
     private readonly app: Application,
@@ -46,8 +49,11 @@ export class Game {
     balance: BalanceData,
     private readonly onGameOver: (result: MatchResult) => void,
     private readonly onQuit: () => void,
+    tutorialFocus?: string,
   ) {
     const me = adapter.getSnapshot().me;
+    this.tutorial = tutorialFocus ? new TutorialHint(tutorialFocus, me, balance) : null;
+    this.tutorial?.mount();
     this.audio = new GameAudio(FACTION_OF_PLAYER[me]);
     this.camera = new Camera();
     this.camera.snapTo(me === 0 ? 0 : WORLD_WIDTH);
@@ -61,6 +67,7 @@ export class Game {
       send: (cmd) => { this.audio.click(); this.gate.send(cmd); },
       onPauseToggle: (paused) => this.adapter.setTimeScale?.(paused ? 0 : 1),
       onQuit: () => this.onQuit(),
+      onLowHealth: () => this.audio.warning(),
     });
 
     this.input = new InputRouter(app.canvas, adapter, balance, this.camera, this.gate, {
@@ -70,6 +77,7 @@ export class Game {
       toggleUpgrades: () => this.hud.toggleUpgrades(),
       togglePause: () => this.hud.togglePause(),
       isOverUi: (x, y) => this.hud.hitTest(x, y),
+      isPaused: () => this.hud.isPaused,
     });
 
     this.adapter.onEvents((events) => {
@@ -88,9 +96,14 @@ export class Game {
   stop(): void {
     if (!this.running) return;
     this.running = false;
+    if (this.resultTimer !== null) {
+      window.clearTimeout(this.resultTimer);
+      this.resultTimer = null;
+    }
     this.app.ticker.remove(this.tick);
     this.adapter.stop();
     this.audio.stop();
+    this.tutorial?.hide();
     this.input.destroy();
     this.hud.root.destroy({ children: true });
     this.renderer.destroy();
@@ -118,6 +131,7 @@ export class Game {
       this.eventBuffer = [];
       this.renderer.handleEvents(batch);
       this.hud.handleEvents(batch);
+      this.tutorial?.handle(batch);
       this.audio.handle(batch, snapshot);
     }
 
@@ -142,7 +156,10 @@ export class Game {
       const result = this.finished;
       this.finished = null;
       // §6: 슬로우모션이 끝난 뒤 결과 화면
-      window.setTimeout(() => this.onGameOver(result), 1700);
+      this.resultTimer = window.setTimeout(() => {
+        this.resultTimer = null;
+        if (this.running) this.onGameOver(result);
+      }, 1700);
     }
   };
 
@@ -152,7 +169,7 @@ export class Game {
       else if (event.type === 'kill' && event.owner !== me) this.killed += 1;
       else if (event.type === 'gameOver') {
         this.finished = {
-          won: event.winner === me,
+          outcome: event.winner === null ? 'draw' : event.winner === me ? 'win' : 'lose',
           elapsedMs: this.adapter.getSnapshot().elapsedMs,
           produced: this.produced,
           killed: this.killed,

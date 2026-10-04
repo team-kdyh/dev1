@@ -79,7 +79,8 @@ export interface Snapshot {
   /** 이 클라이언트가 조종하는 진영 */
   readonly me: PlayerId;
   readonly phase: 'playing' | 'over';
-  readonly winner?: PlayerId;
+  /** 제한시간에 본진 체력 비율이 같으면 null(무승부) */
+  readonly winner?: PlayerId | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -115,7 +116,7 @@ export type SimEvent =
   | { type: 'baseHit'; owner: PlayerId; amount: number }
   | { type: 'strategy'; owner: PlayerId; slot: 0 | 1; strategyId: string }
   | { type: 'rejected'; command: Command; reason: RejectReason; owner?: PlayerId }
-  | { type: 'gameOver'; winner: PlayerId };
+  | { type: 'gameOver'; winner: PlayerId | null };
 
 // ---------------------------------------------------------------------------
 // Balance — 소유: C. 도감/툴팁/유닛 바가 그대로 렌더한다. (하드코딩 금지)

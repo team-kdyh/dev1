@@ -12,6 +12,8 @@ Node.js 24 이상에서 저장소 루트에서 실행한다.
 npm ci
 npm run dev
 npm run check
+npm run audit:pve -- --matches=40 --difficulty=hard
+npm run preview
 ```
 
 빠른 대전은 진영을 고른 뒤 바로 시작한다. 숫자키 1~9 또는 하단 카드로 유닛을 생산하고, Q/W로 전략, E로 시대 상승, R로 업그레이드, 스페이스로 전선 복귀를 사용한다. 설정에서 음악과 효과음 크기를 조절할 수 있으며 값은 브라우저에 저장된다.
@@ -23,6 +25,8 @@ npm run check
 - [좁은 화면 전투](../assets/previews/game-comic-battle-mobile.png)
 - [개선된 첫 교전 · 데스크톱](../assets/previews/game-comic-first-clash-desktop.png)
 - [개선된 첫 교전 · 좁은 화면](../assets/previews/game-comic-first-clash-mobile.png)
+- [캠페인 전투 안내](../assets/previews/game-campaign-tutorial.png)
+- [일시정지 메뉴](../assets/previews/game-pause-menu.png)
 
 ## 연결 위치
 
@@ -33,9 +37,10 @@ npm run check
 | 전선 추적과 원거리 타격 연출 | `src/render/frontline.ts`, `src/render/ProjectileLayer.ts` |
 | 사운드와 설정 | `src/audio/GameAudio.ts`, `src/audio/settings.ts` |
 | 메뉴와 HUD | `src/screens/`, `src/ui/` |
+| 배포 에셋 복사 | `tools/copy-runtime-assets.mjs` |
 
-`npm run check`에서 밸런스 검증 오류 0건, 타입 검사 통과, 테스트 19개 통과, 클라이언트·밸런스 편집기 빌드 성공을 확인했다. 초기 자동 대전의 첫 유닛은 양쪽 모두 약 1.5초에 등장하고 첫 교전은 약 5.8초에 시작한다. Chrome 데스크톱·좁은 화면에서 메뉴 → 진영 선택 → 유닛 생산 → 첫 교전을 확인했고 런타임 예외는 없었다. 도감 이미지 18개, 캠페인 카드 24개와 설정 저장·재열기는 이전 검수에서 확인했다.
+`npm run check`에서 밸런스 검증 오류 0건, 타입 검사 통과, 테스트 30개 통과, 클라이언트·밸런스 편집기 빌드 성공을 확인했다. 배포 빌드에는 게임이 참조하는 정적 파일 176개(14.2 MiB)를 담는다. 초기 자동 대전의 첫 유닛은 양쪽 모두 약 1.5초에 등장하고 첫 교전은 약 5.8초에 시작한다. Chrome에서 개발·배포 빌드의 메뉴 → 캠페인 → 전투 안내 → 생산 → 일시정지 경로를 확인했고 런타임 예외는 없었다. 도감 이미지 18개, 캠페인 카드 24개와 설정 저장·재열기는 이전 검수에서 확인했다.
 
-## 브랜치 통합 참고
+## 현재 범위
 
-`integration/active-tracks-character-polish` 브랜치에는 별도의 공격·방어 애니메이션과 진영 배경 작업이 있다. 해당 브랜치는 `FakeSimAdapter`를 사용하고 이 빌드는 `LocalSimAdapter`를 사용하므로, 두 브랜치의 전투 상태 계약을 대조한 뒤 통합해야 한다. 이 빌드에는 공격 시 전진 동작과 피격 반응을 현재 시뮬레이터에 맞춰 반영했다.
+24개 캠페인 스테이지, 연구소, 빠른 PvE 대전이 동작한다. 온라인 대전과 리플레이는 아직 지원하지 않아 메뉴에 표시하지 않는다. 밸런스와 공개 배포 전 점검 항목은 [출시 준비 점검](RELEASE_READINESS.md)을 참조한다.

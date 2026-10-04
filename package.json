@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run typecheck:client && vite build",
+    "build": "npm run typecheck:client && vite build && node tools/copy-runtime-assets.mjs",
     "preview": "vite preview",
     "typecheck": "npm run typecheck:client && npm run typecheck:track-c",
     "validate:balance": "tsx tools/balance-validator/index.ts",
@@ -24,7 +24,8 @@
     "preview:assets": "python3 assets/tools/make_previews.py",
     "preview:images": "python3 assets/tools/make_image_gallery.py",
     "pack:assets": "python3 assets/tools/pack_assets.py",
-    "validate:assets": "python3 assets/tools/validate_assets.py"
+    "validate:assets": "python3 assets/tools/validate_assets.py",
+    "audit:pve": "node --import tsx tools/pve-audit.ts"
   },
   "dependencies": {
     "pixi.js": "^8.0.0",

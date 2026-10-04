@@ -19,6 +19,7 @@ export interface InputHost {
   toggleUpgrades(): void;
   togglePause(): void;
   isOverUi(screenX: number, screenY: number): boolean;
+  isPaused(): boolean;
 }
 
 /**
@@ -30,6 +31,7 @@ export interface InputHost {
 export class InputRouter {
   private panDirection = 0;
   private dragging = false;
+  private panning = false;
   private lastPointerX = 0;
   private pressStartMs = 0;
   private pressX = 0;
@@ -40,13 +42,16 @@ export class InputRouter {
   private readonly onKeyUp = (e: KeyboardEvent) => this.handleKeyUp(e);
   private readonly onContextMenu = (e: MouseEvent) => {
     e.preventDefault();
+    if (this.host.isPaused() || this.adapter.getSnapshot().phase !== 'playing') return;
     this.showInfoAt(e.clientX, e.clientY);
   };
   private readonly onPointerDown = (e: PointerEvent) => {
+    if (this.host.isPaused() || this.adapter.getSnapshot().phase !== 'playing') return;
     // HUD가 입력을 먼저 가져간다 — 버튼을 누르다 카메라가 끌려가면 안 된다
     if (this.host.isOverUi(e.clientX, e.clientY)) return;
     if (e.button === 2) return; // 우클릭은 contextmenu에서 처리
     this.dragging = true;
+    this.panning = false;
     this.lastPointerX = e.clientX;
     this.pressStartMs = performance.now();
     this.pressX = e.clientX;
@@ -60,11 +65,14 @@ export class InputRouter {
     // 길게 누르기 중에 손가락이 움직이면 드래그로 본다
     if (Math.abs(e.clientX - this.pressX) > 8 || Math.abs(e.clientY - this.pressY) > 8) {
       this.pressStartMs = 0;
+      this.panning = true;
     }
+    if (!this.panning || dx === 0) return;
     this.camera.panBy(-dx / this.camera.scale);
   };
   private readonly onPointerUp = () => {
     this.dragging = false;
+    this.panning = false;
     this.pressStartMs = 0;
     if (this.longPressFired) this.host.hideUnitInfo();
     this.longPressFired = false;
@@ -88,6 +96,10 @@ export class InputRouter {
   }
 
   update(deltaMs: number): void {
+    if (this.host.isPaused() || this.adapter.getSnapshot().phase !== 'playing') {
+      this.panDirection = 0;
+      return;
+    }
     if (this.panDirection !== 0) {
       this.camera.panBy(this.panDirection * KEY_PAN_SPEED * deltaMs);
     }
@@ -122,6 +134,11 @@ export class InputRouter {
 
   private handleKeyDown(e: KeyboardEvent): void {
     if (e.repeat) return;
+    if (e.code === 'Escape') {
+      this.host.togglePause();
+      return;
+    }
+    if (this.host.isPaused() || this.adapter.getSnapshot().phase !== 'playing') return;
 
     // 숫자키 1~9 → 해당 티어 유닛 (§5)
     if (e.code.startsWith('Digit')) {
@@ -145,9 +162,6 @@ export class InputRouter {
         break;
       case 'KeyR':
         this.host.toggleUpgrades();
-        break;
-      case 'Escape':
-        this.host.togglePause();
         break;
       case 'Space':
         e.preventDefault();

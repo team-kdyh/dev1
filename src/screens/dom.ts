@@ -73,6 +73,7 @@ const CSS = `
 .sw-home .sw-menu .sw-btn:first-child { background: var(--blue); color: #fff; }
 .sw-home .sw-menu .sw-btn:nth-child(2) { background: #ffda70; }
 .sw-home .sw-menu .sw-btn:first-child:hover:not(:disabled) { background: #3868cb; }
+.sw-home .sw-menu .sw-btn:last-child { grid-column: 1 / -1; }
 .sw-faction-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); width: min(620px,92vw); gap: 14px; margin: 10px 0 20px; }
 .sw-faction-card {
   appearance: none; display: flex; flex-direction: column; align-items: center; gap: 5px;
@@ -127,6 +128,18 @@ const CSS = `
 .sw-verdict { font-size: clamp(50px, 8vw, 84px); font-weight: 1000; margin: 0 0 10px; -webkit-text-stroke: 2px var(--ink); paint-order: stroke fill; text-shadow: 4px 5px 0 var(--ink); }
 .sw-win { color: #80d591; }
 .sw-lose { color: #ff8f81; }
+.sw-draw { color: #ffda70; }
+.sw-tutorial {
+  position: absolute; z-index: 3; top: 14px; left: 50%; transform: translateX(-50%);
+  width: min(480px, calc(100vw - 32px)); box-sizing: border-box;
+  display: flex; align-items: center; gap: 10px; padding: 9px 11px;
+  border: 3px solid #253044; border-radius: 12px; background: #fff9eb;
+  box-shadow: 4px 5px 0 #253044; color: #253044; pointer-events: auto;
+  font: 800 13px/1.45 "Malgun Gothic", system-ui, sans-serif;
+}
+.sw-tutorial strong { flex: none; color: #316dd3; }
+.sw-tutorial span { flex: 1; }
+.sw-tutorial .sw-btn { flex: none; min-height: 30px; padding: 4px 8px; font-size: 11px; }
 @media (max-width: 620px) {
   .sw-screen { padding: 15px; justify-content: flex-start; }
   .sw-home { justify-content: center; }
@@ -140,6 +153,7 @@ const CSS = `
   .sw-panel { max-height: 94vh; }
   .sw-panel-head { padding: 9px; }
   .sw-panel-body { padding: 12px; }
+  .sw-tutorial { top: 84px; font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) { .sw-fighter img { animation: none; } .sw-btn, .sw-faction-card { transition: none; } }
 `;

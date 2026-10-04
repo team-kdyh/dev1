@@ -2,6 +2,7 @@ import type { BalanceData, UnitDef } from '../sim/contracts';
 import semiconSkills from '../data/balance/skills/semicon.json';
 import orchardSkills from '../data/balance/skills/orchard.json';
 import { button, el, uiRoot } from './dom';
+import { assetUrl } from '../assets/assetUrl';
 
 /**
  * 도감. (명세 §7)
@@ -123,7 +124,7 @@ export class Codex {
     image.className = 'sw-preview';
     image.alt = unit.name;
     image.style.objectFit = 'contain';
-    image.src = '/assets/frames/units/' + unit.faction + '/' + unit.artId + '_idle_00.png';
+    image.src = assetUrl('frames/units/' + unit.faction + '/' + unit.artId + '_idle_00.png');
     return image;
   }
 

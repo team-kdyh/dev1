@@ -12,7 +12,6 @@ const IDLE_MS = 15000;
  * - 본진 HP 25% 이하: 적색 비네트 펄스 + 1회 경고음
  * - 자원 100 이상으로 15초 유휴: 캐시 아이콘 강조
  *
- * 경고음은 사운드가 들어오는 M2까지 재생 지점만 잡아둔다.
  */
 export class Warnings {
   readonly root = new Container();
@@ -26,7 +25,7 @@ export class Warnings {
   /** 캐시 유휴 강조 강도 0~1 — ResourceBar가 읽어간다 */
   cashHighlight = 0;
 
-  constructor() {
+  constructor(private readonly onAlarm?: () => void) {
     this.vignette.alpha = 0;
     this.root.addChild(this.vignette);
     this.root.eventMode = 'none';
@@ -54,7 +53,7 @@ export class Warnings {
       this.vignette.alpha = 0.35 + 0.35 * Math.abs(Math.sin(this.pulseMs * 0.004));
       if (!this.alarmPlayed) {
         this.alarmPlayed = true;
-        // TODO(M2 사운드): 경고음 1회 재생
+        this.onAlarm?.();
       }
     } else {
       this.vignette.alpha = 0;

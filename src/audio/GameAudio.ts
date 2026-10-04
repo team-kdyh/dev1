@@ -2,6 +2,7 @@ import manifestJson from '../../assets/audio/manifest.json';
 import { artIdOf } from '../data/gameData';
 import type { SimEvent, Snapshot } from '../sim/contracts';
 import { loadAudioSettings } from './settings';
+import { assetUrl } from '../assets/assetUrl';
 
 type Sound = { ogg: string; mp3: string; loopStart?: number; loopEnd?: number };
 type AudioManifest = { sampleRate: number; sfx: Record<string, Record<string, Sound>>;
@@ -31,7 +32,7 @@ export class GameAudio {
       promise = (async () => {
         for (const path of [sound.ogg, sound.mp3]) {
           try {
-            const response = await fetch('/assets/' + path);
+            const response = await fetch(assetUrl(path));
             if (!response.ok) continue;
             return await this.context.decodeAudioData(await response.arrayBuffer());
           } catch { /* try the alternate format */ }
@@ -126,12 +127,33 @@ export class GameAudio {
       } else if (event.type === 'rejected' && (event.owner === undefined || event.owner === snapshot.me)) {
         void this.play(manifest.sfx.misc.purchase_fail, 0.15);
       } else if (event.type === 'gameOver') {
-        void this.play(manifest.sfx.misc[event.winner === snapshot.me ? 'victory' : 'defeat'], 0.35);
+        void this.play(manifest.sfx.misc[event.winner === null ? 'ui_transition' :
+          event.winner === snapshot.me ? 'victory' : 'defeat'], 0.35);
       }
     }
   }
 
   click(): void { void this.play(manifest.sfx.misc.button_click, 0.12); }
+
+  /** 본진 체력 25% 경고: 음량 설정을 따르는 짧은 두 번의 전자 비프음. */
+  warning(): void {
+    if (this.closed || this.settings.effects <= 0) return;
+    const now = this.context.currentTime;
+    for (const offset of [0, 0.18]) {
+      const oscillator = this.context.createOscillator();
+      const gain = this.context.createGain();
+      const start = now + offset;
+      oscillator.type = 'square';
+      oscillator.frequency.setValueAtTime(740, start);
+      oscillator.frequency.exponentialRampToValueAtTime(520, start + 0.12);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.045 * this.settings.effects, start + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.13);
+      oscillator.connect(gain).connect(this.context.destination);
+      oscillator.start(start);
+      oscillator.stop(start + 0.14);
+    }
+  }
 
   stop(): void {
     for (const gain of this.gains) gain.gain.setTargetAtTime(0, this.context.currentTime, 0.04);

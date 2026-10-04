@@ -15,6 +15,7 @@ export interface HudCallbacks {
   send: (cmd: Command) => void;
   onPauseToggle: (paused: boolean) => void;
   onQuit: () => void;
+  onLowHealth?: () => void;
 }
 
 /**
@@ -24,7 +25,7 @@ export interface HudCallbacks {
 export class Hud {
   readonly root = new Container();
 
-  private readonly warnings = new Warnings();
+  private readonly warnings: Warnings;
   private readonly resources = new ResourceBar();
   private readonly unitBar: UnitBar;
   private readonly queueBar: QueueBar;
@@ -43,6 +44,7 @@ export class Hud {
     camera: Camera,
     private readonly callbacks: HudCallbacks,
   ) {
+    this.warnings = new Warnings(callbacks.onLowHealth);
     this.unitBar = new UnitBar(balance, FACTION_OF_PLAYER[me], balance.queueMax, (def: UnitDef) => {
       // 판정과 무관하게 항상 보낸다. 거부는 시뮬의 몫 (§4.1)
       callbacks.send({ type: 'SPAWN_UNIT', defId: def.id });

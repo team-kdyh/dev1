@@ -148,34 +148,27 @@ def check_atlases(manifest: dict, source_images: dict) -> int:
 
 
 def check_balance_data(manifest: dict) -> int:
-    folder = PROJECT / "data" / "balance"
-    if not folder.exists():
-        print("Balance JSON not present; C's assets.sprite cross-check remains pending")
-        return 0
+    folder = PROJECT / "src" / "data" / "balance" / "units"
+    require(folder.exists(), "Track C unit balance folder is missing")
+    logical_path = PROJECT / "src" / "data" / "assets.manifest.json"
+    require(logical_path.exists(), "Logical asset manifest is missing")
+    logical_keys = set(json.loads(logical_path.read_text(encoding="utf-8"))["keys"])
+    art_by_tier = {(entry["faction"], entry["tier"]): entry for entry in manifest["units"].values()}
     found = 0
-
-    def inspect(value: object, file: Path) -> None:
-        nonlocal found
-        if isinstance(value, dict):
-            assets = value.get("assets")
-            if isinstance(assets, dict) and "sprite" in assets:
-                sprite = assets["sprite"]
-                require(isinstance(sprite, str), f"{file}: assets.sprite must be a string")
-                if sprite in manifest["units"]:
-                    found += 1
-                else:
-                    require((ROOT / sprite).exists(), f"{file}: assets.sprite does not resolve: {sprite}")
-                    found += 1
-            for child in value.values():
-                inspect(child, file)
-        elif isinstance(value, list):
-            for child in value:
-                inspect(child, file)
-
     files = sorted(folder.glob("*.json"))
     for file in files:
-        inspect(json.loads(file.read_text(encoding="utf-8")), file)
-    print(f"Checked {found} assets.sprite references in {len(files)} balance files")
+        units = json.loads(file.read_text(encoding="utf-8"))["units"]
+        for unit in units:
+            assets = unit["assets"]
+            art = art_by_tier.get((unit["faction"], unit["tier"]))
+            require(art is not None, f"{unit['id']}: no character art at faction/tier")
+            for name in ("sprite", "sfxAttack", "sfxDeath"):
+                key = assets.get(name)
+                require(isinstance(key, str) and key in logical_keys,
+                        f"{unit['id']}: {name} does not resolve in logical manifest: {key}")
+            found += 1
+    require(found == len(manifest["units"]) == 18, f"Balance/art unit count mismatch: {found}")
+    print(f"Checked {found} Track C units against art and logical sprite/sound keys")
     return found
 
 

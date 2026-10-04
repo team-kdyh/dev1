@@ -148,8 +148,12 @@ export class EffectDirector {
   }
 
   /** §6: 슬로우모션 후 결과 화면 / §3: 게임 종료는 패배 본진 줌인 */
-  private gameOver(winner: number): void {
+  private gameOver(winner: number | null): void {
     this.slow(OVER_SLOW_SCALE, OVER_SLOW_MS);
+    if (winner === null) {
+      this.camera.returnToAuto();
+      return;
+    }
     const loser = winner === 0 ? 1 : 0;
     this.camera.zoomTo(toPixel(loser === 0 ? 0 : LOGICAL_MAX), 1.45);
   }

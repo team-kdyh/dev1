@@ -3,7 +3,7 @@ name: Team integration checks
 on:
   pull_request:
   push:
-    branches: [main, gjtjw/track-c-docs]
+    branches: [main, gjtjw/track-c-docs, 'integration/**']
 
 jobs:
   validate:
@@ -24,6 +24,8 @@ jobs:
         run: python3 assets/tools/validate_assets.py
       - name: Verify batch reporting pipeline
         run: npm run batch -- --adapter smoke --n 20 --seed 1000 --out reports/ci-smoke.csv
+      - name: Exercise full-length browser simulation
+        run: npm run audit:pve -- --matches=10
 
   # 트랙 B의 권위 있는 headless 어댑터가 연결되면 데이터 변경 PR에서
   # 200판 회귀 실행을 추가한다. smoke 어댑터 결과는 밸런스 게이트가 아니다.

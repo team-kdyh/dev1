@@ -31,6 +31,7 @@ export class UnitView {
   private spawnMs = 0;
   private baseTint = 0xffffff;
   private faction = '';
+  private nativeOwner: 0 | 1 = 0;
   private tier = 1;
   private facing: 1 | -1 = 1;
   private visualState = 'idle';
@@ -65,6 +66,7 @@ export class UnitView {
   reset(unit: UnitSnapshot, faction: string): void {
     this.unitId = unit.id;
     this.faction = faction;
+    this.nativeOwner = unit.owner;
     this.tier = unit.tier;
     this.facing = unit.facing;
     this.visualState = 'idle';
@@ -94,6 +96,11 @@ export class UnitView {
     this.root.position.set(this.worldX, y);
 
     this.facing = curr.facing;
+    const ownerTint = curr.owner === this.nativeOwner ? 0xffffff : 0x8dbaff;
+    if (this.baseTint !== ownerTint) {
+      this.baseTint = ownerTint;
+      if (this.flashMs <= 0) this.body.tint = ownerTint;
+    }
     if (curr.state !== this.visualState && this.deathMs < 0 && this.attackMs <= 0) {
       this.visualState = curr.state;
       this.stateElapsedMs = 0;

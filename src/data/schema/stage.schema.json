@@ -23,7 +23,8 @@
               "timeLimit": { "type": "number", "exclusiveMinimum": 0 },
               "bannedUnits": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
               "startAge": { "type": "integer", "minimum": 1, "maximum": 4 }, "upgradesEnabled": { "type": "boolean" },
-              "enemyStatMod": { "type": "number", "exclusiveMinimum": 0 }, "tutorialFocus": { "type": "string" }
+              "enemyStatMod": { "type": "number", "exclusiveMinimum": 0 }, "tutorialFocus": { "type": "string" },
+              "enemyBossAt": { "type": "number", "exclusiveMinimum": 0 }
             }
           },
           "rewards": {

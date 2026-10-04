@@ -13,7 +13,7 @@ import type {
 import { FACTION_OF_PLAYER, unitsOfFaction } from '../data/gameData';
 import { createInitialMemory, evaluateAi, defaultCatalog } from '../ai/index';
 import type { AiMemory, Command as AiCommand, DifficultyId, SimulationSnapshot as AiSnapshot, UnitRole } from '../ai/types';
-import { FixedStepLoop, LOGICAL_MAX, TICK_MS, type SimAdapter } from './SimAdapter';
+import { FixedStepLoop, LOGICAL_MAX, TICK_HZ, TICK_MS, type SimAdapter } from './SimAdapter';
 
 /** Browser implementation of Track B's 30 Hz M0 rules, consuming Track C data. */
 
@@ -29,6 +29,30 @@ interface SimUnit {
   attackCdMs: number;
   poseMs: number;
   healCdMs: number;
+  stationaryMs: number;
+  skillCdMs: number;
+  speedBoostMs: number;
+  rootMs: number;
+  specialCdMs: number;
+  oneMoreUsed: boolean;
+  bossBuffed: boolean;
+  freeSupply: boolean;
+  attackCount: number;
+  killCount: number;
+  ringStacks: number;
+  foldMs: number;
+  folded: boolean;
+  deployed: boolean;
+  silenceMs: number;
+  stunMs: number;
+  malfunctionMs: number;
+  overheatStacks: number;
+  coolingMs: number;
+  ghostMs: number;
+  illusionMs: number;
+  isIllusion: boolean;
+  convertedUntilTick: number;
+  pairBoosted: boolean;
 }
 
 interface SimPlayer {
@@ -44,6 +68,7 @@ interface SimPlayer {
   cashBoostMs: number;
   turretCdMs: number;
   instantProductionCharges: number;
+  ultimateBuffMs: number;
   unlockedTiers: number[];
   queue: { def: UnitDef; elapsedMs: number }[];
 }
@@ -60,6 +85,8 @@ export interface LocalMatchOptions {
   startAge?: number;
   bannedUnits?: readonly string[];
   research?: Readonly<Record<string, number>>;
+  enemyStatMod?: number;
+  enemyBossAtSeconds?: number;
 }
 
 function mulberry32(seed: number): () => number {
@@ -84,7 +111,8 @@ export class LocalSimAdapter implements SimAdapter {
   private players: [SimPlayer, SimPlayer];
   private aiMemory: AiMemory = createInitialMemory();
   private readonly scheduled: { tick: number; owner: PlayerId; command: Command }[] = [];
-  private winner: PlayerId | null = null;
+  /** undefined=진행 중, null=무승부 */
+  private winner: PlayerId | null | undefined;
 
   private pending: SimEvent[] = [];
   private listeners: ((events: SimEvent[]) => void)[] = [];
@@ -138,6 +166,11 @@ export class LocalSimAdapter implements SimAdapter {
   }
 
   send(cmd: Command): void {
+    if (this.winner !== undefined) {
+      this.emit({ type: 'rejected', owner: this.me, command: cmd, reason: 'GAME_OVER' });
+      this.flush();
+      return;
+    }
     this.enqueue(this.me, cmd);
   }
 
@@ -147,7 +180,7 @@ export class LocalSimAdapter implements SimAdapter {
 
   private applyCommand(owner: PlayerId, cmd: Command): void {
     const player = this.players[owner];
-    if (this.winner !== null) {
+    if (this.winner !== undefined) {
       this.emit({ type: 'rejected', owner, command: cmd, reason: 'GAME_OVER' });
       return;
     }
@@ -255,7 +288,7 @@ export class LocalSimAdapter implements SimAdapter {
   /** 프론트(§4.1)와 같은 규칙. 어긋나면 버그라는 걸 증명하기 위해 일부러 중복 구현. */
   private rejectSpawn(owner: PlayerId, def: UnitDef): RejectReason | null {
     const p = this.players[owner];
-    if (this.winner !== null) return 'GAME_OVER';
+    if (this.winner !== undefined) return 'GAME_OVER';
     if (!p.unlockedTiers.includes(def.tier) || this.options.bannedUnits?.includes(def.id)) return 'LOCKED';
     if (p.queue.length >= this.balance.queueMax) return 'QUEUE_FULL';
     if ((p.cooldowns[def.id] ?? 0) > 0) return 'COOLDOWN';
@@ -266,7 +299,7 @@ export class LocalSimAdapter implements SimAdapter {
 
   private supplyOf(owner: PlayerId): number {
     let total = 0;
-    for (const u of this.units) if (u.owner === owner) total += u.def.supply;
+    for (const u of this.units) if (u.owner === owner && !u.freeSupply) total += u.def.supply;
     for (const q of this.players[owner].queue) total += q.def.supply;
     return total;
   }
@@ -282,7 +315,7 @@ export class LocalSimAdapter implements SimAdapter {
   // -- 시뮬 루프 -----------------------------------------------------------
 
   private step(): void {
-    if (this.winner !== null) {
+    if (this.winner !== undefined) {
       this.flush();
       return;
     }
@@ -291,34 +324,45 @@ export class LocalSimAdapter implements SimAdapter {
     const dt = TICK_MS / 1000;
     for (let index = 0; index < this.scheduled.length;) {
       const task = this.scheduled[index];
+      if (!task) break;
       if (task.tick > this.tick) { index++; continue; }
       this.scheduled.splice(index, 1);
       this.applyCommand(task.owner, task.command);
     }
 
-    for (let i = 0; i < 2; i += 1) {
-      const p = this.players[i];
-      const researchCash = i === this.me ? 0.5 * (this.options.research?.[FACTION_OF_PLAYER[i] + '_cash_rate'] ?? 0) : 0;
+    for (const owner of [0, 1] as const) {
+      const p = this.players[owner];
+      const researchCash = owner === this.me ? 0.5 * (this.options.research?.[FACTION_OF_PLAYER[owner] + '_cash_rate'] ?? 0) : 0;
       const income = (this.balance.cashPerSecond + researchCash + 3 * (p.upgradeLevels.production_line ?? 0)) *
         (p.cashBoostMs > 0 ? 3 : 1) * dt;
       p.cash = Math.min(this.balance.cashCap ?? 9999, p.cash + income);
       p.cumulativeCash += income;
       p.cashBoostMs = Math.max(0, p.cashBoostMs - TICK_MS);
+      p.ultimateBuffMs = Math.max(0, p.ultimateBuffMs - TICK_MS);
       p.turretCdMs = Math.max(0, p.turretCdMs - TICK_MS);
       for (const key of Object.keys(p.cooldowns)) {
-        p.cooldowns[key] = Math.max(0, p.cooldowns[key] - TICK_MS);
+        p.cooldowns[key] = Math.max(0, (p.cooldowns[key] ?? 0) - TICK_MS);
       }
       for (const key of Object.keys(p.strategyCooldowns)) {
-        p.strategyCooldowns[key] = Math.max(0, p.strategyCooldowns[key] - TICK_MS);
+        p.strategyCooldowns[key] = Math.max(0, (p.strategyCooldowns[key] ?? 0) - TICK_MS);
       }
-      this.stepQueue(i as PlayerId, p);
+      this.stepQueue(owner, p);
     }
 
+    if (this.options.enemyBossAtSeconds !== undefined &&
+      this.tick === Math.round(this.options.enemyBossAtSeconds * 30)) {
+      const enemy: PlayerId = this.me === 0 ? 1 : 0;
+      const boss = unitsOfFaction(this.balance, FACTION_OF_PLAYER[enemy])
+        .find((unit) => unit.tier === 9);
+      if (boss) this.spawn(enemy, boss);
+    }
+
+    this.syncSemiconAura();
     this.stepUnits(dt);
-    if (this.winner === null) this.stepTurrets();
+    if (this.winner === undefined) this.stepTurrets();
 
     this.currSnapshot = this.buildSnapshot();
-    this.stepAi();
+    if (this.winner === undefined) this.stepAi();
     this.flush();
   }
 
@@ -333,12 +377,13 @@ export class LocalSimAdapter implements SimAdapter {
     this.spawn(owner, head.def);
   }
 
-  private spawn(owner: PlayerId, def: UnitDef): void {
-    const x = owner === 0 ? 60 : LOGICAL_MAX - 60;
+  private spawn(owner: PlayerId, def: UnitDef,
+    options: { x?: number; freeSupply?: boolean; illusion?: boolean } = {}): void {
+    const x = options.x ?? (owner === 0 ? 60 : LOGICAL_MAX - 60);
     const mastery = owner === this.me ? this.options.research?.[FACTION_OF_PLAYER[owner] + '_unit_mastery'] ?? 0 : 0;
     const ageBonus = this.balance.ages?.find((age) => age.age === this.players[owner].age);
-    const hp = def.hp * (1 + 0.12 * (this.players[owner].upgradeLevels.quality_control ?? 0) +
-      0.03 * mastery + (ageBonus?.globalStatBonus ?? 0));
+    const hp = options.illusion ? 1 : def.hp * (1 + 0.12 * (this.players[owner].upgradeLevels.quality_control ?? 0) +
+      0.03 * mastery + (ageBonus?.globalStatBonus ?? 0)) * this.enemyModifier(owner);
     const unit: SimUnit = {
       id: this.nextUnitId++,
       def,
@@ -351,12 +396,122 @@ export class LocalSimAdapter implements SimAdapter {
       attackCdMs: 0,
       poseMs: 0,
       healCdMs: 1000,
+      stationaryMs: 0,
+      skillCdMs: def.id === 'semicon_t9_chairman' ? 20000 :
+        def.id === 'orchard_t9_founder' ? 18000 :
+        def.id === 'orchard_t5_pad_shield' ? 12000 :
+        def.id === 'semicon_t8_ai_assistant' ? 10000 :
+        def.id === 'orchard_t6_vision' && !options.illusion ? 14000 : 0,
+      speedBoostMs: 0,
+      rootMs: 0,
+      specialCdMs: def.id === 'orchard_t9_founder' ? 40000 :
+        def.id === 'semicon_t9_chairman' ? 35000 : 0,
+      oneMoreUsed: false,
+      bossBuffed: false,
+      freeSupply: options.freeSupply ?? false,
+      attackCount: 0,
+      killCount: 0,
+      ringStacks: 0,
+      foldMs: def.id === 'semicon_t5_fold' ? 2000 : 0,
+      folded: def.id === 'semicon_t5_fold',
+      deployed: false,
+      silenceMs: 0,
+      stunMs: 0,
+      malfunctionMs: 0,
+      overheatStacks: 0,
+      coolingMs: 0,
+      ghostMs: def.id === 'orchard_t6_vision' && !options.illusion ? 3000 : 0,
+      illusionMs: options.illusion ? 5000 : 0,
+      isIllusion: options.illusion ?? false,
+      convertedUntilTick: 0,
+      pairBoosted: false,
     };
     this.units.push(unit);
     this.emit({ type: 'spawn', unitId: unit.id, defId: def.id, owner, x });
   }
 
+  private enemyModifier(owner: PlayerId): number {
+    const value = owner === this.me ? 1 : this.options.enemyStatMod ?? 1;
+    return Number.isFinite(value) && value > 0 ? value : 1;
+  }
+
+  /** 회장이 필드에 있는 동안 아군 최대 HP를 올리고, 사망 시 비율을 보존해 되돌린다. */
+  private syncSemiconAura(): void {
+    const empowered = this.units.some((unit) =>
+      unit.owner === 0 && unit.def.id === 'semicon_t9_chairman' && unit.hp > 0);
+    for (const unit of this.units) {
+      if (unit.owner !== 0 || unit.bossBuffed === empowered) continue;
+      const factor = empowered ? 1.2 : 1 / 1.2;
+      unit.maxHp *= factor;
+      unit.hp = Math.min(unit.maxHp, unit.hp * factor);
+      unit.bossBuffed = empowered;
+    }
+  }
+
+  private attackBonus(unit: SimUnit): number {
+    const chairman = unit.owner === 0 && this.units.some((ally) =>
+      ally.owner === 0 && ally.def.id === 'semicon_t9_chairman' && ally.hp > 0);
+    const extended = this.units.some((ally) => ally !== unit && ally.owner === unit.owner &&
+      ally.def.id === 'semicon_t7_book_station' && ally.deployed && ally.hp > 0 &&
+      Math.abs(ally.x - unit.x) <= 150);
+    return (chairman ? 1.2 : 1) * (this.players[unit.owner].ultimateBuffMs > 0 ? 1.5 : 1) *
+      (extended ? 1.15 : 1) * (1 + unit.ringStacks * 0.05) *
+      (1 + unit.overheatStacks * 0.08);
+  }
+
+  private effectiveRange(unit: SimUnit): number {
+    const extended = this.units.some((ally) => ally !== unit && ally.owner === unit.owner &&
+      ally.def.id === 'semicon_t7_book_station' && ally.deployed && ally.hp > 0 &&
+      Math.abs(ally.x - unit.x) <= 150);
+    return unit.def.range + (extended ? 40 : 0);
+  }
+
+  /** T1 버즈는 한 몸체로 그려지지만 체력 절반에서 한쪽이 이탈해 공격이 빨라진다. */
+  private checkPairLoss(unit: SimUnit): void {
+    if (unit.def.id !== 'semicon_t1_buds' || unit.pairBoosted ||
+      unit.hp <= 0 || unit.hp > unit.maxHp / 2) return;
+    unit.pairBoosted = true;
+    this.emit({ type: 'skill', unitId: unit.id, skillId: 'semicon_buds_pair', x: unit.x });
+  }
+
   private stepAi(): void {
+    const enemy: PlayerId = this.me === 0 ? 1 : 0;
+    const ai = this.players[enemy];
+    const nextAge = this.balance.ages?.find((age) => age.age === ai.age + 1);
+    if (nextAge) {
+      const baseX = enemy === 0 ? 0 : LOGICAL_MAX;
+      const underAttack = this.units.some((unit) => unit.owner === this.me &&
+        Math.abs(unit.x - baseX) <= 350);
+      const readyToSave = ai.cumulativeCash >= nextAge.cumulativeCashRequired;
+      const readyToAdvance = readyToSave && ai.cash >= nextAge.cost &&
+        (nextAge.previousAgeSecondsRequired === undefined ||
+          this.tick - ai.ageEnteredTick >= nextAge.previousAgeSecondsRequired * 30);
+      if (readyToAdvance) {
+        if (!this.scheduled.some((task) => task.owner === enemy && task.command.type === 'AGE_UP')) {
+          this.enqueue(enemy, { type: 'AGE_UP' });
+        }
+        return;
+      }
+      if (readyToSave && !underAttack) {
+        return;
+      }
+    }
+    // 하드 AI는 저티어 근접 유닛만 반복 생산하지 않고, 전선이 형성되면
+    // T3 원거리 유닛의 비용을 모아 혼합 편성을 만든다.
+    if ((this.options.difficulty === 'hard' || this.options.difficulty === 'expert') &&
+      this.tick >= 300 && ai.age === 1) {
+      const ranged = this.balance.units.find((unit) =>
+        unit.faction === FACTION_OF_PLAYER[enemy] && unit.tier === 3);
+      if (ranged) {
+        if (ai.cash < ranged.cost) return;
+        if (this.tick % 15 === 0 && !this.rejectSpawn(enemy, ranged) && !this.scheduled.some((task) =>
+          task.owner === enemy && task.command.type === 'SPAWN_UNIT' && task.command.defId === ranged.id)) {
+          this.enqueue(enemy, { type: 'SPAWN_UNIT', defId: ranged.id });
+          return;
+        }
+        if (!this.rejectSpawn(enemy, ranged)) return;
+      }
+    }
     const snapshot: AiSnapshot = {
       tick: this.tick,
       tickRate: 30,
@@ -390,12 +545,11 @@ export class LocalSimAdapter implements SimAdapter {
         x: unit.x,
         hp: unit.hp,
         maxHp: unit.maxHp,
-        atk: unit.def.attack ?? unit.def.dps,
+        atk: (unit.def.attack ?? unit.def.dps) * this.enemyModifier(unit.owner),
         atkSpeed: 1000 / (unit.def.attackIntervalMs ?? 1000),
         roles: [...(unit.def.roles ?? [])] as UnitRole[],
       })),
     } as AiSnapshot;
-    const enemy: PlayerId = this.me === 0 ? 1 : 0;
     const result = evaluateAi({
       snapshot, playerId: enemy === 0 ? 'p0' : 'p1', difficulty: this.options.difficulty ?? 'normal',
       catalog: defaultCatalog, memory: this.aiMemory, rng: { next: () => this.rng() },
@@ -423,40 +577,194 @@ export class LocalSimAdapter implements SimAdapter {
 
   private stepUnits(dt: number): void {
     const dead: SimUnit[] = [];
+    const vanished: SimUnit[] = [];
+    const killerById = new Map<number, SimUnit>();
     for (const unit of this.units) {
       if (unit.hp <= 0) continue;
+      if (unit.convertedUntilTick > 0 && this.tick >= unit.convertedUntilTick) {
+        vanished.push(unit);
+        continue;
+      }
+      if (unit.isIllusion) {
+        unit.illusionMs -= TICK_MS;
+        if (unit.illusionMs <= 0) vanished.push(unit);
+        else unit.state = 'idle';
+        continue;
+      }
       const dir = unit.owner === 0 ? 1 : -1;
       unit.facing = dir;
       unit.attackCdMs = Math.max(0, unit.attackCdMs - TICK_MS);
       unit.poseMs = Math.max(0, unit.poseMs - TICK_MS);
       unit.healCdMs = Math.max(0, unit.healCdMs - TICK_MS);
+      unit.skillCdMs = Math.max(0, unit.skillCdMs - TICK_MS);
+      unit.speedBoostMs = Math.max(0, unit.speedBoostMs - TICK_MS);
+      unit.rootMs = Math.max(0, unit.rootMs - TICK_MS);
+      unit.specialCdMs = Math.max(0, unit.specialCdMs - TICK_MS);
+      unit.silenceMs = Math.max(0, unit.silenceMs - TICK_MS);
+      unit.stunMs = Math.max(0, unit.stunMs - TICK_MS);
+      unit.malfunctionMs = Math.max(0, unit.malfunctionMs - TICK_MS);
+      unit.coolingMs = Math.max(0, unit.coolingMs - TICK_MS);
+      unit.ghostMs = Math.max(0, unit.ghostMs - TICK_MS);
+      if (unit.def.id === 'semicon_t5_fold') {
+        unit.foldMs -= TICK_MS;
+        if (unit.foldMs <= 0) {
+          unit.foldMs = 2000;
+          unit.folded = !unit.folded;
+          this.emit({ type: 'skill', unitId: unit.id, skillId: 'semicon_fold_toggle', x: unit.x });
+        }
+      }
+      if (unit.stunMs > 0) {
+        unit.state = 'idle';
+        continue;
+      }
 
-      if (unit.def.id === 'semicon_t2_watch_medic' && unit.healCdMs === 0) {
+      if (unit.def.id === 'semicon_t9_chairman' && unit.skillCdMs === 0 && unit.silenceMs === 0) {
+        unit.skillCdMs = 20000;
+        const soldier = this.balance.units.find((def) => def.id === 'semicon_t3_aphone');
+        if (soldier) {
+          for (let index = 0; index < 4; index++) {
+            this.spawn(unit.owner, soldier, { x: 60 - index * 14, freeSupply: true });
+          }
+          this.emit({ type: 'skill', unitId: unit.id, skillId: 'semicon_increase_production', x: unit.x });
+        }
+      }
+      if (unit.def.id === 'semicon_t9_chairman' && unit.specialCdMs === 0 && unit.silenceMs === 0) {
+        const acquired = this.units.filter((enemy) => enemy.owner !== unit.owner && enemy.hp > 0 &&
+          enemy.def.tier < 9 && !enemy.isIllusion &&
+          Math.abs(enemy.x - unit.x) <= this.effectiveRange(unit))
+          .sort((a, b) => (b.def.attack ?? b.def.dps) * b.maxHp -
+            (a.def.attack ?? a.def.dps) * a.maxHp || a.id - b.id)[0];
+        if (acquired) {
+          acquired.owner = unit.owner;
+          acquired.facing = unit.facing;
+          acquired.freeSupply = true;
+          acquired.convertedUntilTick = this.tick + 8 * TICK_HZ;
+          unit.specialCdMs = 35000;
+          this.emit({ type: 'skill', unitId: unit.id, skillId: 'semicon_acquisition', x: unit.x });
+        }
+      }
+      if (unit.def.id === 'orchard_t6_vision' && unit.skillCdMs === 0 && unit.silenceMs === 0) {
+        unit.skillCdMs = 14000;
+        for (const offset of [-12, 12]) {
+          this.spawn(unit.owner, unit.def, {
+            x: clamp(unit.x + offset, 0, LOGICAL_MAX), freeSupply: true, illusion: true,
+          });
+        }
+        this.emit({ type: 'skill', unitId: unit.id, skillId: 'orchard_illusion', x: unit.x });
+      }
+      if (unit.def.id === 'orchard_t9_founder' && unit.silenceMs === 0) {
+        if (unit.skillCdMs === 0) {
+          const rooted = this.units.filter((enemy) => enemy.owner !== unit.owner && enemy.hp > 0 &&
+            (enemy.x - unit.x) * dir >= 0 && Math.abs(enemy.x - unit.x) <= 300);
+          if (rooted.length > 0) {
+            for (const enemy of rooted) enemy.rootMs = Math.max(enemy.rootMs, 3000);
+            unit.skillCdMs = 18000;
+            this.emit({ type: 'skill', unitId: unit.id, skillId: 'orchard_presentation', x: unit.x });
+          }
+        }
+        if (!unit.oneMoreUsed && unit.specialCdMs === 0) {
+          const allies = this.units.filter((ally) => ally.owner === unit.owner && ally.hp > 0);
+          if (allies.some((ally) => ally.hp < ally.maxHp)) {
+            for (const ally of allies) ally.hp = ally.maxHp;
+            this.players[unit.owner].ultimateBuffMs = 15000;
+            unit.oneMoreUsed = true;
+            this.emit({ type: 'skill', unitId: unit.id, skillId: 'orchard_one_more_thing', x: unit.x });
+          }
+        }
+      }
+
+      const isSemiconMedic = unit.def.id === 'semicon_t2_watch_medic';
+      const isOrchardTrainer = unit.def.id === 'orchard_t2_watch_trainer';
+      if ((isSemiconMedic || isOrchardTrainer) && unit.healCdMs === 0) {
         unit.healCdMs = 1000;
         const wounded = this.units.filter((other) => other.owner === unit.owner && other.hp > 0 &&
-          other.hp < other.maxHp && Math.abs(other.x - unit.x) <= 100);
+          other.hp < other.maxHp && Math.abs(other.x - unit.x) <= (isSemiconMedic ? 100 : 110));
         wounded.sort((left, right) => left.hp / left.maxHp - right.hp / right.maxHp ||
           Math.abs(left.x - unit.x) - Math.abs(right.x - unit.x) || left.id - right.id);
         if (wounded.length > 0) {
-          for (const target of wounded.slice(0, 3)) target.hp = Math.min(target.maxHp, target.hp + 6);
-          this.emit({ type: 'skill', unitId: unit.id, skillId: 'semicon_heart_monitor', x: unit.x });
+          for (const ally of isSemiconMedic ? wounded.slice(0, 3) : wounded) {
+            ally.hp = Math.min(ally.maxHp, ally.hp + (isSemiconMedic ? 6 : 5));
+          }
+          this.emit({ type: 'skill', unitId: unit.id,
+            skillId: isSemiconMedic ? 'semicon_heart_monitor' : 'orchard_trainer_heal', x: unit.x });
           unit.state = 'cast';
           unit.poseMs = 330;
         }
       }
 
-      const target = this.nearestEnemy(unit, dir);
+      if (isSemiconMedic && unit.skillCdMs === 0) {
+        const critical = this.units.filter((ally) => ally.owner === unit.owner && ally.hp > 0 &&
+          ally.hp / ally.maxHp <= 0.2 && Math.abs(ally.x - unit.x) <= 100)
+          .sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp || a.id - b.id)[0];
+        if (critical) {
+          critical.speedBoostMs = Math.max(critical.speedBoostMs, 3000);
+          unit.skillCdMs = 8000;
+          this.emit({ type: 'skill', unitId: unit.id, skillId: 'semicon_emergency_call', x: unit.x });
+        }
+      }
+
+      let target = this.nearestEnemy(unit, dir);
       const enemyBaseX = unit.owner === 0 ? LOGICAL_MAX : 0;
-      const reach = unit.def.range + CONTACT_PAD;
-      const attackInterval = unit.def.attackIntervalMs ?? 1000;
+      const reach = this.effectiveRange(unit) + CONTACT_PAD;
+      if (unit.def.id === 'semicon_t7_book_station' && target &&
+        Math.abs(target.x - unit.x) <= reach && !unit.deployed) {
+        unit.deployed = true;
+        unit.state = 'deploy';
+        unit.poseMs = 330;
+        this.emit({ type: 'skill', unitId: unit.id, skillId: 'semicon_dex_mode', x: unit.x });
+      }
+      if (unit.def.id === 'semicon_t8_ai_assistant' && unit.skillCdMs === 0 && unit.silenceMs === 0) {
+        const victim = this.units.filter((enemy) => enemy.owner !== unit.owner && enemy.hp > 0 &&
+          Math.abs(enemy.x - unit.x) <= reach)
+          .sort((a, b) => b.def.tier - a.def.tier || Math.abs(a.x - unit.x) - Math.abs(b.x - unit.x))[0];
+        if (victim) {
+          victim.silenceMs = Math.max(victim.silenceMs, 5000);
+          unit.skillCdMs = 10000;
+          this.emit({ type: 'skill', unitId: unit.id, skillId: 'semicon_routine_execute', x: unit.x });
+        }
+      }
+      if (unit.def.id === 'orchard_t5_pad_shield' && unit.skillCdMs === 0 &&
+        unit.silenceMs === 0 && target && Math.abs(target.x - unit.x) <= 60) {
+        unit.skillCdMs = 12000;
+        const amount = Math.max(1, Math.round((unit.def.attack ?? unit.def.dps) * 2.5 *
+          this.enemyModifier(unit.owner) * this.attackBonus(unit) - (target.def.armor ?? 0)));
+        target.hp -= amount;
+        this.checkPairLoss(target);
+        target.stunMs = Math.max(target.stunMs, 1500);
+        this.emit({ type: 'hit', unitId: target.id, x: target.x, amount, crit: false });
+        this.emit({ type: 'skill', unitId: unit.id, skillId: 'orchard_pencil_stab', x: unit.x });
+        if (target.hp <= 0 && !dead.includes(target)) {
+          dead.push(target);
+          killerById.set(target.id, unit);
+        }
+        if (target.hp <= 0) target = this.nearestEnemy(unit, dir);
+      }
+      const crowd = unit.def.id === 'semicon_t3_aphone' && this.units.filter((ally) =>
+        ally.owner === unit.owner && ally.def.id === unit.def.id && ally.hp > 0 &&
+        Math.abs(ally.x - unit.x) <= 100).length >= 3;
+      const founderHaste = unit.owner === 1 && this.units.some((ally) =>
+        ally.owner === 1 && ally.def.id === 'orchard_t9_founder' && ally.hp > 0 &&
+        Math.abs(ally.x - unit.x) <= 250);
+      const attackInterval = (unit.def.attackIntervalMs ?? 1000) *
+        (unit.malfunctionMs > 0 ? 1.3 : 1) /
+        ((crowd ? 1.25 : 1) * (founderHaste ? 1.3 : 1) * (unit.pairBoosted ? 1.5 : 1));
       if (target && Math.abs(target.x - unit.x) <= reach) {
-        if (unit.attackCdMs === 0) {
+        unit.stationaryMs += TICK_MS;
+        if (unit.attackCdMs === 0 && !unit.folded && unit.coolingMs === 0) {
           unit.attackCdMs = attackInterval;
+          unit.attackCount++;
           unit.poseMs = 330;
           unit.state = 'attack';
           this.emit({ type: 'attack', unitId: unit.id, defId: unit.def.id, owner: unit.owner, x: unit.x, targetX: target.x });
           const victims = [target];
-          if (unit.def.targetType === 'splash') {
+          const piercing = unit.def.id === 'semicon_t6_tab_artillery' && unit.attackCount % 4 === 0 &&
+            unit.silenceMs === 0;
+          if (piercing) {
+            victims.splice(0, 1, ...this.units.filter((enemy) => enemy.owner !== unit.owner && enemy.hp > 0 &&
+              (enemy.x - unit.x) * dir >= 0 && Math.abs(enemy.x - unit.x) <= reach)
+              .sort((a, b) => Math.abs(a.x - unit.x) - Math.abs(b.x - unit.x)).slice(0, 3));
+            this.emit({ type: 'skill', unitId: unit.id, skillId: 'semicon_pen_throw', x: unit.x });
+          } else if (unit.def.targetType === 'splash') {
             const radius = unit.def.splashRadius ?? 0;
             for (const other of this.units) {
               if (other !== target && other.owner !== unit.owner && other.hp > 0 &&
@@ -468,64 +776,146 @@ export class LocalSimAdapter implements SimAdapter {
             const mastery = unit.owner === this.me ? this.options.research?.[FACTION_OF_PLAYER[unit.owner] + '_unit_mastery'] ?? 0 : 0;
             const ageBonus = this.balance.ages?.find((age) => age.age === this.players[unit.owner].age)?.globalStatBonus ?? 0;
             const attack = (unit.def.attack ?? unit.def.dps) *
-              (1 + 0.12 * (this.players[unit.owner].upgradeLevels.rnd ?? 0) + 0.03 * mastery + ageBonus);
-            const amount = Math.max(1, Math.round(attack * matrix - (victim.def.armor ?? 0)));
+              (1 + 0.12 * (this.players[unit.owner].upgradeLevels.rnd ?? 0) + 0.03 * mastery + ageBonus) *
+              this.enemyModifier(unit.owner) * this.attackBonus(unit);
+            const crit = unit.def.id === 'semicon_t4_sphone_sniper' && unit.stationaryMs >= 2500;
+            const aim = unit.def.id === 'semicon_t4_sphone_sniper' && !crit ? 0.8 : 1;
+            const protection = victim.def.id === 'orchard_t3_phone' && this.units.some((ally) =>
+              ally !== victim && ally.owner === victim.owner && ally.hp > 0 &&
+              Math.abs(ally.x - victim.x) <= 130) ? 0.9 : 1;
+            const shield = unit.def.damageType === 'ranged' && this.units.some((ally) =>
+              ally.owner === victim.owner && ally.def.id === 'orchard_t5_pad_shield' && ally.hp > 0 &&
+              (victim.x - ally.x) * (victim.owner === 0 ? 1 : -1) < 0 &&
+              Math.abs(victim.x - ally.x) <= 100) ? 0.65 : 1;
+            const fold = victim.folded ? 0.6 : 1;
+            const cooling = victim.coolingMs > 0 ? 1.2 : 1;
+            const minimumRange = unit.def.id === 'semicon_t6_tab_artillery' &&
+              Math.abs(victim.x - unit.x) < 70 ? 0.5 : 1;
+            const armor = (victim.def.armor ?? 0) + (victim.deployed ? 25 : 0);
+            const amount = Math.max(1, Math.round((attack * matrix * (crit ? 3 : aim) *
+              minimumRange - armor) * protection * shield * fold * cooling));
             victim.hp -= amount;
-            this.emit({ type: 'hit', unitId: victim.id, x: victim.x, amount, crit: false });
-            if (victim.hp <= 0 && !dead.includes(victim)) dead.push(victim);
+            this.emit({ type: 'hit', unitId: victim.id, x: victim.x, amount, crit });
+            this.checkPairLoss(victim);
+            if (unit.def.id === 'semicon_t8_ai_assistant' && unit.silenceMs === 0) {
+              for (const enemy of this.units) {
+                if (enemy.owner !== unit.owner && enemy.hp > 0 && Math.abs(enemy.x - victim.x) <= 120) {
+                  enemy.malfunctionMs = Math.max(enemy.malfunctionMs, 4000);
+                }
+              }
+            }
+            if (victim.hp <= 0 && !dead.includes(victim)) {
+              dead.push(victim);
+              killerById.set(victim.id, unit);
+              if (unit.def.id === 'orchard_t4_phone_pro') unit.attackCdMs = 0;
+            }
+            if (crit) unit.stationaryMs = 0;
+          }
+          if (unit.def.id === 'orchard_t8_pro_notebook' && unit.silenceMs === 0) {
+            unit.overheatStacks++;
+            if (unit.overheatStacks >= 5) {
+              unit.overheatStacks = 0;
+              unit.coolingMs = 3000;
+              this.emit({ type: 'skill', unitId: unit.id, skillId: 'orchard_performance_mode', x: unit.x });
+            }
           }
         } else if (unit.poseMs === 0) unit.state = 'idle';
       } else if (!target && Math.abs(enemyBaseX - unit.x) <= reach) {
-        if (unit.attackCdMs === 0) {
+        unit.stationaryMs += TICK_MS;
+        if (unit.attackCdMs === 0 && !unit.folded && unit.coolingMs === 0) {
           unit.attackCdMs = attackInterval;
           unit.poseMs = 330;
           unit.state = 'attack';
           this.emit({ type: 'attack', unitId: unit.id, defId: unit.def.id, owner: unit.owner, x: unit.x, targetX: enemyBaseX });
           const victim: PlayerId = unit.owner === 0 ? 1 : 0;
           const matrix = this.balance.damageMatrix?.[unit.def.damageType ?? 'melee']?.structure ?? 1;
-          const amount = Math.max(1, Math.round((unit.def.attack ?? unit.def.dps) * matrix));
+          const amount = Math.max(1, Math.round((unit.def.attack ?? unit.def.dps) * matrix *
+            this.enemyModifier(unit.owner) * this.attackBonus(unit) *
+            (unit.def.id === 'orchard_t8_pro_notebook' ? 2 : 1)));
           this.players[victim].baseHp = Math.max(0, this.players[victim].baseHp - amount);
           this.emit({ type: 'baseHit', owner: victim, amount });
+          if (unit.def.id === 'orchard_t8_pro_notebook' && unit.silenceMs === 0) {
+            unit.overheatStacks++;
+            if (unit.overheatStacks >= 5) {
+              unit.overheatStacks = 0;
+              unit.coolingMs = 3000;
+              this.emit({ type: 'skill', unitId: unit.id, skillId: 'orchard_performance_mode', x: unit.x });
+            }
+          }
         } else if (unit.poseMs === 0) unit.state = 'idle';
-      } else if (this.blockedByAlly(unit, dir)) {
+      } else if (unit.rootMs > 0 || unit.deployed || !unit.folded &&
+        unit.def.id === 'semicon_t5_fold' || this.blockedByAlly(unit, dir)) {
+        unit.stationaryMs += TICK_MS;
         if (unit.poseMs === 0) unit.state = 'idle';
       } else {
+        unit.stationaryMs = 0;
         if (unit.poseMs === 0) unit.state = 'move';
-        unit.x = clamp(unit.x + dir * unit.def.speed * dt, 0, LOGICAL_MAX);
+        const emergencySpeed = unit.speedBoostMs > 0 ? 1.4 : 1;
+        const founderSlow = unit.owner === 0 && this.units.some((enemy) =>
+          enemy.owner === 1 && enemy.def.id === 'orchard_t9_founder' && enemy.hp > 0 &&
+          Math.abs(enemy.x - unit.x) <= 250) ? 0.8 : 1;
+        unit.x = clamp(unit.x + dir * unit.def.speed * emergencySpeed * founderSlow *
+          (unit.folded ? 1.3 : 1) * dt, 0, LOGICAL_MAX);
       }
     }
 
     for (const unit of dead) {
+      if (unit.isIllusion) continue;
       const killer: PlayerId = unit.owner === 0 ? 1 : 0;
       const reward = Math.round(unit.def.cost * 0.4);
-      this.players[killer].cash = Math.min(this.balance.cashCap ?? 9999, this.players[killer].cash + reward);
+      this.awardKill(killer, reward);
+      const victor = killerById.get(unit.id);
+      if (victor && victor.hp > 0) {
+        victor.killCount++;
+        const trainer = this.units.find((ally) => ally.owner === victor.owner &&
+          ally.def.id === 'orchard_t2_watch_trainer' && ally.hp > 0 &&
+          Math.abs(ally.x - victor.x) <= 110);
+        if (trainer && victor.killCount % 3 === 0 && victor.ringStacks < 5) {
+          victor.ringStacks++;
+          this.emit({ type: 'skill', unitId: trainer.id, skillId: 'orchard_close_rings', x: trainer.x });
+        }
+      }
+      this.onUnitKilled(unit);
       this.emit({ type: 'kill', unitId: unit.id, defId: unit.def.id, owner: unit.owner, x: unit.x });
     }
-    if (dead.length > 0) this.units = this.units.filter((unit) => !dead.includes(unit));
-    for (let owner = 0; owner < 2; owner++) {
+    if (dead.length > 0 || vanished.length > 0) {
+      this.units = this.units.filter((unit) => !dead.includes(unit) && !vanished.includes(unit));
+    }
+    if (dead.length > 0) this.syncSemiconAura();
+    for (const owner of [0, 1] as const) {
       if (this.players[owner].baseHp > 0) continue;
       this.winner = owner === 0 ? 1 : 0;
       this.emit({ type: 'gameOver', winner: this.winner });
       return;
     }
     if (this.tick >= (this.options.timeLimitSeconds ?? 480) * 30) {
-      this.winner = this.players[0].baseHp >= this.players[1].baseHp ? 0 : 1;
+      const left = this.players[0].baseHp / this.players[0].baseMaxHp;
+      const right = this.players[1].baseHp / this.players[1].baseMaxHp;
+      this.winner = Math.abs(left - right) < 1e-9 ? null : left > right ? 0 : 1;
       this.emit({ type: 'gameOver', winner: this.winner });
     }
   }
 
   private nearestEnemy(unit: SimUnit, dir: 1 | -1): SimUnit | null {
     const candidates = this.units.filter((other) =>
-      other.owner !== unit.owner && other.hp > 0 && (other.x - unit.x) * dir >= -CONTACT_PAD);
+      other.owner !== unit.owner && other.hp > 0 && (other.x - unit.x) * dir >= -CONTACT_PAD &&
+      !(other.ghostMs > 0 && unit.def.roles?.includes('melee')));
     if (candidates.length === 0) return null;
-    const reachable = candidates.filter((other) => Math.abs(other.x - unit.x) <= unit.def.range + CONTACT_PAD);
+    const reachable = candidates.filter((other) => Math.abs(other.x - unit.x) <= this.effectiveRange(unit) + CONTACT_PAD);
     const pool = reachable.length > 0 ? reachable : candidates;
     pool.sort((left, right) => {
+      if (left.isIllusion !== right.isIllusion && reachable.length > 0) {
+        return left.isIllusion ? -1 : 1;
+      }
+      if (unit.def.targetPolicy === 'lowestHpRatio' && reachable.length > 0) {
+        const ratio = left.hp / left.maxHp - right.hp / right.maxHp;
+        if (ratio !== 0) return ratio;
+      }
       const a = Math.abs(left.x - unit.x);
       const b = Math.abs(right.x - unit.x);
       return (unit.def.targetPolicy === 'farthest' && reachable.length > 0 ? b - a : a - b) || left.id - right.id;
     });
-    return pool[0];
+    return pool[0] ?? null;
   }
 
   private stepTurrets(): void {
@@ -541,14 +931,34 @@ export class LocalSimAdapter implements SimAdapter {
       if (!target) continue;
       player.turretCdMs = 1000;
       const amount = Math.max(1, Math.round(dps - (target.def.armor ?? 0)));
-      target.hp -= amount;
+        target.hp -= amount;
+        this.checkPairLoss(target);
       this.emit({ type: 'hit', unitId: target.id, x: target.x, amount, crit: false });
       if (target.hp <= 0) {
-        player.cash = Math.min(this.balance.cashCap ?? 9999, player.cash + Math.round(target.def.cost * 0.4));
-        this.emit({ type: 'kill', unitId: target.id, defId: target.def.id, owner: target.owner, x: target.x });
+        if (!target.isIllusion) {
+          this.awardKill(owner, Math.round(target.def.cost * 0.4));
+          this.onUnitKilled(target);
+          this.emit({ type: 'kill', unitId: target.id, defId: target.def.id, owner: target.owner, x: target.x });
+        }
         this.units = this.units.filter((unit) => unit !== target);
       }
     }
+  }
+
+  private onUnitKilled(unit: SimUnit): void {
+    if (unit.def.id !== 'orchard_t1_airpods') return;
+    for (const enemy of this.units) {
+      if (enemy.owner !== unit.owner && enemy.hp > 0 && Math.abs(enemy.x - unit.x) <= 60) {
+        enemy.silenceMs = Math.max(enemy.silenceMs, 1500);
+      }
+    }
+    this.emit({ type: 'skill', unitId: unit.id, skillId: 'orchard_noise_cancel', x: unit.x });
+  }
+
+  private awardKill(owner: PlayerId, reward: number): void {
+    const player = this.players[owner];
+    player.cash = Math.min(this.balance.cashCap ?? 9999, player.cash + reward);
+    player.cumulativeCash += reward;
   }
 
   /** 앞선 아군과 겹치지 않게 줄 세우기 — 스프라이트가 포개지는 걸 막는다. */
@@ -578,13 +988,13 @@ export class LocalSimAdapter implements SimAdapter {
 
     return {
       tick: this.tick,
-      elapsedMs: this.tick * TICK_MS,
+      elapsedMs: this.tick * 1000 / TICK_HZ,
       units,
       projectiles: [],
       players: [this.snapshotPlayer(0), this.snapshotPlayer(1)],
       me: this.me,
-      phase: this.winner === null ? 'playing' : 'over',
-      ...(this.winner === null ? {} : { winner: this.winner }),
+      phase: this.winner === undefined ? 'playing' : 'over',
+      ...(this.winner === undefined ? {} : { winner: this.winner }),
     };
   }
 
@@ -632,6 +1042,7 @@ export class LocalSimAdapter implements SimAdapter {
       cashBoostMs: 0,
       turretCdMs: 0,
       instantProductionCharges: 0,
+      ultimateBuffMs: 0,
       unlockedTiers: this.unlockedForAge(age),
       queue: [],
     };

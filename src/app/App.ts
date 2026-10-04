@@ -14,7 +14,7 @@ interface Screen {
 
 /**
  * 화면 흐름. (명세 §7)
- * 스플래시 → 메인메뉴 → 캠페인/빠른대전/도감/연구소/온라인 대전(M3)/설정 → 인게임 → 결과
+ * 스플래시 → 메인메뉴 → 캠페인/빠른대전/도감/연구소/설정 → 인게임 → 결과
  */
 export class App {
   private current: Screen | null = null;
@@ -49,7 +49,6 @@ export class App {
           this.startMatch({ me: faction === 'semicon' ? 0 : 1 }), () => this.mainMenu())),
         codex: () => this.show(new Codex(this.balance, () => this.mainMenu())),
         lab: () => this.show(new ResearchScreen(() => this.mainMenu())),
-        online: () => {},
         settings: () => this.show(new SettingsScreen(() => this.mainMenu())),
       }),
     );
@@ -65,6 +64,8 @@ export class App {
       timeLimitSeconds: stage.rules.timeLimit,
       startAge: stage.rules.startAge,
       bannedUnits: stage.rules.bannedUnits,
+      enemyStatMod: 'enemyStatMod' in stage.rules ? stage.rules.enemyStatMod : undefined,
+      enemyBossAtSeconds: 'enemyBossAt' in stage.rules ? stage.rules.enemyBossAt : undefined,
     }, stage);
   }
 
@@ -90,6 +91,7 @@ export class App {
       matchBalance,
       (result) => this.showResult(result, options, stage),
       () => this.mainMenu(),
+      stage && 'tutorialFocus' in stage.rules ? stage.rules.tutorialFocus : undefined,
     );
     this.game.start();
   }
@@ -99,11 +101,11 @@ export class App {
     if (stage) {
       const progress = loadProgress();
       const firstClear = !progress.cleared.includes(stage.id);
-      const rp = result.won ? stage.rewards.rp + (firstClear ? stage.rewards.firstClearRp : 0) : 0;
-      if (result.won && firstClear) progress.cleared.push(stage.id);
+      const rp = result.outcome === 'win' ? stage.rewards.rp + (firstClear ? stage.rewards.firstClearRp : 0) : 0;
+      if (result.outcome === 'win' && firstClear) progress.cleared.push(stage.id);
       progress.rp += rp;
-      saveProgress(progress);
-      finalResult = { ...result, rp };
+      const saved = saveProgress(progress);
+      finalResult = { ...result, rp, storageWarning: !saved };
     }
     this.show(
       new ResultScreen(

@@ -1,5 +1,6 @@
 import { Assets, Graphics, Rectangle, Texture, type Renderer } from 'pixi.js';
 import manifest from '../../assets/manifest.json';
+import { assetUrl } from '../assets/assetUrl';
 
 export const FACTION_COLOR: Record<string, number> = {
   semicon: 0x1428a0,
@@ -24,10 +25,10 @@ export async function initTextures(renderer: Renderer): Promise<void> {
   frames.clear();
   baseCache.clear();
   await Promise.all(manifest.atlases.map(async (atlasName) => {
-    const response = await fetch('/assets/atlases/' + atlasName);
+    const response = await fetch(assetUrl('atlases/' + atlasName));
     if (!response.ok) throw new Error('Atlas metadata failed: ' + atlasName);
     const atlas = await response.json() as Atlas;
-    const image = await Assets.load<Texture>('/assets/atlases/' + atlas.meta.image);
+    const image = await Assets.load<Texture>(assetUrl('atlases/' + atlas.meta.image));
     for (const [name, entry] of Object.entries(atlas.frames)) {
       const { x, y, w, h } = entry.frame;
       frames.set(atlasName + ':' + name, new Texture({

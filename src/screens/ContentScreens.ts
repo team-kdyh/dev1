@@ -2,6 +2,7 @@ import stagesJson from '../data/campaign/stages.json';
 import researchJson from '../data/meta/research_tree.json';
 import { loadProgress, saveProgress } from '../data/progress';
 import { button, el, uiRoot } from './dom';
+import { assetUrl } from '../assets/assetUrl';
 
 export type CampaignStage = (typeof stagesJson.stages)[number];
 
@@ -19,7 +20,7 @@ export class FactionScreen {
       const card = el('button', `sw-faction-card sw-${faction}`);
       card.type = 'button';
       const image = document.createElement('img');
-      image.src = `/assets/frames/units/${filename}`;
+      image.src = assetUrl(`frames/units/${filename}`);
       image.alt = '';
       card.append(image, el('strong', undefined, name), el('small', undefined, note));
       card.addEventListener('click', () => onChoose(faction));
@@ -68,6 +69,7 @@ export class ResearchScreen {
   private readonly node = el('div', 'sw-screen');
   private readonly grid = el('div', 'sw-grid');
   private readonly balance = el('div', 'sw-sub');
+  private storageWarning = false;
 
   constructor(onClose: () => void) {
     const panel = el('div', 'sw-panel');
@@ -82,25 +84,32 @@ export class ResearchScreen {
 
   private render(): void {
     const progress = loadProgress();
-    this.balance.textContent = '보유 RP: ' + progress.rp;
+    this.balance.textContent = '보유 RP: ' + progress.rp +
+      (this.storageWarning ? ' · 저장소에 기록하지 못했습니다. 이 탭을 닫으면 진행이 사라질 수 있습니다.' : '');
     this.grid.replaceChildren();
     for (const node of researchJson.nodes) {
       const level = progress.research[node.id] ?? 0;
       const next = node.levels[level];
+      const prerequisitesMet = node.requires.every((id) => (progress.research[id] ?? 0) > 0);
       const card = el('div', 'sw-card');
       card.append(el('div', 'sw-card-name', node.name + '  ' + level + '/' + node.levels.length));
       card.append(el('div', 'sw-missing', node.faction === 'semicon' ? '삼성' : '애플'));
+      if (!prerequisitesMet) {
+        const names = node.requires.map((id) => researchJson.nodes.find((entry) => entry.id === id)?.name ?? id);
+        card.append(el('div', 'sw-missing', '선행 연구: ' + names.join(', ')));
+      }
       const purchase = button(next ? '연구 ' + next.cost + ' RP' : '최대 레벨', () => {
         const current = loadProgress();
         const currentLevel = current.research[node.id] ?? 0;
         const price = node.levels[currentLevel]?.cost;
-        if (price === undefined || current.rp < price) return;
+        if (price === undefined || current.rp < price ||
+          !node.requires.every((id) => (current.research[id] ?? 0) > 0)) return;
         current.rp -= price;
         current.research[node.id] = currentLevel + 1;
-        saveProgress(current);
+        this.storageWarning = !saveProgress(current);
         this.render();
       });
-      purchase.disabled = !next || progress.rp < next.cost;
+      purchase.disabled = !next || progress.rp < next.cost || !prerequisitesMet;
       card.append(purchase);
       this.grid.append(card);
     }

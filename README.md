@@ -1,6 +1,6 @@
 # TECH WAR — 팀 통합 저장소
 
-A 클라이언트, B Unity 시뮬레이션, C 밸런스·AI 도구, D 아트·사운드를 기본 브랜치 `gjtjw/track-c-docs`에서 함께 관리합니다.
+A 클라이언트, B Unity 시뮬레이션, C 밸런스·AI 도구, D 아트·사운드를 함께 관리합니다. 현재 웹 게임은 로컬 PvE 전투를 플레이할 수 있습니다.
 
 | 트랙 | 코드와 산출물 | 인계 문서 |
 | --- | --- | --- |
@@ -22,9 +22,9 @@ npm run editor    # C 밸런스 편집기, 별도 터미널에서 실행
 npm run check     # 밸런스 검증, A·C 타입 검사, 테스트, 두 웹 빌드
 ```
 
-`npm run build`는 웹 클라이언트를 `dist/`에, `npm run build:editor`는 편집기를 `dist/balance-editor/`에 만듭니다. 두 산출물이 필요하면 클라이언트 빌드 후 편집기를 빌드합니다. A·C의 타입 검사 옵션은 `tsconfig.json`과 `tsconfig.track-c.json`에서 각각 유지합니다.
+`npm run build`는 웹 클라이언트와 실제 플레이에 필요한 이미지·오디오를 `dist/`에 담습니다. `npm run build:editor`는 편집기를 `dist/balance-editor/`에 만듭니다. 두 산출물이 필요하면 클라이언트 빌드 후 편집기를 빌드합니다. A·C의 타입 검사 옵션은 `tsconfig.json`과 `tsconfig.track-c.json`에서 각각 유지합니다. 하위 경로에 배포할 때는 `VITE_BASE_PATH=/dev1/ npm run build`처럼 경로를 지정합니다.
 
-현재 웹 클라이언트는 `FakeSimAdapter`와 임시 밸런스·텍스처를 사용합니다. B의 C# 시뮬레이션, C의 정식 데이터, D의 스프라이트·오디오를 실제 게임에 연결하는 작업은 남아 있습니다. 트랙별 핸드오프의 미결 계약을 확인하세요.
+웹 클라이언트는 `LocalSimAdapter`, C의 밸런스 데이터, D의 캐릭터 아틀라스·전투 사운드를 연결했습니다. 온라인 대전과 Unity/C# 시뮬레이션 연동은 별도 작업입니다. 현재 빌드의 사용 방법과 검증 결과는 [플레이 빌드 인계](docs/PLAYABLE_GAME_HANDOFF.md), 정식 출시 전 남은 기준은 [출시 준비 점검](docs/RELEASE_READINESS.md)에 정리했습니다.
 
 ## Unity 시뮬레이션
 

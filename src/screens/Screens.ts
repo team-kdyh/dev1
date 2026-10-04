@@ -1,5 +1,6 @@
 import { button, el, uiRoot } from './dom';
 import { loadAudioSettings, saveAudioSettings, type AudioSettings } from '../audio/settings';
+import { assetUrl } from '../assets/assetUrl';
 
 /** §7 스플래시 */
 export class Splash {
@@ -25,11 +26,10 @@ export interface MainMenuActions {
   quickMatch: () => void;
   codex: () => void;
   lab: () => void;
-  online: () => void;
   settings: () => void;
 }
 
-/** §7 메인메뉴 → 캠페인/빠른대전/도감/연구소/온라인 대전(M3)/설정 */
+/** PvE 메뉴. 온라인 대전은 서버가 준비된 별도 단계에서 노출한다. */
 export class MainMenu {
   private readonly node = el('div', 'sw-screen sw-home');
 
@@ -45,7 +45,7 @@ export class MainMenu {
     ] as const) {
       const figure = el('div', `sw-fighter sw-fighter-${faction}`);
       const image = document.createElement('img');
-      image.src = `/assets/frames/units/${filename}`;
+      image.src = assetUrl(`frames/units/${filename}`);
       image.alt = faction === 'blue' ? '삼성 진영 캐릭터' : '애플 진영 캐릭터';
       figure.append(image);
       if (faction === 'coral') stage.append(el('div', 'sw-versus', 'VS'));
@@ -58,11 +58,6 @@ export class MainMenu {
     menu.append(button('빠른 대전', actions.quickMatch));
     menu.append(button('도감', actions.codex));
     menu.append(button('연구소', actions.lab));
-
-    const online = button('온라인 대전', actions.online);
-    online.disabled = true;
-    online.title = '추후 업데이트 예정';
-    menu.append(online);
 
     menu.append(button('설정', actions.settings));
     this.node.append(menu);
@@ -78,13 +73,14 @@ export class MainMenu {
 }
 
 export interface MatchResult {
-  won: boolean;
+  outcome: 'win' | 'lose' | 'draw';
   elapsedMs: number;
   produced: number;
   killed: number;
   /** 최대 전선 — 논리 좌표 기준으로 아군이 가장 멀리 밀어낸 지점 */
   maxFrontline: number;
   rp: number | null;
+  storageWarning?: boolean;
 }
 
 /** §7 결과 화면: 승패, 시간, 생산·처치 수, 최대 전선, RP */
@@ -92,7 +88,8 @@ export class ResultScreen {
   private readonly node = el('div', 'sw-screen sw-transparent');
 
   constructor(result: MatchResult, onAgain: () => void, onMenu: () => void) {
-    const verdict = el('h1', `sw-verdict ${result.won ? 'sw-win' : 'sw-lose'}`, result.won ? '승리' : '패배');
+    const verdictText = { win: '승리', lose: '패배', draw: '무승부' }[result.outcome];
+    const verdict = el('h1', `sw-verdict sw-${result.outcome}`, verdictText);
     this.node.append(verdict);
 
     const totalSec = Math.floor(result.elapsedMs / 1000);
@@ -114,16 +111,13 @@ export class ResultScreen {
       list.append(li);
     }
     this.node.append(list);
+    if (result.storageWarning) {
+      this.node.append(el('p', 'sw-sub', '진행을 저장소에 기록하지 못했습니다. 이 탭을 닫으면 진행이 사라질 수 있습니다.'));
+    }
 
     const menu = el('div', 'sw-menu');
     menu.append(button('다시 하기', onAgain));
     menu.append(button('메인 메뉴', onMenu));
-
-    // M3 리플레이 저장 — 리플레이 데이터가 없으므로 비활성
-    const replay = button('리플레이 저장', () => {});
-    replay.disabled = true;
-    replay.title = 'M3에서 열립니다';
-    menu.append(replay);
 
     this.node.append(menu);
   }
