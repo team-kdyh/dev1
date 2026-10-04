@@ -37,7 +37,7 @@
 ## 남은 연결 작업
 
 1. **A ↔ B 런타임 계약:** A는 TypeScript/PixiJS, B는 Unity/C#이다. 웹의 `FakeSimAdapter`를 실제 시뮬레이션으로 교체하려면 포팅 또는 연결 어댑터와 Snapshot/Command 계약을 정해야 한다.
-2. **A ↔ C 데이터:** 웹은 `src/data/placeholderBalance.ts`를 사용한다. C의 `src/data/balance/` 데이터를 A 계약으로 연결하는 작업이 필요하다.
+2. **A ↔ C 데이터:** 연결 완료. `src/data/gameData.ts`가 C의 `src/data/balance/`를 A 계약으로 변환한다. 플레이스홀더 모듈은 제거했다 — 진영 id가 `blue`/`red`로 남아 있어 AI 유닛 풀이 비는 버그의 원인이었다.
 3. **A·C ↔ D 에셋:** C의 `src/data/assets.manifest.json`은 계속 플레이스홀더여서 밸런스 검증에 경고 1개가 나온다. D의 `assets/manifest.json`과 다른 스키마이므로 논리 키 매핑과 이미지·오디오 로더가 필요하다.
 4. **C ↔ D 교차 검증:** D 검증기는 루트 `data/balance/`를 찾고 C 데이터는 `src/data/balance/`에 있다. 현재 D 검증 통과는 C의 `assets.sprite`와 실제 이미지 ID 사이의 검증을 의미하지 않는다.
 5. **C ↔ B 배치 실행:** C의 실제 경기용 `project` 어댑터는 미연결이다. 현재 스모크 배치로 승률이나 밸런스를 확정하지 않는다.

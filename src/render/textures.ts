@@ -1,11 +1,19 @@
 import { Assets, Graphics, Rectangle, Texture, type Renderer } from 'pixi.js';
 import manifest from '../../assets/manifest.json';
 import { assetUrl } from '../assets/assetUrl';
+import factionsSource from '../data/balance/factions.json' with { type: 'json' };
 
-export const FACTION_COLOR: Record<string, number> = {
-  semicon: 0x1428a0,
-  orchard: 0xf5f5f7,
-};
+/**
+ * 진영 색. **C의 `factions.json`에서 읽는다** — 코드에 적지 않는다.
+ * 전에는 `semicon: 0x1428a0` 처럼 박혀 있었는데, 같은 값이 데이터에도 있어
+ * C가 색을 바꾸면 조용히 어긋났다.
+ */
+export const FACTION_COLOR: Record<string, number> = Object.fromEntries(
+  (factionsSource.factions as { id: string; colorPrimary: string }[]).map((faction) => [
+    faction.id,
+    Number.parseInt(faction.colorPrimary.replace('#', ''), 16),
+  ]),
+);
 
 type FrameRef = { atlas: string; frame: string };
 type Clip = { fps: number; loop: boolean; frames: FrameRef[] };

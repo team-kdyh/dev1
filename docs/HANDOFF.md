@@ -86,7 +86,7 @@ src/
     CommandGate.ts         ★ 프론트 → 시뮬 유일한 출구 (100ms 중복 차단)
     InputRouter.ts         §5
   screens/                 메뉴·도감·결과 (DOM, #ui-root)
-  data/placeholderBalance.ts   ★ C의 밸런스 JSON 교체 지점
+  data/gameData.ts         ★ C의 밸런스 JSON 로더 (연결 완료)
 ```
 
 **★ 표시가 다른 트랙의 산출물이 들어올 자리입니다.** 그 외 파일은 건드릴 필요가 없습니다.
@@ -206,7 +206,7 @@ C의 데이터는 `feat/track-c-implementation`에 있습니다. C 본인이
 
 1. **계약 확정 (B와)** — 이게 먼저입니다. 나머지가 전부 여기에 걸려 있습니다.
    요구 목록은 [contract-response-a.md](contract-response-a.md) §4.
-2. **밸런스 JSON 연결 (C 합의 후)** — `src/data/placeholderBalance.ts`를 로더로 교체.
+2. ~~밸런스 JSON 연결~~ — **완료.** `src/data/gameData.ts`가 C의 `src/data/balance/`를 읽는다.
    이어서 `textures.ts`의 하드코딩된 진영 색을 `factions.json`에서 읽게 바꾸고,
    업그레이드 패널·전략 버튼·도감의 "데이터 없음" 자리를 채우고,
    유닛 버튼 해금 조건 툴팁을 추가합니다(§4.1).

@@ -22,8 +22,5 @@
     "src/data/**/*.ts",
     "tools/**/*.ts",
     "vite.config.ts"
-  ],
-  "exclude": [
-    "src/data/placeholderBalance.ts"
   ]
 }

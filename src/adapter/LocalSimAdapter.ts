@@ -53,6 +53,8 @@ interface SimUnit {
   isIllusion: boolean;
   convertedUntilTick: number;
   pairBoosted: boolean;
+  /** 뒤를 기다린 누적 시간 — 상한을 넘으면 그냥 전진한다 */
+  musterMs: number;
 }
 
 interface SimPlayer {
@@ -74,6 +76,31 @@ interface SimPlayer {
 }
 
 const CONTACT_PAD = 8;
+
+// --- 본대 대열 (각개전투 방지) --------------------------------------------
+// 유닛이 한 기씩 도착해 1:1로 싸우는 걸 막는다.
+
+/** 바로 뒤 아군과 이만큼 넘게 벌어지면 기다린다. */
+const MUSTER_GAP = 30;
+/** 이 거리 안의 아군만 같은 본대로 본다. 멀리 있는 증원을 기다리다 전진이 멈추지 않게. */
+const COHESION_WINDOW = 220;
+/**
+ * 한 유닛이 뒤를 기다릴 수 있는 최대 시간.
+ * 상한이 없으면 교착된다 — 생산이 계속되는 동안 선두 뒤에는 항상 새 낙오자가
+ * 생기므로 선두가 영구히 멈춰 서고 양측이 아예 만나지 못한다.
+ */
+const MUSTER_MAX_MS = 1200;
+/** 뒤처진 유닛의 가속 배율 */
+const CATCHUP_SPEED = 1.6;
+/** 원거리 유닛이 근접 벽 뒤에 유지하는 거리 */
+const RANGED_HOLD_MIN = 26;
+/** 이 사거리 이상이면 대열상 '원거리'로 본다 */
+const RANGED_MIN_RANGE = 50;
+
+/** 대열상 원거리 유닛인가. damageType이 optional이라 사거리도 같이 본다. */
+function isRangedFormation(def: UnitDef): boolean {
+  return def.damageType !== 'melee' && def.range >= RANGED_MIN_RANGE;
+}
 
 export interface LocalMatchOptions {
   me?: PlayerId;
@@ -425,6 +452,7 @@ export class LocalSimAdapter implements SimAdapter {
       isIllusion: options.illusion ?? false,
       convertedUntilTick: 0,
       pairBoosted: false,
+      musterMs: 0,
     };
     this.units.push(unit);
     this.emit({ type: 'spawn', unitId: unit.id, defId: def.id, owner, x });
@@ -579,6 +607,8 @@ export class LocalSimAdapter implements SimAdapter {
     const dead: SimUnit[] = [];
     const vanished: SimUnit[] = [];
     const killerById = new Map<number, SimUnit>();
+    // 가장 앞선 근접 아군(= 벽). 원거리가 이 뒤에 선다.
+    const meleeFront = this.meleeFrontByOwner();
     for (const unit of this.units) {
       if (unit.hp <= 0) continue;
       if (unit.convertedUntilTick > 0 && this.tick >= unit.convertedUntilTick) {
@@ -664,12 +694,10 @@ export class LocalSimAdapter implements SimAdapter {
         }
         if (!unit.oneMoreUsed && unit.specialCdMs === 0) {
           const allies = this.units.filter((ally) => ally.owner === unit.owner && ally.hp > 0);
-          if (allies.some((ally) => ally.hp < ally.maxHp)) {
-            for (const ally of allies) ally.hp = ally.maxHp;
-            this.players[unit.owner].ultimateBuffMs = 15000;
-            unit.oneMoreUsed = true;
-            this.emit({ type: 'skill', unitId: unit.id, skillId: 'orchard_one_more_thing', x: unit.x });
-          }
+          for (const ally of allies) ally.hp = ally.maxHp;
+          this.players[unit.owner].ultimateBuffMs = 15000;
+          unit.oneMoreUsed = true;
+          this.emit({ type: 'skill', unitId: unit.id, skillId: 'orchard_one_more_thing', x: unit.x });
         }
       }
 
@@ -848,14 +876,46 @@ export class LocalSimAdapter implements SimAdapter {
         unit.stationaryMs += TICK_MS;
         if (unit.poseMs === 0) unit.state = 'idle';
       } else {
-        unit.stationaryMs = 0;
-        if (unit.poseMs === 0) unit.state = 'move';
-        const emergencySpeed = unit.speedBoostMs > 0 ? 1.4 : 1;
-        const founderSlow = unit.owner === 0 && this.units.some((enemy) =>
-          enemy.owner === 1 && enemy.def.id === 'orchard_t9_founder' && enemy.hp > 0 &&
-          Math.abs(enemy.x - unit.x) <= 250) ? 0.8 : 1;
-        unit.x = clamp(unit.x + dir * unit.def.speed * emergencySpeed * founderSlow *
-          (unit.folded ? 1.3 : 1) * dt, 0, LOGICAL_MAX);
+        const gaps = this.neighborGaps(unit, dir);
+        const meleeFrontX = meleeFront[unit.owner];
+
+        // 원거리는 근접 벽을 앞지르지 않는다 — 혼자 걸어 나가 1:1로 죽는 걸 막고,
+        // 사거리가 비슷한 유닛끼리 같은 x 띠에 모여 함께 사격하게 된다.
+        //
+        // 벽이 **내 앞에 있을 때만** 적용한다. 근접이 전멸했거나 아직 뒤에서
+        // 올라오는 중이면 멈춰 세우지 않는다 — 그러면 전진이 영구히 막힌다.
+        const wallAhead =
+          isRangedFormation(unit.def) && meleeFrontX !== null && (meleeFrontX - unit.x) * dir > 0;
+        const holdX = wallAhead ? (meleeFrontX as number) - dir * RANGED_HOLD_MIN : null;
+
+        if (holdX !== null && (unit.x - holdX) * dir >= 0) {
+          unit.stationaryMs += TICK_MS;
+          if (unit.poseMs === 0) unit.state = 'idle';
+        } else if (
+          gaps.behind > MUSTER_GAP &&
+          gaps.behind <= COHESION_WINDOW &&
+          unit.musterMs < MUSTER_MAX_MS
+        ) {
+          // 바로 뒤 아군이 뒤처졌으면 기다린다 (각개전투 방지).
+          // 대기에는 상한이 있다 — 없으면 생산이 계속되는 동안 선두가 영구히 멈추고
+          // 양측이 아예 만나지 못한다.
+          unit.musterMs += TICK_MS;
+          unit.stationaryMs += TICK_MS;
+          if (unit.poseMs === 0) unit.state = 'idle';
+        } else {
+          unit.musterMs = 0;
+          unit.stationaryMs = 0;
+          if (unit.poseMs === 0) unit.state = 'move';
+          // 앞 아군과 벌어졌으면 가속해 합류한다 → 줄이 아니라 덩어리로 움직인다.
+          // 추격에는 상한을 걸지 않는다 — 걸면 멀리 뒤처진 유닛이 가속을 못 받아 더 벌어진다.
+          const speed = gaps.ahead > MUSTER_GAP ? unit.def.speed * CATCHUP_SPEED : unit.def.speed;
+          const emergencySpeed = unit.speedBoostMs > 0 ? 1.4 : 1;
+          const founderSlow = unit.owner === 0 && this.units.some((enemy) =>
+            enemy.owner === 1 && enemy.def.id === 'orchard_t9_founder' && enemy.hp > 0 &&
+            Math.abs(enemy.x - unit.x) <= 250) ? 0.8 : 1;
+          unit.x = clamp(unit.x + dir * speed * emergencySpeed * founderSlow *
+            (unit.folded ? 1.3 : 1) * dt, 0, LOGICAL_MAX);
+        }
       }
     }
 
@@ -962,6 +1022,37 @@ export class LocalSimAdapter implements SimAdapter {
   }
 
   /** 앞선 아군과 겹치지 않게 줄 세우기 — 스프라이트가 포개지는 걸 막는다. */
+  /** 진영별 가장 앞선 근접 아군의 x. 없으면 null. */
+  private meleeFrontByOwner(): [number | null, number | null] {
+    const front: [number | null, number | null] = [null, null];
+    for (const unit of this.units) {
+      if (unit.hp <= 0 || isRangedFormation(unit.def)) continue;
+      const dir = unit.owner === 0 ? 1 : -1;
+      const current = front[unit.owner];
+      if (current === null || (unit.x - current) * dir > 0) front[unit.owner] = unit.x;
+    }
+    return front;
+  }
+
+  /**
+   * 같은 진영에서 내 앞/뒤로 가장 가까운 아군까지의 거리. 없으면 Infinity.
+   * dir 방향이 '앞'이다.
+   */
+  private neighborGaps(unit: SimUnit, dir: 1 | -1): { ahead: number; behind: number } {
+    let ahead = Infinity;
+    let behind = Infinity;
+    for (const other of this.units) {
+      if (other === unit || other.owner !== unit.owner || other.hp <= 0) continue;
+      const delta = (other.x - unit.x) * dir;
+      if (delta > 0) {
+        if (delta < ahead) ahead = delta;
+      } else if (delta < 0) {
+        if (-delta < behind) behind = -delta;
+      }
+    }
+    return { ahead, behind };
+  }
+
   private blockedByAlly(unit: SimUnit, dir: 1 | -1): boolean {
     for (const other of this.units) {
       if (other === unit || other.owner !== unit.owner) continue;
