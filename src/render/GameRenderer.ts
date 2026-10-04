@@ -4,8 +4,9 @@ import { LOGICAL_MAX, type SimAdapter } from '../adapter/SimAdapter';
 import { FACTION_OF_PLAYER } from '../data/gameData';
 import { BaseView } from './BaseView';
 import type { Camera } from './Camera';
-import { toPixel } from './coords';
+import { toLogical, toPixel } from './coords';
 import { EffectDirector } from './EffectDirector';
+import { frontlineTarget } from './frontline';
 import type { Interpolator } from './Interpolator';
 import { DamageTextPool, ObjectPool, ParticlePool } from './pools';
 import { ProjectileLayer } from './ProjectileLayer';
@@ -41,6 +42,7 @@ export class GameRenderer {
   readonly effects: EffectDirector;
 
   private readonly projectiles: ProjectileLayer;
+  private readonly attackDefs: Map<string, { range: number; damageType?: string }>;
   private readonly damageText: DamageTextPool;
   private readonly particles: ParticlePool;
 
@@ -57,6 +59,7 @@ export class GameRenderer {
     adapter: SimAdapter,
     private readonly camera: Camera,
   ) {
+    this.attackDefs = new Map(balance.units.map((unit) => [unit.id, unit]));
     // 하늘은 카메라를 따라가지 않는다 — 화면 고정
     stage.addChild(this.sky, this.world, this.screenLayer);
     this.world.addChild(
@@ -102,7 +105,13 @@ export class GameRenderer {
 
   handleEvents(events: readonly SimEvent[]): void {
     for (const event of events) {
-      if (event.type === 'attack') this.views.get(event.unitId)?.playAttack();
+      if (event.type === 'attack') {
+        this.views.get(event.unitId)?.playAttack();
+        const def = this.attackDefs.get(event.defId);
+        if (event.targetX !== undefined && def && def.range >= 50 && def.damageType !== 'melee') {
+          this.projectiles.shoot(event.x, event.targetX, event.owner, event.unitId, def.damageType ?? 'ranged');
+        }
+      }
       if (event.type === 'skill') this.views.get(event.unitId)?.playAttack(true);
     }
     this.effects.handle(events);
@@ -162,6 +171,7 @@ export class GameRenderer {
     }
 
     this.projectiles.draw(curr.projectiles);
+    this.projectiles.tick(deltaMs);
     this.damageText.tick(deltaMs);
     this.particles.tick(deltaMs);
     this.effects.tick(deltaMs);
@@ -173,20 +183,10 @@ export class GameRenderer {
     }
   }
 
-  /** 카메라 자동 추적 목표: 최전방 아군과 적의 중간점 (§3) */
+  /** 카메라 자동 추적 목표: 아군을 화면에 두고 교전 시 양쪽 선두를 함께 본다. */
   frontlineX(snapshot: Snapshot): number {
-    const me = snapshot.me;
-    let allyFront = Number.NEGATIVE_INFINITY;
-    let enemyFront = Number.POSITIVE_INFINITY;
-    for (const unit of snapshot.units) {
-      if (unit.owner === me) allyFront = Math.max(allyFront, unit.x);
-      else enemyFront = Math.min(enemyFront, unit.x);
-    }
-    if (allyFront === Number.NEGATIVE_INFINITY) {
-      return toPixel(me === 0 ? 0 : LOGICAL_MAX);
-    }
-    if (enemyFront === Number.POSITIVE_INFINITY) return toPixel(allyFront);
-    return toPixel((allyFront + enemyFront) / 2);
+    const visibleLogical = toLogical(this.camera.viewRight - this.camera.viewLeft);
+    return toPixel(frontlineTarget(snapshot, visibleLogical));
   }
 
   /** 결과 화면(§7)의 "최대 전선" 집계에 쓴다 */

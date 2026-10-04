@@ -99,6 +99,14 @@ export class LocalSimAdapter implements SimAdapter {
     this.players = [this.makePlayer(0), this.makePlayer(1)];
     this.loop = new FixedStepLoop(TICK_MS, () => this.step());
     this.currSnapshot = this.buildSnapshot();
+    // 첫 교전이 본진 앞에서 시작되지 않도록 AI도 가장 기본 유닛을 즉시 생산한다.
+    // 이후 생산·업그레이드·전략은 Track C AI가 그대로 결정한다.
+    const enemy: PlayerId = this.me === 0 ? 1 : 0;
+    const opener = unitsOfFaction(balance, FACTION_OF_PLAYER[enemy])
+      .find((unit) => unit.tier === 1 && !options.bannedUnits?.includes(unit.id));
+    if (opener && this.players[enemy].cash >= opener.cost) {
+      this.scheduled.push({ tick: 1, owner: enemy, command: { type: 'SPAWN_UNIT', defId: opener.id } });
+    }
   }
 
   // -- SimAdapter ----------------------------------------------------------
@@ -446,7 +454,7 @@ export class LocalSimAdapter implements SimAdapter {
           unit.attackCdMs = attackInterval;
           unit.poseMs = 330;
           unit.state = 'attack';
-          this.emit({ type: 'attack', unitId: unit.id, defId: unit.def.id, owner: unit.owner, x: unit.x });
+          this.emit({ type: 'attack', unitId: unit.id, defId: unit.def.id, owner: unit.owner, x: unit.x, targetX: target.x });
           const victims = [target];
           if (unit.def.targetType === 'splash') {
             const radius = unit.def.splashRadius ?? 0;
@@ -472,7 +480,7 @@ export class LocalSimAdapter implements SimAdapter {
           unit.attackCdMs = attackInterval;
           unit.poseMs = 330;
           unit.state = 'attack';
-          this.emit({ type: 'attack', unitId: unit.id, defId: unit.def.id, owner: unit.owner, x: unit.x });
+          this.emit({ type: 'attack', unitId: unit.id, defId: unit.def.id, owner: unit.owner, x: unit.x, targetX: enemyBaseX });
           const victim: PlayerId = unit.owner === 0 ? 1 : 0;
           const matrix = this.balance.damageMatrix?.[unit.def.damageType ?? 'melee']?.structure ?? 1;
           const amount = Math.max(1, Math.round((unit.def.attack ?? unit.def.dps) * matrix));

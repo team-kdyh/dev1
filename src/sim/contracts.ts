@@ -107,7 +107,7 @@ export type RejectReason =
 
 export type SimEvent =
   | { type: 'spawn'; unitId: UnitId; defId: UnitDefId; owner: PlayerId; x: number }
-  | { type: 'attack'; unitId: UnitId; defId: UnitDefId; owner: PlayerId; x: number }
+  | { type: 'attack'; unitId: UnitId; defId: UnitDefId; owner: PlayerId; x: number; targetX?: number }
   | { type: 'hit'; unitId: UnitId; x: number; amount: number; crit: boolean }
   | { type: 'kill'; unitId: UnitId; defId: UnitDefId; owner: PlayerId; x: number }
   | { type: 'skill'; unitId: UnitId; skillId: string; x: number }

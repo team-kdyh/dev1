@@ -52,4 +52,26 @@ describe('merged game contracts', () => {
     };
     expect(run()).toEqual(run());
   });
+
+  it('starts both factions near the same time and reports the actual attack destination', () => {
+    for (const me of [0, 1] as const) {
+      const sim = new LocalSimAdapter(GAME_BALANCE, 1337, { me, difficulty: 'normal' });
+      const spawnTicks = new Map<number, number>();
+      let firstAttack: { x: number; targetX?: number } | undefined;
+      sim.onEvents((events) => {
+        for (const event of events) {
+          if (event.type === 'spawn' && !spawnTicks.has(event.owner)) {
+            spawnTicks.set(event.owner, sim.getSnapshot().tick);
+          }
+          if (event.type === 'attack' && !firstAttack) firstAttack = event;
+        }
+      });
+      sim.send({ type: 'SPAWN_UNIT', defId: me === 0 ? 'semicon_t1_buds' : 'orchard_t1_airpods' });
+      sim.advanceTicks(30 * 8);
+      expect(spawnTicks.get(0)).toBeLessThan(30 * 3);
+      expect(spawnTicks.get(1)).toBeLessThan(30 * 3);
+      expect(firstAttack?.targetX).toBeTypeOf('number');
+      expect(firstAttack?.targetX).not.toBe(firstAttack?.x);
+    }
+  });
 });
