@@ -26,7 +26,6 @@
     "src/render/**/*.ts",
     "src/screens/**/*.ts",
     "src/sim/**/*.ts",
-    "src/ui/**/*.ts",
-    "src/data/placeholderBalance.ts"
+    "src/ui/**/*.ts"
   ]
 }
