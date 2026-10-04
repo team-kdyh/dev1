@@ -34,20 +34,26 @@ export class MainMenu {
   private readonly node = el('div', 'sw-screen sw-home');
 
   constructor(actions: MainMenuActions) {
-    this.node.append(el('div', 'sw-eyebrow', 'PRODUCT BATTLE · SIDE SCROLL STRATEGY'));
+    this.node.append(el('div', 'sw-eyebrow', 'PRODUCT BATTLE  /  SIDE SCROLL STRATEGY'));
     this.node.append(el('h1', 'sw-title', 'TECH WAR'));
-    this.node.append(el('p', 'sw-sub', '삼성 vs 애플 · 제품 군단의 한 줄 전쟁'));
+    this.node.append(el('p', 'sw-sub', '삼성 vs 애플  ·  제품 군단의 한 줄 전쟁'));
 
     const stage = el('div', 'sw-home-stage');
-    for (const [faction, filename] of [
-      ['blue', 'semicon/semicon_t3_aphone_soldier_idle_00.png'],
-      ['coral', 'orchard/orchard_t3_phone_idle_00.png'],
+    for (const [faction, filename, support, name] of [
+      ['blue', 'semicon/semicon_t3_aphone_soldier_idle_00.png',
+        'semicon/semicon_t1_buds_idle_00.png', 'SAMSUNG'],
+      ['coral', 'orchard/orchard_t3_phone_idle_00.png',
+        'orchard/orchard_t1_airpod_duo_idle_00.png', 'APPLE'],
     ] as const) {
       const figure = el('div', `sw-fighter sw-fighter-${faction}`);
       const image = document.createElement('img');
       image.src = assetUrl(`frames/units/${filename}`);
       image.alt = faction === 'blue' ? '삼성 진영 캐릭터' : '애플 진영 캐릭터';
-      figure.append(image);
+      const partner = document.createElement('img');
+      partner.className = 'sw-fighter-support';
+      partner.src = assetUrl(`frames/units/${support}`);
+      partner.alt = '';
+      figure.append(partner, image, el('span', 'sw-fighter-label', name));
       if (faction === 'coral') stage.append(el('div', 'sw-versus', 'VS'));
       stage.append(figure);
     }
@@ -61,6 +67,7 @@ export class MainMenu {
 
     menu.append(button('설정', actions.settings));
     this.node.append(menu);
+    this.node.append(el('p', 'sw-home-footnote', '24 STAGES  ·  18 UNITS  ·  2 FACTIONS'));
   }
 
   mount(): void {

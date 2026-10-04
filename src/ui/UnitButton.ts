@@ -39,37 +39,41 @@ export class UnitButton {
     hotkey: number,
     onPress: (def: UnitDef) => void,
   ) {
-    this.bg.roundRect(0, 0, BUTTON_W, BUTTON_H, 8).fill(COLOR.panel);
-    this.bg.roundRect(0, 0, BUTTON_W, BUTTON_H, 8).stroke({ width: 3, color: COLOR.panelEdge, alignment: 1 });
-    this.accent.roundRect(7, 5, BUTTON_W - 14, 4, 2)
-      .fill(def.faction === 'semicon' ? 0x4d7fe4 : 0xff987e);
+    const factionAccent = def.faction === 'semicon' ? 0x60bdff : 0xff8c7b;
+    this.bg.roundRect(0, 0, BUTTON_W, BUTTON_H, 9)
+      .fill(def.faction === 'semicon' ? 0x203f61 : 0x513849);
+    this.bg.roundRect(0, 0, BUTTON_W, BUTTON_H, 9)
+      .stroke({ width: 1.5, color: factionAccent, alpha: 0.8, alignment: 1 });
+    this.bg.roundRect(2, BUTTON_H - 20, BUTTON_W - 4, 18, 6)
+      .fill({ color: 0x081727, alpha: 0.8 });
+    this.accent.roundRect(8, 5, BUTTON_W - 16, 3, 2).fill(factionAccent);
 
     this.icon.texture = unitTexture(def.faction, def.tier);
     this.icon.anchor.set(0.5, 1);
     // 큰 원본 아틀라도 생산 카드 안에 들어오도록 맞춘다.
-    const fit = Math.min(47 / this.icon.texture.height, 47 / this.icon.texture.width);
+    const fit = Math.min(51 / this.icon.texture.height, 51 / this.icon.texture.width);
     this.icon.scale.set(fit);
-    this.icon.position.set(BUTTON_W / 2, BUTTON_H - 16);
+    this.icon.position.set(BUTTON_W / 2, BUTTON_H - 17);
 
     this.keyHint = new Text({
       text: String(hotkey),
-      style: { fontFamily: UI_MONO, fontSize: 10, fill: COLOR.textDim },
+      style: { fontFamily: UI_MONO, fontSize: 11, fontWeight: 'bold', fill: COLOR.text },
     });
-    this.keyHint.position.set(4, 3);
+    this.keyHint.position.set(7, 9);
 
     this.costText = new Text({
       text: String(def.cost),
-      style: { fontFamily: UI_MONO, fontSize: 11, fontWeight: 'bold', fill: COLOR.cash },
+      style: { fontFamily: UI_MONO, fontSize: 12, fontWeight: 'bold', fill: COLOR.cash },
     });
     this.costText.anchor.set(0.5, 1);
-    this.costText.position.set(BUTTON_W / 2, BUTTON_H - 3);
+    this.costText.position.set(BUTTON_W / 2, BUTTON_H - 4);
 
     this.supplyText = new Text({
-      text: `■${def.supply}`,
-      style: { fontFamily: UI_MONO, fontSize: 9, fill: COLOR.supply },
+      text: `◆${def.supply}`,
+      style: { fontFamily: UI_MONO, fontSize: 9, fontWeight: 'bold', fill: COLOR.supply },
     });
     this.supplyText.anchor.set(1, 0);
-    this.supplyText.position.set(BUTTON_W - 4, 3);
+    this.supplyText.position.set(BUTTON_W - 6, 9);
 
     this.drawLock();
 
@@ -157,8 +161,8 @@ export class UnitButton {
       this.reason === 'NO_SUPPLY' ? 0.35 + 0.65 * Math.abs(Math.sin(this.pulseMs * 0.006)) : 1;
 
     // 구매 가능하면 테두리 발광
-    this.bg.tint = this.reason === null ? 0xffffff : 0xb9c2d6;
-    this.bg.alpha = this.reason === null ? 1 : 0.9;
+    this.bg.tint = this.reason === null ? 0xffffff : 0x8593a8;
+    this.bg.alpha = this.reason === null ? 1 : 0.94;
 
     // 쿨다운 원형 진행 오버레이 (§4.1). 반지름을 버튼 안에 맞춰 마스크 없이 그린다.
     // clear/재작성은 쿨다운 중인 버튼(최대 9개)에서만 일어난다.
@@ -201,7 +205,8 @@ export class UnitButton {
   private drawLock(): void {
     const cx = BUTTON_W / 2;
     const cy = BUTTON_H / 2 - 2;
-    this.lock.rect(0, 0, BUTTON_W, BUTTON_H).fill({ color: 0x000000, alpha: 0.45 });
+    this.lock.roundRect(1, 1, BUTTON_W - 2, BUTTON_H - 2, 8)
+      .fill({ color: 0x071120, alpha: 0.74 });
     this.lock.roundRect(cx - 11, cy, 22, 17, 3).fill(COLOR.textDim);
     this.lock
       .arc(cx, cy, 8, Math.PI, 0)

@@ -3,15 +3,17 @@ import type { Snapshot } from '../sim/contracts';
 import { COLOR, UI_FONT, UI_MONO } from './theme';
 
 const PANEL_W = 236;
-const PANEL_H = 86;
-const HP_W = 190;
-const HP_H = 8;
+const PANEL_H = 94;
+const HP_W = 208;
+const HP_H = 7;
 
 /** 캐시·인구·시대·본진 HP·타이머. (§4) */
 export class ResourceBar {
   readonly root = new Container();
 
   private readonly panel = new Graphics();
+  private readonly foePanel = new Graphics();
+  private readonly cashLabel: Text;
   private readonly cash: Text;
   private readonly supply: Text;
   private readonly age: Text;
@@ -27,38 +29,50 @@ export class ResourceBar {
   private highlightMs = 0;
 
   constructor() {
-    this.panel.roundRect(0, 0, PANEL_W, PANEL_H, 10).fill({ color: COLOR.panel, alpha: 0.88 });
-    this.panel.roundRect(0, 0, PANEL_W, PANEL_H, 10).stroke({ width: 2, color: COLOR.panelEdge, alignment: 1 });
+    this.panel.roundRect(0, 0, PANEL_W, PANEL_H, 12).fill({ color: COLOR.panel, alpha: 0.96 });
+    this.panel.roundRect(0, 0, PANEL_W, PANEL_H, 12)
+      .stroke({ width: 1, color: COLOR.panelEdge, alpha: 0.9, alignment: 1 });
+    this.panel.roundRect(13, 10, 4, 36, 2).fill(COLOR.cash);
+    this.panel.roundRect(13, PANEL_H - 14, HP_W, 2, 1)
+      .fill({ color: 0x7da4c5, alpha: 0.4 });
+
+    this.cashLabel = new Text({
+      text: 'CASH',
+      style: { fontFamily: UI_MONO, fontSize: 10, fontWeight: 'bold', fill: COLOR.textDim,
+        letterSpacing: 2 },
+    });
+    this.cashLabel.position.set(24, 10);
 
     this.cash = new Text({
       text: '0',
-      style: { fontFamily: UI_MONO, fontSize: 26, fontWeight: 'bold', fill: COLOR.cash },
+      style: { fontFamily: UI_MONO, fontSize: 28, fontWeight: 'bold', fill: COLOR.cash },
     });
-    this.cash.position.set(14, 8);
+    this.cash.position.set(24, 23);
 
     this.supply = new Text({
       text: '0/0',
-      style: { fontFamily: UI_MONO, fontSize: 14, fill: COLOR.supply },
+      style: { fontFamily: UI_FONT, fontSize: 12, fontWeight: 'bold', fill: COLOR.supply },
     });
-    this.supply.position.set(14, 42);
+    this.supply.position.set(14, 60);
 
     this.age = new Text({
       text: '시대 1',
-      style: { fontFamily: UI_FONT, fontSize: 13, fill: COLOR.text },
+      style: { fontFamily: UI_FONT, fontSize: 12, fontWeight: 'bold', fill: COLOR.text },
     });
     this.age.anchor.set(1, 0);
-    this.age.position.set(PANEL_W - 14, 44);
+    this.age.position.set(PANEL_W - 14, 60);
 
     this.timer = new Text({
       text: '00:00',
-      style: { fontFamily: UI_MONO, fontSize: 14, fill: COLOR.textDim },
+      style: { fontFamily: UI_MONO, fontSize: 13, fontWeight: 'bold', fill: COLOR.textDim },
     });
     this.timer.anchor.set(1, 0);
-    this.timer.position.set(PANEL_W - 14, 14);
+    this.timer.position.set(PANEL_W - 14, 15);
 
-    setupBar(this.myHpBg, this.myHpFill, 14, 66);
+    setupBar(this.myHpBg, this.myHpFill, 14, 82);
     this.root.addChild(
       this.panel,
+      this.cashLabel,
       this.cash,
       this.supply,
       this.age,
@@ -67,23 +81,27 @@ export class ResourceBar {
       this.myHpFill,
     );
 
+    this.foePanel.roundRect(0, 0, PANEL_W, 52, 12).fill({ color: COLOR.panel, alpha: 0.95 });
+    this.foePanel.roundRect(0, 0, PANEL_W, 52, 12)
+      .stroke({ width: 1, color: COLOR.panelEdge, alpha: 0.8, alignment: 1 });
+    this.foePanel.roundRect(13, 12, 4, 23, 2).fill(COLOR.danger);
     this.foeLabel = new Text({
-      text: '적 본진',
-      style: { fontFamily: UI_FONT, fontSize: 12, fill: COLOR.textDim },
+      text: 'ENEMY BASE',
+      style: { fontFamily: UI_MONO, fontSize: 11, fontWeight: 'bold', fill: COLOR.text,
+        letterSpacing: 1.2 },
     });
-    this.foeLabel.anchor.set(1, 0);
-    this.foeLabel.position.set(HP_W, 0);
-    setupBar(this.foeHpBg, this.foeHpFill, 0, 20);
-    this.foeGroup.addChild(this.foeLabel, this.foeHpBg, this.foeHpFill);
+    this.foeLabel.position.set(23, 10);
+    setupBar(this.foeHpBg, this.foeHpFill, 14, 38);
+    this.foeGroup.addChild(this.foePanel, this.foeLabel, this.foeHpBg, this.foeHpFill);
     this.root.addChild(this.foeGroup);
 
     this.root.position.set(12, 12);
   }
 
   layout(screenW: number): void {
-    const scale = screenW < 650 ? 0.76 : 1;
+    const scale = screenW < 420 ? 0.62 : screenW < 650 ? 0.76 : 1;
     this.root.scale.set(scale);
-    this.foeGroup.position.set((screenW - 12) / scale - HP_W - 12, 4);
+    this.foeGroup.position.set((screenW - 12) / scale - PANEL_W, 0);
   }
 
   /** cashHighlight: §4.4 "자원 100 이상으로 15초 유휴" 강조 (0 또는 1) */
@@ -96,7 +114,7 @@ export class ResourceBar {
       this.highlightMs += deltaMs;
       const pulse = 0.5 + 0.5 * Math.abs(Math.sin(this.highlightMs * 0.005));
       this.cash.scale.set(1 + pulse * 0.12);
-      this.cash.style.fill = pulse > 0.5 ? 0x253044 : COLOR.cash;
+      this.cash.style.fill = pulse > 0.5 ? 0xffffff : COLOR.cash;
     } else {
       this.highlightMs = 0;
       this.cash.scale.set(1);
@@ -104,7 +122,7 @@ export class ResourceBar {
     }
     this.supply.text = `인구 ${me.supply}/${me.supplyMax}`;
     this.supply.style.fill = me.supply >= me.supplyMax ? COLOR.danger : COLOR.supply;
-    this.age.text = `시대 ${me.age + 1}`;
+    this.age.text = `시대 ${me.age}`;
 
     const totalSec = Math.floor(snapshot.elapsedMs / 1000);
     const mm = String(Math.floor(totalSec / 60)).padStart(2, '0');
@@ -118,8 +136,8 @@ export class ResourceBar {
 
 function setupBar(bg: Sprite, fill: Sprite, x: number, y: number): void {
   bg.anchor.set(0, 0.5);
-  bg.tint = 0x000000;
-  bg.alpha = 0.6;
+  bg.tint = 0x071120;
+  bg.alpha = 0.9;
   bg.width = HP_W + 2;
   bg.height = HP_H + 2;
   bg.position.set(x - 1, y);

@@ -5,8 +5,10 @@ import { COLOR, UI_FONT, UI_MONO } from './theme';
 /** 공통 패널 배경 */
 function panel(width: number, height: number): Graphics {
   const g = new Graphics();
-  g.roundRect(0, 0, width, height, 10).fill({ color: COLOR.panel, alpha: 0.96 });
-  g.roundRect(0, 0, width, height, 10).stroke({ width: 2, color: COLOR.panelEdge, alignment: 1 });
+  g.roundRect(0, 0, width, height, 14).fill({ color: COLOR.panel, alpha: 0.98 });
+  g.roundRect(0, 0, width, height, 14)
+    .stroke({ width: 1.5, color: COLOR.panelEdge, alignment: 1 });
+  g.roundRect(14, 10, width - 28, 3, 2).fill({ color: COLOR.ready, alpha: 0.75 });
   return g;
 }
 
@@ -24,12 +26,14 @@ class TextButton {
   private readonly caption: Text;
   private enabled = true;
 
-  constructor(text: string, width: number, height: number, onPress: () => void) {
+  constructor(text: string, width: number, height: number, onPress: () => void, tone: 'default' | 'gold' = 'default') {
     this.bg = new Graphics();
-    this.bg.roundRect(0, 0, width, height, 6).fill(COLOR.panel);
-    this.bg.roundRect(0, 0, width, height, 6).stroke({ width: 2, color: COLOR.panelEdge, alignment: 1 });
+    this.bg.roundRect(0, 0, width, height, 7)
+      .fill(tone === 'gold' ? 0xb98139 : 0x2a4869);
+    this.bg.roundRect(0, 0, width, height, 7)
+      .stroke({ width: 1, color: tone === 'gold' ? 0xffd17a : COLOR.panelEdge, alignment: 1 });
 
-    this.caption = label(text, 14, COLOR.text);
+    this.caption = label(text, 13, COLOR.text);
     this.caption.anchor.set(0.5);
     this.caption.position.set(width / 2, height / 2);
 
@@ -95,7 +99,8 @@ export class StrategyButtons {
 
   layout(screenW: number, screenH: number, bottomMargin: number): void {
     this.x = 14;
-    this.y = screenH - this.h * 2 - 6 - bottomMargin;
+    this.y = screenW < 650 ? screenW < 420 ? 88 : 100
+      : screenH - this.h * 2 - 6 - bottomMargin;
     this.root.position.set(this.x, this.y);
   }
 
@@ -203,13 +208,14 @@ export class AgeUpButton {
     private readonly balance: BalanceData,
     send: (cmd: Command) => void,
   ) {
-    this.button = new TextButton('E  시대 업', this.w, this.h, () => send({ type: 'AGE_UP' }));
+    this.button = new TextButton('E  시대 업', this.w, this.h, () => send({ type: 'AGE_UP' }), 'gold');
     this.root.addChild(this.button.root);
   }
 
   layout(screenW: number, screenH: number, bottomMargin: number): void {
     this.x = 14 + 96 + 10;
-    this.y = screenH - this.h - bottomMargin;
+    this.y = screenW < 650 ? screenW < 420 ? 128 : 140
+      : screenH - this.h - bottomMargin;
     this.root.position.set(this.x, this.y);
   }
 
@@ -238,6 +244,7 @@ export class AgeUpButton {
 /** 일시정지 메뉴 (§4, §5 ESC). PvP에서는 비활성 — M3에서 NetSimAdapter가 막는다. */
 export class PauseMenu {
   readonly root = new Container();
+  private readonly backdrop = new Graphics();
   private readonly w = 260;
   private readonly h = 160;
   private x = 0;
@@ -254,7 +261,8 @@ export class PauseMenu {
     const quit = new TextButton('메인 메뉴로', this.w - 48, 34, onQuit);
     quit.root.position.set(24, 104);
 
-    this.root.addChild(bg, title, resume.root, quit.root);
+    this.backdrop.eventMode = 'none';
+    this.root.addChild(this.backdrop, bg, title, resume.root, quit.root);
     this.root.visible = false;
     this.root.eventMode = 'static';
   }
@@ -262,6 +270,9 @@ export class PauseMenu {
   layout(screenW: number, screenH: number): void {
     this.x = Math.round((screenW - this.w) / 2);
     this.y = Math.round((screenH - this.h) / 2);
+    this.backdrop.clear();
+    this.backdrop.rect(-this.x, -this.y, screenW, screenH)
+      .fill({ color: 0x071323, alpha: 0.65 });
     this.root.position.set(this.x, this.y);
   }
 

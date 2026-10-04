@@ -147,6 +147,7 @@ export class Camera {
 
     if (!this.world) return;
     this.world.x = this.screenW / 2 - this.x * this.scale + shakeX;
-    this.world.y = this.screenH * 0.86 - GROUND_Y * this.scale + shakeY;
+    // 좁은 화면에서는 생산 카드 위에 전장이 남도록 지면을 조금 올린다.
+    this.world.y = this.screenH * (this.screenW < 650 ? 0.78 : 0.86) - GROUND_Y * this.scale + shakeY;
   }
 }

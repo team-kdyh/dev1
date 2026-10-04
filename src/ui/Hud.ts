@@ -1,4 +1,4 @@
-import { Container } from 'pixi.js';
+import { Container, Graphics } from 'pixi.js';
 import type { BalanceData, Command, PlayerId, SimEvent, Snapshot, UnitDef } from '../sim/contracts';
 import { FACTION_OF_PLAYER } from '../data/gameData';
 import { Minimap } from './Minimap';
@@ -25,6 +25,7 @@ export interface HudCallbacks {
 export class Hud {
   readonly root = new Container();
 
+  private readonly commandDock = new Graphics();
   private readonly warnings: Warnings;
   private readonly resources = new ResourceBar();
   private readonly unitBar: UnitBar;
@@ -68,6 +69,7 @@ export class Hud {
 
     this.root.addChild(
       this.warnings.root,
+      this.commandDock,
       this.resources.root,
       this.unitBar.root,
       this.queueBar.root,
@@ -85,16 +87,25 @@ export class Hud {
   resize(width: number, height: number): void {
     const compact = width < 650;
     this.warnings.resize(width, height);
+    this.commandDock.clear();
+    const dockTop = height - BUTTON_H - BAR_MARGIN - 11;
+    this.commandDock.rect(0, dockTop, width, height - dockTop)
+      .fill({ color: 0x101d32, alpha: 0.97 });
+    this.commandDock.rect(0, dockTop, width, 2)
+      .fill({ color: this.me === 0 ? 0x6cc7ff : 0xff9c83, alpha: 0.9 });
+    this.commandDock.rect(0, dockTop + 3, width, 1)
+      .fill({ color: 0xffffff, alpha: 0.1 });
+    this.commandDock.eventMode = 'none';
     this.resources.layout(width);
     this.unitBar.layout(width, height, BAR_MARGIN);
 
     const unitBarTop = height - BUTTON_H - BAR_MARGIN;
-    this.queueBar.layout(width, unitBarTop - (compact ? BUTTON_H + 35 : 6));
+    this.queueBar.layout(width, unitBarTop - 6);
     this.minimap.layout(width, height, BUTTON_H + BAR_MARGIN + 8);
     this.strategy.layout(width, height, BAR_MARGIN + (compact ? BUTTON_H + 14 : 0));
     this.ageUp.layout(width, height, BAR_MARGIN + (compact ? BUTTON_H + 14 : 0));
     this.toasts.layout(width, height,
-      BUTTON_H + BAR_MARGIN + this.queueBar.barHeight + (compact ? 104 : 24));
+      BUTTON_H + BAR_MARGIN + this.queueBar.barHeight + 24);
     this.upgrades.layout(width, height);
     this.pause.layout(width, height);
   }
