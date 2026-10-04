@@ -2,6 +2,7 @@ import { Container, Graphics, Sprite, Text } from 'pixi.js';
 import type { PlayerSnapshot, RejectReason, UnitDef } from '../sim/contracts';
 import { unitTexture } from '../render/textures';
 import { BUTTON_H, BUTTON_W, COLOR, UI_FONT, UI_MONO } from './theme';
+import { unlockHint } from './ageLabels';
 
 const SHAKE_MS = 260;
 const PRESS_MS = 110;
@@ -21,6 +22,7 @@ export class UnitButton {
   private readonly costText: Text;
   private readonly supplyText: Text;
   private readonly lock = new Graphics();
+  private readonly unlockText: Text;
   private readonly cooldown = new Graphics();
 
   private shakeMs = 0;
@@ -68,6 +70,24 @@ export class UnitButton {
 
     this.drawLock();
 
+    // §4.1 미해금 조건 툴팁. 문구는 C의 ages.json에서 온다 — 없으면 표시하지 않는다.
+    this.unlockText = new Text({
+      text: unlockHint(def.tier) ?? '',
+      style: {
+        fontFamily: UI_FONT,
+        fontSize: 10,
+        fontWeight: 'bold',
+        fill: COLOR.text,
+        align: 'center',
+        wordWrap: true,
+        wordWrapWidth: BUTTON_W - 8,
+        stroke: { color: 0x05070d, width: 3 },
+      },
+    });
+    this.unlockText.anchor.set(0.5, 1);
+    this.unlockText.position.set(BUTTON_W / 2, BUTTON_H - 6);
+    this.unlockText.visible = false;
+
     this.root.addChild(
       this.bg,
       this.icon,
@@ -76,6 +96,7 @@ export class UnitButton {
       this.supplyText,
       this.cooldown,
       this.lock,
+      this.unlockText,
     );
 
     this.root.eventMode = 'static';
@@ -114,6 +135,9 @@ export class UnitButton {
 
     this.lock.visible = locked;
     this.icon.visible = !locked;
+    // 잠긴 동안에는 비용 대신 해금 조건을 보여준다 (§4.1)
+    this.unlockText.visible = locked && this.unlockText.text !== '';
+    this.costText.visible = !this.unlockText.visible;
 
     // 흑백 / 컬러
     const grey = this.reason === 'NO_CASH' || this.reason === 'NO_SUPPLY';
