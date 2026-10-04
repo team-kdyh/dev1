@@ -3,6 +3,7 @@ import type {
   Command,
   PlayerId,
   PlayerSnapshot,
+  ProjectileStyle,
   RejectReason,
   SimEvent,
   Snapshot,
@@ -10,8 +11,15 @@ import type {
   UnitSnapshot,
   UnitState,
 } from '../sim/contracts';
-import { FACTION_OF_PLAYER, unitsOfFaction } from '../data/placeholderBalance';
+import { FACTION_OF_PLAYER, unitsOfFaction } from '../data/balanceData';
 import { FixedStepLoop, LOGICAL_MAX, TICK_MS, type SimAdapter } from './SimAdapter';
+import {
+  SKILL_EVERY_ATTACKS,
+  blockChanceFor,
+  isRangedAttack,
+  projectileDurationMs,
+  projectileStyleFor,
+} from './combatRules';
 
 /**
  * 진짜 시뮬(B)이 오기 전까지 프론트를 끝까지 만들기 위한 가짜 시뮬. (명세 §1.1)
@@ -30,6 +38,26 @@ interface FakeUnit {
   state: UnitState;
   facing: 1 | -1;
   attackCdMs: number;
+  attackCount: number;
+  castMs: number;
+  /** 뒤를 기다린 누적 시간 — 상한을 넘으면 그냥 전진한다 */
+  musterMs: number;
+}
+
+interface FakeProjectile {
+  id: number;
+  defId: string;
+  owner: PlayerId;
+  sourceUnitId: number;
+  targetUnitId?: number;
+  targetOwner?: PlayerId;
+  fromX: number;
+  toX: number;
+  elapsedMs: number;
+  durationMs: number;
+  damage: number;
+  crit: boolean;
+  style: ProjectileStyle;
 }
 
 interface FakePlayer {
@@ -41,9 +69,57 @@ interface FakePlayer {
   queue: { def: UnitDef; elapsedMs: number }[];
 }
 
-const ATTACK_INTERVAL_MS = 600;
-const CONTACT_PAD = 8;
+const CONTACT_PAD = 4;
+const BASE_EDGE_REACH = 34;
+/** 아군 간 최소 간격. 좁을수록 뭉쳐 보인다 — 렌더가 id별 Y 레인을 주므로 겹쳐 보이지 않는다. */
+const ALLY_SPACING = 9;
+/**
+ * 바로 뒤 아군과 이만큼 넘게 벌어지면 기다린다 — 혼자 달려나가 1:1로 죽는 걸 막는다.
+ * 본대 중심(평균)과 비교하면 평균에 선두 자신이 섞여 제약이 절반으로 희석되므로
+ * 반드시 **바로 뒤 아군과의 실제 간격**으로 재야 한다.
+ */
+const MUSTER_GAP = 30;
+/** 이 거리 안의 아군만 같은 본대로 본다. 멀리 있는 증원을 기다리다 전진이 멈추지 않게. */
+const COHESION_WINDOW = 220;
+/**
+ * 한 유닛이 뒤를 기다릴 수 있는 최대 시간.
+ *
+ * 상한이 없으면 교착된다 — 생산이 계속되는 동안 선두 뒤에는 항상 새 낙오자가
+ * 생기므로 선두가 영구히 멈춰 서고, 최악의 경우 양측이 아예 만나지 못한다.
+ */
+const MUSTER_MAX_MS = 1200;
+/** 본대보다 뒤처진 유닛의 가속 배율 — 한 줄로 늘어지지 않고 합류한다. */
+const CATCHUP_SPEED = 1.6;
+/** 원거리 유닛이 근접 벽 뒤에 유지하는 거리 */
+const RANGED_HOLD_MIN = 26;
+
+/** 한 진영의 본대 상태 */
+interface PackInfo {
+  /** 본대 중심 x (평균) */
+  packX: number;
+  /** 가장 앞선 근접 아군 x — 원거리가 이 뒤에 선다. 없으면 null */
+  meleeFrontX: number | null;
+  count: number;
+}
 const AI_SPAWN_INTERVAL_MS = 2500;
+const SKILL_DAMAGE_MULTIPLIER = 1.55;
+const BLOCKED_DAMAGE_MULTIPLIER = 0.35;
+const CAST_MS = 420;
+
+/** 실제 플레이 체감 속도. setTimeScale 인자는 이 값을 기준으로 한 상대 배율이다. */
+export const DEMO_TIME_SCALE = 0.72;
+
+/**
+ * 쇼케이스용 캐시 수급 배율. **FakeSim 전용이며 C의 밸런스 JSON은 건드리지 않는다.**
+ *
+ * 계측 결과 기본 수급(8/s)에서는 내 유닛이 동시에 2~3기만 살아 있어
+ * 무엇을 해도 1:1 교전이 된다 — 뭉칠 몸 자체가 없다.
+ * 프론트의 대열·사격선 연출을 보여주려면 전선에 유닛이 쌓여야 하므로 여기서만 올린다.
+ *
+ * **밸런스 결정이 아니다.** 실제 수급 곡선은 C가 정하고 B의 시뮬이 적용한다.
+ * 이 상수는 LocalSimAdapter 교체 시 이 파일과 함께 사라진다.
+ */
+export const DEMO_CASH_MULTIPLIER = 2.6;
 
 function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
@@ -63,7 +139,9 @@ export class FakeSimAdapter implements SimAdapter {
 
   private tick = 0;
   private nextUnitId = 1;
+  private nextProjectileId = 1;
   private units: FakeUnit[] = [];
+  private projectiles: FakeProjectile[] = [];
   private players: [FakePlayer, FakePlayer];
   private aiTimerMs = 1200;
   private winner: PlayerId | null = null;
@@ -79,6 +157,7 @@ export class FakeSimAdapter implements SimAdapter {
     this.rng = mulberry32(seed);
     this.players = [this.makePlayer(), this.makePlayer()];
     this.loop = new FixedStepLoop(TICK_MS, () => this.step());
+    this.loop.timeScale = DEMO_TIME_SCALE;
     this.currSnapshot = this.buildSnapshot();
   }
 
@@ -101,7 +180,7 @@ export class FakeSimAdapter implements SimAdapter {
   }
 
   setTimeScale(scale: number): void {
-    this.loop.timeScale = scale;
+    this.loop.timeScale = DEMO_TIME_SCALE * scale;
   }
 
   send(cmd: Command): void {
@@ -186,7 +265,7 @@ export class FakeSimAdapter implements SimAdapter {
 
     for (let i = 0; i < 2; i += 1) {
       const p = this.players[i];
-      p.cash += this.balance.cashPerSecond * dt;
+      p.cash += this.balance.cashPerSecond * DEMO_CASH_MULTIPLIER * dt;
       for (const key of Object.keys(p.cooldowns)) {
         p.cooldowns[key] = Math.max(0, p.cooldowns[key] - TICK_MS);
       }
@@ -220,6 +299,9 @@ export class FakeSimAdapter implements SimAdapter {
       state: 'move',
       facing: owner === 0 ? 1 : -1,
       attackCdMs: 0,
+      attackCount: 0,
+      castMs: 0,
+      musterMs: 0,
     };
     this.units.push(unit);
     this.emit({ type: 'spawn', unitId: unit.id, defId: def.id, owner, x });
@@ -241,52 +323,110 @@ export class FakeSimAdapter implements SimAdapter {
     ai.queue.push({ def, elapsedMs: 0 });
   }
 
+  /**
+   * 진영별 본대 정보. 뭉쳐 움직이기와 원거리 사격선 유지에 쓴다.
+   * FakeSim 전용 — B의 시뮬이 붙으면 이 판단은 시뮬 쪽으로 간다.
+   */
+  private computePacks(): [PackInfo, PackInfo] {
+    const acc = [
+      { sum: 0, n: 0, melee: null as number | null },
+      { sum: 0, n: 0, melee: null as number | null },
+    ];
+
+    for (const unit of this.units) {
+      if (unit.hp <= 0) continue;
+      const a = acc[unit.owner];
+      a.sum += unit.x;
+      a.n += 1;
+      // 가장 앞선 근접 아군 = 벽. 원거리는 이 뒤에 줄을 선다.
+      if (!isRangedAttack(unit.def)) {
+        const dir = unit.owner === 0 ? 1 : -1;
+        if (a.melee === null || (unit.x - a.melee) * dir > 0) a.melee = unit.x;
+      }
+    }
+
+    return [
+      { packX: acc[0].n > 0 ? acc[0].sum / acc[0].n : 0, meleeFrontX: acc[0].melee, count: acc[0].n },
+      { packX: acc[1].n > 0 ? acc[1].sum / acc[1].n : 0, meleeFrontX: acc[1].melee, count: acc[1].n },
+    ];
+  }
+
   private stepUnits(dt: number): void {
     const dead: FakeUnit[] = [];
+    const packs = this.computePacks();
 
     for (const unit of this.units) {
       const dir = unit.owner === 0 ? 1 : -1;
       unit.facing = dir;
       unit.attackCdMs = Math.max(0, unit.attackCdMs - TICK_MS);
+      unit.castMs = Math.max(0, unit.castMs - TICK_MS);
+
+      if (unit.castMs > 0) {
+        unit.state = 'cast';
+        continue;
+      }
 
       const target = this.nearestEnemy(unit, dir);
       const enemyBaseX = unit.owner === 0 ? LOGICAL_MAX : 0;
       const reach = unit.def.range + CONTACT_PAD;
+      const baseReach = Math.max(reach, BASE_EDGE_REACH);
 
       if (target && Math.abs(target.x - unit.x) <= reach) {
         unit.state = 'attack';
         if (unit.attackCdMs === 0) {
-          unit.attackCdMs = ATTACK_INTERVAL_MS;
-          const crit = this.rng() < 0.12;
-          const amount = Math.round(unit.def.dps * (ATTACK_INTERVAL_MS / 1000) * (crit ? 2 : 1));
-          target.hp -= amount;
-          this.emit({ type: 'hit', unitId: target.id, x: target.x, amount, crit });
-          if (target.hp <= 0 && !dead.includes(target)) {
-            target.state = 'die';
-            dead.push(target);
-          }
+          const killed = this.performAttack(unit, target);
+          if (killed) dead.push(killed);
         }
-      } else if (!target && Math.abs(enemyBaseX - unit.x) <= reach) {
+      } else if (!target && Math.abs(enemyBaseX - unit.x) <= baseReach) {
         unit.state = 'attack';
         if (unit.attackCdMs === 0) {
-          unit.attackCdMs = ATTACK_INTERVAL_MS;
           const victim: PlayerId = unit.owner === 0 ? 1 : 0;
-          const amount = Math.round(unit.def.dps * (ATTACK_INTERVAL_MS / 1000));
-          this.players[victim].baseHp = Math.max(0, this.players[victim].baseHp - amount);
-          this.emit({ type: 'baseHit', owner: victim, amount });
+          this.performAttack(unit, undefined, victim);
         }
       } else if (this.blockedByAlly(unit, dir)) {
         unit.state = 'idle';
       } else {
-        unit.state = 'move';
-        unit.x = clamp(unit.x + dir * unit.def.speed * dt, 0, LOGICAL_MAX);
+        const pack = packs[unit.owner];
+        const gaps = this.neighborGaps(unit, dir);
+
+        // 원거리는 근접 벽을 앞지르지 않는다 — 혼자 걸어 나가 1:1로 죽는 걸 막고,
+        // 사거리가 비슷한 유닛끼리 같은 x 띠에 모여 함께 사격하게 된다.
+        //
+        // 단, 벽이 **내 앞에 있을 때만** 적용한다. 근접이 전멸했거나 아직 뒤에서
+        // 올라오는 중이면 멈춰 세우지 않는다 — 그러면 전진이 영구히 막힌다.
+        const wallAhead =
+          isRangedAttack(unit.def) &&
+          pack.meleeFrontX !== null &&
+          (pack.meleeFrontX - unit.x) * dir > 0;
+        const holdX = wallAhead ? (pack.meleeFrontX as number) - dir * RANGED_HOLD_MIN : null;
+
+        if (holdX !== null && (unit.x - holdX) * dir >= 0) {
+          unit.state = 'idle';
+        } else if (
+          gaps.behind > MUSTER_GAP &&
+          gaps.behind <= COHESION_WINDOW &&
+          unit.musterMs < MUSTER_MAX_MS
+        ) {
+          // 바로 뒤 아군이 뒤처졌으면 기다린다 (각개전투 방지).
+          // 간격이 COHESION_WINDOW를 넘으면 본대가 아니라 먼 증원이므로 기다리지 않는다.
+          // 대기에는 상한이 있다 — 없으면 생산이 계속되는 동안 선두가 영구히 멈춘다.
+          unit.musterMs += TICK_MS;
+          unit.state = 'idle';
+        } else {
+          unit.musterMs = 0;
+          unit.state = 'move';
+          // 앞 아군과 벌어졌으면 가속해 합류한다 → 줄이 아니라 덩어리로 움직인다.
+          // 상한(COHESION_WINDOW)은 '기다리기'에만 쓴다 — 추격에 상한을 걸면
+          // 멀리 뒤처진 유닛이 가속을 못 받아 오히려 더 벌어진다.
+          const chasing = gaps.ahead > MUSTER_GAP;
+          const speed = chasing ? unit.def.speed * CATCHUP_SPEED : unit.def.speed;
+          unit.x = clamp(unit.x + dir * speed * dt, 0, LOGICAL_MAX);
+        }
       }
     }
 
-    for (const unit of dead) {
-      this.emit({ type: 'kill', unitId: unit.id, defId: unit.def.id, owner: unit.owner, x: unit.x });
-    }
-    if (dead.length > 0) this.units = this.units.filter((u) => !dead.includes(u));
+    this.removeDead(dead);
+    this.stepProjectiles();
 
     for (let i = 0; i < 2; i += 1) {
       if (this.players[i].baseHp <= 0) {
@@ -295,6 +435,123 @@ export class FakeSimAdapter implements SimAdapter {
         return;
       }
     }
+  }
+
+  private performAttack(attacker: FakeUnit, target?: FakeUnit, targetOwner?: PlayerId): FakeUnit | undefined {
+    attacker.attackCdMs = attacker.def.attackIntervalMs;
+    attacker.attackCount += 1;
+    const skill = attacker.attackCount % SKILL_EVERY_ATTACKS === 0 && attacker.def.skillIds.length > 0;
+    const ranged = isRangedAttack(attacker.def);
+    const crit = this.rng() < 0.12;
+    const baseDamage = attacker.def.dps * (attacker.def.attackIntervalMs / 1000);
+    const damage = Math.max(1, Math.round(baseDamage * (skill ? SKILL_DAMAGE_MULTIPLIER : 1) * (crit ? 2 : 1)));
+
+    if (skill) {
+      attacker.state = 'cast';
+      attacker.castMs = CAST_MS;
+      this.emit({
+        type: 'skill',
+        unitId: attacker.id,
+        defId: attacker.def.id,
+        owner: attacker.owner,
+        skillId: attacker.def.skillIds[(attacker.attackCount / SKILL_EVERY_ATTACKS - 1) % attacker.def.skillIds.length],
+        x: attacker.x,
+      });
+    }
+    this.emit({
+      type: 'attack',
+      unitId: attacker.id,
+      defId: attacker.def.id,
+      owner: attacker.owner,
+      x: attacker.x,
+      ranged,
+      skill,
+    });
+
+    if (ranged) {
+      this.launchProjectile(attacker, damage, crit, skill, target, targetOwner);
+      return undefined;
+    }
+    if (target) return this.damageUnit(target, damage, crit);
+    if (targetOwner !== undefined) this.damageBase(targetOwner, damage);
+    return undefined;
+  }
+
+  private launchProjectile(
+    attacker: FakeUnit,
+    damage: number,
+    crit: boolean,
+    skill: boolean,
+    target?: FakeUnit,
+    targetOwner?: PlayerId,
+  ): void {
+    const toX = target?.x ?? (targetOwner === 0 ? 0 : LOGICAL_MAX);
+    const style = projectileStyleFor(attacker.def, skill);
+    this.projectiles.push({
+      id: this.nextProjectileId++,
+      defId: attacker.def.id,
+      owner: attacker.owner,
+      sourceUnitId: attacker.id,
+      ...(target ? { targetUnitId: target.id } : {}),
+      ...(targetOwner !== undefined ? { targetOwner } : {}),
+      fromX: attacker.x,
+      toX,
+      elapsedMs: 0,
+      durationMs: projectileDurationMs(toX - attacker.x, style),
+      damage,
+      crit,
+      style,
+    });
+  }
+
+  private stepProjectiles(): void {
+    const completed: FakeProjectile[] = [];
+    const dead: FakeUnit[] = [];
+
+    for (const projectile of this.projectiles) {
+      projectile.elapsedMs += TICK_MS;
+      if (projectile.elapsedMs < projectile.durationMs) continue;
+      completed.push(projectile);
+
+      if (projectile.targetUnitId !== undefined) {
+        const target = this.units.find((unit) => unit.id === projectile.targetUnitId && unit.hp > 0);
+        if (target) {
+          const killed = this.damageUnit(target, projectile.damage, projectile.crit);
+          if (killed) dead.push(killed);
+        }
+      } else if (projectile.targetOwner !== undefined) {
+        this.damageBase(projectile.targetOwner, projectile.damage);
+      }
+    }
+
+    if (completed.length > 0) {
+      this.projectiles = this.projectiles.filter((projectile) => !completed.includes(projectile));
+    }
+    this.removeDead(dead);
+  }
+
+  private damageUnit(target: FakeUnit, rawAmount: number, crit: boolean): FakeUnit | undefined {
+    const blocked = this.rng() < blockChanceFor(target.def);
+    const amount = Math.max(1, Math.round(rawAmount * (blocked ? BLOCKED_DAMAGE_MULTIPLIER : 1)));
+    target.hp -= amount;
+    this.emit({ type: 'hit', unitId: target.id, x: target.x, amount, crit, blocked });
+    if (target.hp > 0) return undefined;
+    target.state = 'die';
+    return target;
+  }
+
+  private damageBase(owner: PlayerId, amount: number): void {
+    this.players[owner].baseHp = Math.max(0, this.players[owner].baseHp - amount);
+    this.emit({ type: 'baseHit', owner, amount });
+  }
+
+  private removeDead(dead: readonly FakeUnit[]): void {
+    if (dead.length === 0) return;
+    const unique = new Set(dead);
+    for (const unit of unique) {
+      this.emit({ type: 'kill', unitId: unit.id, defId: unit.def.id, owner: unit.owner, x: unit.x });
+    }
+    this.units = this.units.filter((unit) => !unique.has(unit));
   }
 
   private nearestEnemy(unit: FakeUnit, dir: 1 | -1): FakeUnit | null {
@@ -312,12 +569,31 @@ export class FakeSimAdapter implements SimAdapter {
     return best;
   }
 
-  /** 앞선 아군과 겹치지 않게 줄 세우기 — 스프라이트가 포개지는 걸 막는다. */
+  /**
+   * 같은 진영에서 내 앞/뒤로 가장 가까운 아군까지의 거리. 없으면 Infinity.
+   * dir 방향이 '앞'이다.
+   */
+  private neighborGaps(unit: FakeUnit, dir: 1 | -1): { ahead: number; behind: number } {
+    let ahead = Infinity;
+    let behind = Infinity;
+    for (const other of this.units) {
+      if (other === unit || other.owner !== unit.owner || other.hp <= 0) continue;
+      const delta = (other.x - unit.x) * dir;
+      if (delta > 0) {
+        if (delta < ahead) ahead = delta;
+      } else if (delta < 0) {
+        if (-delta < behind) behind = -delta;
+      }
+    }
+    return { ahead, behind };
+  }
+
+  /** 앞선 아군과 최소 간격 유지 — 완전히 포개지는 것만 막고, 촘촘히 뭉치는 건 허용한다. */
   private blockedByAlly(unit: FakeUnit, dir: 1 | -1): boolean {
     for (const other of this.units) {
       if (other === unit || other.owner !== unit.owner) continue;
       const delta = (other.x - unit.x) * dir;
-      if (delta > 0 && delta < 11 && other.state !== 'move') return true;
+      if (delta > 0 && delta < ALLY_SPACING && other.state !== 'move') return true;
     }
     return false;
   }
@@ -341,7 +617,21 @@ export class FakeSimAdapter implements SimAdapter {
       tick: this.tick,
       elapsedMs: this.tick * TICK_MS,
       units,
-      projectiles: [],
+      projectiles: this.projectiles.map((projectile) => {
+        const progress = Math.min(1, projectile.elapsedMs / projectile.durationMs);
+        return {
+          id: projectile.id,
+          defId: projectile.defId,
+          owner: projectile.owner,
+          sourceUnitId: projectile.sourceUnitId,
+          ...(projectile.targetUnitId !== undefined ? { targetUnitId: projectile.targetUnitId } : {}),
+          fromX: projectile.fromX,
+          toX: projectile.toX,
+          x: projectile.fromX + (projectile.toX - projectile.fromX) * progress,
+          style: projectile.style,
+          progress,
+        };
+      }),
       players: [this.snapshotPlayer(0), this.snapshotPlayer(1)],
       me: this.me,
       phase: this.winner === null ? 'playing' : 'over',

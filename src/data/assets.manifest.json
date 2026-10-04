@@ -1,6 +1,6 @@
 {
   "$schema": "./schema/asset-manifest.schema.json",
-  "placeholder": true,
+  "placeholder": false,
   "keys": [
     "bases.semicon.age1", "bases.semicon.age2", "bases.semicon.age3", "bases.semicon.age4",
     "bases.orchard.age1", "bases.orchard.age2", "bases.orchard.age3", "bases.orchard.age4",

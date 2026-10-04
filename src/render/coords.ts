@@ -12,7 +12,7 @@ export const toLogical = (px: number): number => (px / WORLD_WIDTH) * LOGICAL_MA
  * 유닛의 Y는 시뮬에 없다. 겹침 방지용 오프셋을 프론트가 부여한다. (명세 §2.1)
  * id 기반 결정론적 지터 — 프레임마다 흔들리면 안 된다.
  */
-export const laneY = (unitId: number): number => GROUND_Y + ((unitId * 37) % 5) * 6;
+export const laneY = (unitId: number): number => GROUND_Y + ((unitId * 37) % 5) * 8;
 
 export const lerp = (a: number, b: number, t: number): number => a + (b - a) * t;
 

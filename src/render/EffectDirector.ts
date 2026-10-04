@@ -66,11 +66,19 @@ export class EffectDirector {
           if (def && def.tier >= 9) this.t9Spawn(toPixel(event.x));
           break;
         }
+        case 'attack': {
+          const view = this.viewOf(event.unitId);
+          view?.playAttack(event.skill);
+          const color = FACTION_COLOR[FACTION_OF_PLAYER[event.owner]] ?? 0xffffff;
+          const x = view ? view.worldX : toPixel(event.x);
+          this.particles.burst(x, laneY(event.unitId) - 42, color, event.skill ? 7 : event.ranged ? 3 : 2);
+          break;
+        }
         case 'hit': {
           const view = this.viewOf(event.unitId);
-          view?.flash();
+          view?.reactToHit(event.blocked);
           const x = view ? view.worldX : toPixel(event.x);
-          this.damageText.spawn(x, laneY(event.unitId) - 64, event.amount, event.crit);
+          this.damageText.spawn(x, laneY(event.unitId) - 64, event.amount, event.crit && !event.blocked);
           break;
         }
         case 'kill': {

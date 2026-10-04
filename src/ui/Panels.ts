@@ -1,6 +1,7 @@
 import { Container, Graphics, Text } from 'pixi.js';
 import type { BalanceData, Command, PlayerSnapshot } from '../sim/contracts';
 import { COLOR, UI_FONT, UI_MONO } from './theme';
+import { UPGRADES } from './upgradeData';
 
 /** 공통 패널 배경 */
 function panel(width: number, height: number): Graphics {
@@ -56,57 +57,25 @@ class TextButton {
 }
 
 /**
- * 전략 버튼 2개 (§4 전략 버튼, §5 Q/W).
- * 전략 정의가 밸런스 데이터에 없어 슬롯 번호만 표시한다 — C의 JSON이 오면 이름/아이콘이 붙는다.
- */
-export class StrategyButtons {
-  readonly root = new Container();
-  private x = 0;
-  private y = 0;
-  private readonly w = 96;
-  private readonly h = 34;
-
-  constructor(send: (cmd: Command) => void) {
-    const q = new TextButton('Q  전략 1', this.w, this.h, () =>
-      send({ type: 'USE_STRATEGY', slot: 0 }),
-    );
-    const w = new TextButton('W  전략 2', this.w, this.h, () =>
-      send({ type: 'USE_STRATEGY', slot: 1 }),
-    );
-    q.root.position.set(0, 0);
-    w.root.position.set(0, this.h + 6);
-    this.root.addChild(q.root, w.root);
-  }
-
-  layout(screenW: number, screenH: number, bottomMargin: number): void {
-    this.x = 14;
-    this.y = screenH - this.h * 2 - 6 - bottomMargin;
-    this.root.position.set(this.x, this.y);
-  }
-
-  hitTest(px: number, py: number): boolean {
-    return (
-      px >= this.x && px <= this.x + this.w && py >= this.y && py <= this.y + this.h * 2 + 6
-    );
-  }
-}
-
-/**
  * 업그레이드 패널. (§4, §5 R 토글)
  *
- * BalanceData에 업그레이드 목록 필드가 아직 없다. §7의 "하드코딩 없이 렌더링" 원칙에 따라
- * 임의의 항목을 지어내지 않고, 데이터가 오면 그대로 그려지도록 비워 둔다.
+ * 항목은 C의 `upgrades.json`에서 읽는다 — 이 파일에 업그레이드 이름도 비용도 없다.
+ *
+ * 한계: `PlayerSnapshot`에 업그레이드 **보유 레벨**이 없어서 현재 레벨과 다음 단계
+ * 비용을 알 수 없다. 그래서 단계별 비용을 전부 나열하고, 구매 가능 판정은 하지 않는다.
+ * 거부는 시뮬이 한다(§4.1의 원칙과 같다). 계약에 레벨이 들어오면 레벨 표시와
+ * 비활성 처리를 붙인다 — docs/contract-response-a.md 참고.
  */
 export class UpgradePanel {
   readonly root = new Container();
   private readonly body = new Container();
-  private readonly w = 320;
-  private readonly h = 220;
+  private readonly w = 340;
+  private readonly h = 64 + Math.max(1, UPGRADES.length) * 40;
   private x = 0;
   private y = 0;
 
   constructor(
-    private readonly balance: BalanceData,
+    _balance: BalanceData,
     private readonly send: (cmd: Command) => void,
   ) {
     const bg = panel(this.w, this.h);
@@ -121,24 +90,39 @@ export class UpgradePanel {
 
   private rebuild(): void {
     this.body.removeChildren();
-    const upgrades = (this.balance as { upgrades?: readonly { id: string; name: string; cost: number }[] })
-      .upgrades;
 
-    if (!upgrades || upgrades.length === 0) {
-      const empty = label('C의 밸런스 데이터에 업그레이드 항목이 없습니다.', 12, COLOR.textDim);
-      empty.position.set(0, 0);
-      const note = label('데이터가 들어오면 여기에 자동으로 표시됩니다.', 12, COLOR.textDim);
-      note.position.set(0, 20);
-      this.body.addChild(empty, note);
+    if (UPGRADES.length === 0) {
+      const empty = label('밸런스 데이터에 업그레이드 항목이 없습니다.', 12, COLOR.textDim);
+      this.body.addChild(empty);
       return;
     }
 
-    upgrades.forEach((upgrade, i) => {
-      const button = new TextButton(`${upgrade.name}  ${upgrade.cost}`, this.w - 32, 30, () =>
+    UPGRADES.forEach((upgrade, i) => {
+      const row = new Container();
+      row.position.set(0, i * 40);
+
+      // 비용은 단계별로 전부 보여준다 — 현재 레벨을 모르므로 하나만 고를 수 없다
+      const costs = upgrade.costs.join(' / ');
+      const button = new TextButton(upgrade.name, 168, 30, () =>
         this.send({ type: 'BUY_UPGRADE', upgradeId: upgrade.id }),
       );
-      button.root.position.set(0, i * 36);
-      this.body.addChild(button.root);
+      row.addChild(button.root);
+
+      const info = new Text({
+        text: `${costs}   Lv.${upgrade.maxLevel}`,
+        style: { fontFamily: UI_MONO, fontSize: 11, fill: COLOR.cash },
+      });
+      info.anchor.set(0, 0.5);
+      info.position.set(178, 15);
+      row.addChild(info);
+
+      if (upgrade.desc) {
+        const desc = label(upgrade.desc, 10, COLOR.textDim);
+        desc.position.set(0, 30);
+        row.addChild(desc);
+      }
+
+      this.body.addChild(row);
     });
   }
 

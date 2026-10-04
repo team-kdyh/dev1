@@ -9,6 +9,8 @@ import { Interpolator } from '../render/Interpolator';
 import { toLogical } from '../render/coords';
 import { Hud } from '../ui/Hud';
 import type { MatchResult } from '../screens/Screens';
+import { AudioDirector } from '../audio/AudioDirector';
+import { FACTION_OF_PLAYER } from '../data/balanceData';
 
 /**
  * 인게임 한 판. 매 프레임 순서를 여기서 고정한다:
@@ -23,6 +25,7 @@ export class Game {
   private readonly hud: Hud;
   private readonly gate: CommandGate;
   private readonly interpolator: Interpolator;
+  private readonly audio: AudioDirector;
 
   /** onEvents는 step 중 동기로 불린다 — 여기 쌓아두고 프레임 경계에서 한 번에 소비한다. */
   private eventBuffer: SimEvent[] = [];
@@ -46,6 +49,7 @@ export class Game {
   ) {
     const me = adapter.getSnapshot().me;
     this.camera = new Camera();
+    this.audio = new AudioDirector(FACTION_OF_PLAYER[me]);
     this.renderer = new GameRenderer(app.stage, balance, adapter, this.camera);
     this.camera.attach(this.renderer.world);
     this.interpolator = new Interpolator(adapter.getSnapshot());
@@ -75,6 +79,7 @@ export class Game {
   start(): void {
     if (this.running) return;
     this.running = true;
+    this.audio.start();
     this.adapter.start();
     this.app.ticker.add(this.tick);
   }
@@ -84,6 +89,7 @@ export class Game {
     this.running = false;
     this.app.ticker.remove(this.tick);
     this.adapter.stop();
+    this.audio.stop();
     this.input.destroy();
     this.hud.root.destroy({ children: true });
     this.renderer.destroy();
@@ -111,6 +117,7 @@ export class Game {
       this.eventBuffer = [];
       this.renderer.handleEvents(batch);
       this.hud.handleEvents(batch);
+      this.audio.handle(batch, snapshot.me);
     }
 
     // 3) 카메라 (§3)

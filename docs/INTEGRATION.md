@@ -11,7 +11,7 @@
 | C | `feat/track-c-implementation` | `4d55e2e` |
 | D | `feat/track-d-art-audio-final` | `5af0738` |
 
-각 브랜치를 merge commit으로 합쳐 원본 이력을 보존했다. 파일과 제작 도구를 한 저장소에서 사용할 수 있으며, 실제 전투에서 모든 트랙을 연결하는 작업은 아래와 같이 남아 있다.
+각 브랜치를 merge commit으로 합쳐 원본 이력을 보존했다. 이후 `integration/active-tracks-character-polish`에서 A 클라이언트가 C 밸런스와 D 캐릭터를 실제 런타임에 사용하도록 연결했다. B의 Unity 프로젝트도 같은 저장소에 보존되지만 기술 스택이 달라 웹 프로세스에는 직접 포함하지 않는다.
 
 ## 충돌 해결
 
@@ -28,18 +28,26 @@
 | 검사 | 결과 |
 | --- | --- |
 | `npm ci` | 통합 lockfile로 설치 성공 |
-| `npm run check` | A·C 타입 검사, 밸런스 15개 파일 검증, 7개 파일의 테스트 13개, 웹 클라이언트·편집기 빌드 통과 |
+| `npm run check` | A·C 타입 검사, 밸런스 15개 파일 검증, 8개 파일의 테스트 16개, 웹 클라이언트·편집기 빌드 통과 |
 | `npm run batch -- --adapter smoke --n 20 --seed 1000 --out reports/integration-smoke.csv` | 20회 실행과 리포트 생성 성공. 실제 밸런스 판정에 사용할 수 없는 스모크 결과 |
 | `python3 assets/tools/validate_assets.py` | 유닛 18종, 원본·패킹 프레임 각 444개, 아틀라스 4장, 효과음 67개, BGM 8개 통과 |
 
-이 환경에는 Unity/.NET SDK가 없어 B의 실행·테스트를 수행하지 않았다. FFmpeg가 없어 OGG/MP3 실제 디코딩 검사는 수행하지 않았다. 이번 검증은 브라우저 실플레이나 전 트랙의 실제 전투 연동을 포함하지 않는다.
+이 환경에는 Unity/.NET SDK가 없어 B의 실행·테스트를 수행하지 않았다. FFmpeg가 없어 OGG/MP3 실제 디코딩 검사는 수행하지 않았다. 브라우저 자동 화면 캡처 환경도 제공되지 않아 시각 검수는 D의 콘택트 시트와 빌드·프레임 무결성 검사로 대체했다.
+
+## 런타임 연결 완료
+
+- **A ↔ C:** `src/data/balanceData.ts`가 C JSON을 A의 `BalanceData` 계약으로 변환한다. 임시 데이터 모듈은 호환용 재수출만 남겼다.
+- **A·C ↔ D:** `src/data/assetMap.ts`가 이름이 다른 8개 ID를 명시적으로 매핑하고, `src/render/unitAssets.ts`가 4개 PixiJS 아틀라스와 상태별 클립을 로드한다.
+- **캐릭터 표현:** 전투의 `idle/move/attack/die/deploy/cast`, 유닛 버튼, 생산 큐, 도감이 동일한 D 캐릭터를 사용한다. 누락 시에만 기존 도형 텍스처로 안전하게 대체한다.
+- **전투 표현:** 근접 타격과 실제 착탄 판정이 있는 직선 탄환·에너지 펄스·포물선 포탄·스킬탄을 구분한다. 탱커는 방어 자세와 방패 링으로 공격을 막는다.
+- **D 오디오:** 유닛별 공격·스킬·사망 SFX, 기지 피격·시대 상승·승패 SFX와 세미콘/오차드의 시대별 레이어 BGM을 런타임 이벤트에 연결한다.
+- **도감:** C의 한국어 설명, 역할, 스킬명과 D의 캐릭터 프리뷰를 함께 표시한다.
+- **교차 검증:** 자동 테스트가 C의 18개 게임플레이 ID가 서로 다른 D 캐릭터 18종과 실제 아틀라스 프레임에 모두 대응하는지 검사한다.
 
 ## 남은 연결 작업
 
-1. **A ↔ B 런타임 계약:** A는 TypeScript/PixiJS, B는 Unity/C#이다. 웹의 `FakeSimAdapter`를 실제 시뮬레이션으로 교체하려면 포팅 또는 연결 어댑터와 Snapshot/Command 계약을 정해야 한다.
-2. **A ↔ C 데이터:** 웹은 `src/data/placeholderBalance.ts`를 사용한다. C의 `src/data/balance/` 데이터를 A 계약으로 연결하는 작업이 필요하다.
-3. **A·C ↔ D 에셋:** C의 `src/data/assets.manifest.json`은 계속 플레이스홀더여서 밸런스 검증에 경고 1개가 나온다. D의 `assets/manifest.json`과 다른 스키마이므로 논리 키 매핑과 이미지·오디오 로더가 필요하다.
-4. **C ↔ D 교차 검증:** D 검증기는 루트 `data/balance/`를 찾고 C 데이터는 `src/data/balance/`에 있다. 현재 D 검증 통과는 C의 `assets.sprite`와 실제 이미지 ID 사이의 검증을 의미하지 않는다.
-5. **C ↔ B 배치 실행:** C의 실제 경기용 `project` 어댑터는 미연결이다. 현재 스모크 배치로 승률이나 밸런스를 확정하지 않는다.
+1. **A ↔ B 런타임 계약:** A는 TypeScript/PixiJS, B는 Unity/C#이다. 웹의 `FakeSimAdapter`를 B 시뮬레이션으로 교체하려면 TypeScript 포팅, WebAssembly, 또는 별도 프로세스 브리지 중 하나를 결정해야 한다.
+2. **고유 스킬 판정:** 현재 웹 데모는 4번째 공격을 강화 스킬로 표현한다. C에 정의된 각 스킬의 고유 회복·제어·소환·버프 판정은 B 시뮬레이션 연결과 함께 구현해야 한다.
+3. **C ↔ B 배치 실행:** C의 실제 경기용 `project` 어댑터는 미연결이다. 현재 스모크 배치로 승률이나 밸런스를 확정하지 않는다.
 
 트랙별 자세한 인계는 루트 [README](../README.md)의 링크를 따른다. 각 트랙의 기존 핸드오프는 해당 단독 브랜치 시점의 기록이므로, 병합 상태는 이 문서를 기준으로 확인한다.
