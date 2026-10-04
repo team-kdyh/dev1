@@ -2,8 +2,8 @@
   "$schema": "../schema/age.schema.json",
   "ages": [
     { "age": 1, "name": "액세서리 시대", "tiers": [1, 2, 3], "cost": 0, "cumulativeCashRequired": 0, "globalStatBonus": 0 },
-    { "age": 2, "name": "모바일 시대", "tiers": [4, 5, 6], "cost": 800, "cumulativeCashRequired": 1500, "globalStatBonus": 0.1 },
-    { "age": 3, "name": "컴퓨팅 시대", "tiers": [7, 8], "cost": 2000, "cumulativeCashRequired": 4500, "globalStatBonus": 0.2 },
-    { "age": 4, "name": "창업자 시대", "tiers": [9], "cost": 4000, "cumulativeCashRequired": 4500, "previousAgeSecondsRequired": 60, "globalStatBonus": 0.3 }
+    { "age": 2, "name": "모바일 시대", "tiers": [4, 5, 6], "cost": 300, "cumulativeCashRequired": 900, "globalStatBonus": 0.1 },
+    { "age": 3, "name": "컴퓨팅 시대", "tiers": [7, 8], "cost": 600, "cumulativeCashRequired": 1400, "globalStatBonus": 0.2 },
+    { "age": 4, "name": "창업자 시대", "tiers": [9], "cost": 900, "cumulativeCashRequired": 2500, "previousAgeSecondsRequired": 30, "globalStatBonus": 0.3 }
   ]
 }

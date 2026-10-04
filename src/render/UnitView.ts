@@ -115,7 +115,7 @@ export class UnitView {
     this.hpFill.width = HP_BAR_W * ratio;
     this.hpFill.tint = ratio > 0.5 ? 0x5ddc7a : ratio > 0.25 ? 0xf0c040 : 0xe6483c;
     this.bar.position.set(this.worldX, barY);
-    this.bar.visible = (ratio < 1 || curr.state === 'attack') && this.deathMs < 0;
+    this.bar.visible = ratio < 1 && this.deathMs < 0;
 
     this.body.x = 0;
   }

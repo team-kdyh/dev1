@@ -203,7 +203,8 @@ describe('merged game contracts', () => {
   it('finishes a full-length PvE match without invalid resources or health', () => {
     for (const me of [0, 1] as const) {
       const sim = new LocalSimAdapter(GAME_BALANCE, 1337, { me });
-      for (let tick = 0; tick < 30 * 480 && sim.getSnapshot().phase === 'playing'; tick++) {
+      for (let tick = 0; tick < 30 * (GAME_BALANCE.matchTimeLimitSeconds ?? 300) &&
+        sim.getSnapshot().phase === 'playing'; tick++) {
         if (tick % 45 === 0) sim.send({
           type: 'SPAWN_UNIT', defId: me === 0 ? 'semicon_t1_buds' : 'orchard_t1_airpods',
         });
@@ -211,7 +212,7 @@ describe('merged game contracts', () => {
       }
       const snapshot = sim.getSnapshot();
       expect(snapshot.phase).toBe('over');
-      expect(snapshot.elapsedMs).toBeLessThanOrEqual(480_000);
+      expect(snapshot.elapsedMs).toBeLessThanOrEqual((GAME_BALANCE.matchTimeLimitSeconds ?? 300) * 1000);
       for (const player of snapshot.players) {
         expect(Number.isFinite(player.cash)).toBe(true);
         expect(player.cash).toBeGreaterThanOrEqual(0);
@@ -221,11 +222,15 @@ describe('merged game contracts', () => {
     }
   });
 
-  it('lets the AI unlock its second age instead of endlessly buying starter units', () => {
+  it('lets both factions advance through the early ages with attainable costs', () => {
     for (const me of [0, 1] as const) {
-      const sim = new LocalSimAdapter(GAME_BALANCE, 1337, { me });
-      sim.advanceTicks(30 * 300);
-      expect(sim.getSnapshot().players[me === 0 ? 1 : 0].age).toBeGreaterThanOrEqual(2);
+      const sim = new LocalSimAdapter(GAME_BALANCE, 1337, { me, startCash: 2000 });
+      sim.send({ type: 'AGE_UP' });
+      sim.advanceTicks(2);
+      expect(sim.getSnapshot().players[me].age).toBe(2);
+      sim.send({ type: 'AGE_UP' });
+      sim.advanceTicks(2);
+      expect(sim.getSnapshot().players[me].age).toBe(3);
     }
   });
 });

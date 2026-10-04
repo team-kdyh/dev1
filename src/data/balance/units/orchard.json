@@ -4,8 +4,8 @@
     {
       "id": "orchard_t1_airpods", "faction": "orchard", "tier": 1,
       "name": "에어팟 듀오", "desc": "빠르게 진입하고 사망 시 적 스킬을 끊는 근접 소모 유닛",
-      "cost": 65, "supply": 1, "cooldown": 1.6, "roles": ["melee", "control"],
-      "stats": { "hp": 160, "armor": 1, "armorClass": "light", "atk": 16, "atkSpeed": 1.1, "range": 20, "moveSpeed": 105, "dmgType": "melee", "targetType": "single", "targetPolicy": "nearest" },
+      "cost": 60, "supply": 1, "cooldown": 1.6, "roles": ["melee", "control"],
+      "stats": { "hp": 170, "armor": 1, "armorClass": "light", "atk": 16, "atkSpeed": 1.1, "range": 20, "moveSpeed": 105, "dmgType": "melee", "targetType": "single", "targetPolicy": "nearest" },
       "skills": ["orchard_noise_cancel"], "traits": ["paired"],
       "assets": { "sprite": "units.orchard.airpods", "sfxAttack": "sfx.airpods.attack", "sfxDeath": "sfx.airpods.death" }
     },
@@ -20,8 +20,8 @@
     {
       "id": "orchard_t3_phone", "faction": "orchard", "tier": 3,
       "name": "폰 기본형", "desc": "생태계 보호를 받는 안정적인 원거리 보병",
-      "cost": 150, "supply": 1, "cooldown": 1.8, "roles": ["ranged"],
-      "stats": { "hp": 190, "armor": 2, "armorClass": "light", "atk": 26, "atkSpeed": 0.95, "range": 170, "moveSpeed": 68, "dmgType": "ranged", "targetType": "single", "targetPolicy": "nearest" },
+      "cost": 140, "supply": 1, "cooldown": 1.8, "roles": ["ranged"],
+      "stats": { "hp": 200, "armor": 2, "armorClass": "light", "atk": 26, "atkSpeed": 0.95, "range": 170, "moveSpeed": 68, "dmgType": "ranged", "targetType": "single", "targetPolicy": "nearest" },
       "skills": ["orchard_ecosystem_protection"], "traits": [],
       "assets": { "sprite": "units.orchard.phone", "sfxAttack": "sfx.phone.attack", "sfxDeath": "sfx.phone.death" }
     },

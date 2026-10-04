@@ -1,10 +1,10 @@
 {
   "$schema": "../schema/meta.schema.json",
   "schemaVersion": "1.0.0",
-  "balanceVersion": "0.1.0-draft",
+  "balanceVersion": "0.2.0-fast-pve",
   "tickRate": 30,
   "laneLength": 1000,
-  "matchTimeLimitSeconds": 480,
+  "matchTimeLimitSeconds": 300,
   "economy": {
     "startCash": 300,
     "baseCashPerSecond": 8,

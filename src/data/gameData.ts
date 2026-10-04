@@ -49,6 +49,7 @@ export const GAME_BALANCE: BalanceData = {
   }),
   ageUpCost: ages.ages.slice(1).map((age) => age.cost),
   cashPerSecond: meta.economy.baseCashPerSecond,
+  matchTimeLimitSeconds: meta.matchTimeLimitSeconds,
   startCash: meta.economy.startCash,
   cashCap: meta.economy.cashCap,
   supplyMax: meta.supply.base,

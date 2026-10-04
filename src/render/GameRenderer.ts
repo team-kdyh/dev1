@@ -73,7 +73,7 @@ export class GameRenderer {
       this.overlayLayer, // 8 데미지 텍스트 / HP 바
     );
 
-    // x 정렬은 zIndex에 맡긴다 — 앞쪽(오른쪽) 유닛이 위로 (§2.3)
+    // 겹친 유닛은 화면 아래쪽에 있는 캐릭터가 앞에 그려지도록 정렬한다.
     this.unitLayer.sortableChildren = true;
 
     this.bases = [
@@ -142,7 +142,7 @@ export class GameRenderer {
         this.views.set(unit.id, view);
       }
       view.apply(this.prevById.get(unit.id), unit, alpha);
-      view.root.zIndex = view.worldX;
+      view.root.zIndex = view.root.y * 10_000 + view.worldX;
       view.tick(deltaMs);
       if (view.worldX < this.camera.viewLeft - CULL_PAD || view.worldX > this.camera.viewRight + CULL_PAD) {
         view.setVisible(false);

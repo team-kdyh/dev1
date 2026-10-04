@@ -175,6 +175,7 @@ export interface BalanceData {
   readonly units: readonly UnitDef[];
   readonly ageUpCost: readonly number[];
   readonly cashPerSecond: number;
+  readonly matchTimeLimitSeconds?: number;
   readonly supplyMax: number;
   readonly baseHp: number;
   readonly queueMax: number;
