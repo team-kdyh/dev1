@@ -1,8 +1,10 @@
 import type { Application } from 'pixi.js';
-import { FakeSimAdapter } from '../adapter/FakeSimAdapter';
+import { LocalSimAdapter, type LocalMatchOptions } from '../adapter/LocalSimAdapter';
 import type { BalanceData } from '../sim/contracts';
 import { Codex } from '../screens/Codex';
-import { MainMenu, PlaceholderScreen, ResultScreen, Splash, type MatchResult } from '../screens/Screens';
+import { CampaignScreen, FactionScreen, ResearchScreen, type CampaignStage } from '../screens/ContentScreens';
+import { loadProgress, saveProgress } from '../data/progress';
+import { MainMenu, ResultScreen, SettingsScreen, Splash, type MatchResult } from '../screens/Screens';
 import { Game } from './Game';
 
 interface Screen {
@@ -42,47 +44,71 @@ export class App {
     this.stopGame();
     this.show(
       new MainMenu({
-        campaign: () => this.startMatch(),
-        quickMatch: () => this.startMatch(),
+        campaign: () => this.show(new CampaignScreen((stage) => this.startCampaign(stage), () => this.mainMenu())),
+        quickMatch: () => this.show(new FactionScreen((faction) =>
+          this.startMatch({ me: faction === 'semicon' ? 0 : 1 }), () => this.mainMenu())),
         codex: () => this.show(new Codex(this.balance, () => this.mainMenu())),
-        lab: () =>
-          this.show(
-            new PlaceholderScreen('연구소', 'RP·연구 데이터가 아직 없습니다 (C 대기).', () =>
-              this.mainMenu(),
-            ),
-          ),
+        lab: () => this.show(new ResearchScreen(() => this.mainMenu())),
         online: () => {},
-        settings: () =>
-          this.show(
-            new PlaceholderScreen('설정', '명세에 설정 항목이 정의되어 있지 않습니다.', () =>
-              this.mainMenu(),
-            ),
-          ),
+        settings: () => this.show(new SettingsScreen(() => this.mainMenu())),
       }),
     );
   }
 
-  private startMatch(): void {
+  private startCampaign(stage: CampaignStage): void {
+    this.startMatch({
+      me: stage.faction === 'semicon' ? 0 : 1,
+      difficulty: stage.aiDifficulty as LocalMatchOptions['difficulty'],
+      startCash: stage.rules.startCash,
+      baseHp: stage.rules.baseHp,
+      enemyBaseHp: stage.rules.enemyBaseHp,
+      timeLimitSeconds: stage.rules.timeLimit,
+      startAge: stage.rules.startAge,
+      bannedUnits: stage.rules.bannedUnits,
+    }, stage);
+  }
+
+  private startMatch(options: LocalMatchOptions = {}, stage?: CampaignStage): void {
     this.clearScreen();
     this.stopGame();
 
-    // M1 3주차에 이 한 줄이 LocalSimAdapter로 바뀐다. 다른 곳은 손대지 않는다.
-    const adapter = new FakeSimAdapter(this.balance);
+    const matchBalance: BalanceData = stage ? {
+      ...this.balance,
+      units: this.balance.units.map((unit) => ({
+        ...unit,
+        cost: Math.round(unit.cost * stage.rules.unitCostMod),
+        buildMs: Math.round(unit.buildMs * stage.rules.productionCooldownMod),
+        cooldownMs: Math.round(unit.cooldownMs * stage.rules.productionCooldownMod),
+      })),
+      cashPerSecond: this.balance.cashPerSecond * stage.rules.cashRateMod,
+      upgrades: stage.rules.upgradesEnabled ? this.balance.upgrades : [],
+    } : this.balance;
+    const adapter = new LocalSimAdapter(matchBalance, 1337, { ...options, research: loadProgress().research });
     this.game = new Game(
       this.app,
       adapter,
-      this.balance,
-      (result) => this.showResult(result),
+      matchBalance,
+      (result) => this.showResult(result, options, stage),
       () => this.mainMenu(),
     );
     this.game.start();
   }
 
-  private showResult(result: MatchResult): void {
+  private showResult(result: MatchResult, options: LocalMatchOptions, stage?: CampaignStage): void {
+    let finalResult = result;
+    if (stage) {
+      const progress = loadProgress();
+      const firstClear = !progress.cleared.includes(stage.id);
+      const rp = result.won ? stage.rewards.rp + (firstClear ? stage.rewards.firstClearRp : 0) : 0;
+      if (result.won && firstClear) progress.cleared.push(stage.id);
+      progress.rp += rp;
+      saveProgress(progress);
+      finalResult = { ...result, rp };
+    }
     this.show(
       new ResultScreen(
-        result,
-        () => this.startMatch(),
+        finalResult,
+        () => this.startMatch(options, stage),
         () => this.mainMenu(),
       ),
     );

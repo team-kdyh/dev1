@@ -1,7 +1,7 @@
 import { Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import type { BalanceData, SimEvent } from '../sim/contracts';
 import { LOGICAL_MAX, type SimAdapter } from '../adapter/SimAdapter';
-import { FACTION_OF_PLAYER, findUnitDef } from '../data/placeholderBalance';
+import { FACTION_OF_PLAYER, findUnitDef } from '../data/gameData';
 import type { BaseView } from './BaseView';
 import type { Camera } from './Camera';
 import { laneY, toPixel } from './coords';

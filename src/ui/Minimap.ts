@@ -47,8 +47,10 @@ export class Minimap {
   }
 
   layout(screenW: number, screenH: number, bottomMargin: number): void {
-    this.x = screenW - MAP_W - 14;
-    this.y = screenH - MAP_H - bottomMargin;
+    const scale = screenW < 650 ? 0.65 : 1;
+    this.root.scale.set(scale);
+    this.x = screenW - MAP_W * scale - 14;
+    this.y = screenH - MAP_H * scale - bottomMargin;
     this.root.position.set(this.x, this.y);
   }
 
@@ -80,6 +82,7 @@ export class Minimap {
   }
 
   hitTest(x: number, y: number): boolean {
-    return x >= this.x && x <= this.x + MAP_W && y >= this.y && y <= this.y + MAP_H;
+    return x >= this.x && x <= this.x + MAP_W * this.root.scale.x &&
+      y >= this.y && y <= this.y + MAP_H * this.root.scale.y;
   }
 }

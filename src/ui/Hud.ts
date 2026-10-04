@@ -1,6 +1,6 @@
 import { Container } from 'pixi.js';
 import type { BalanceData, Command, PlayerId, SimEvent, Snapshot, UnitDef } from '../sim/contracts';
-import { FACTION_OF_PLAYER } from '../data/placeholderBalance';
+import { FACTION_OF_PLAYER } from '../data/gameData';
 import { Minimap } from './Minimap';
 import { AgeUpButton, PauseMenu, StrategyButtons, UnitInfoPopup, UpgradePanel } from './Panels';
 import { QueueBar } from './QueueBar';
@@ -39,7 +39,7 @@ export class Hud {
   constructor(
     stage: Container,
     balance: BalanceData,
-    me: PlayerId,
+    private readonly me: PlayerId,
     camera: Camera,
     private readonly callbacks: HudCallbacks,
   ) {
@@ -52,7 +52,7 @@ export class Hud {
       callbacks.send({ type: 'CANCEL_QUEUE', index });
     });
     this.minimap = new Minimap(camera);
-    this.strategy = new StrategyButtons(callbacks.send);
+    this.strategy = new StrategyButtons(balance, FACTION_OF_PLAYER[me], callbacks.send);
     this.ageUp = new AgeUpButton(balance, callbacks.send);
     this.upgrades = new UpgradePanel(balance, callbacks.send);
     this.pause = new PauseMenu(
@@ -81,16 +81,18 @@ export class Hud {
   }
 
   resize(width: number, height: number): void {
+    const compact = width < 650;
     this.warnings.resize(width, height);
     this.resources.layout(width);
     this.unitBar.layout(width, height, BAR_MARGIN);
 
     const unitBarTop = height - BUTTON_H - BAR_MARGIN;
-    this.queueBar.layout(width, unitBarTop - 6);
+    this.queueBar.layout(width, unitBarTop - (compact ? BUTTON_H + 35 : 6));
     this.minimap.layout(width, height, BUTTON_H + BAR_MARGIN + 8);
-    this.strategy.layout(width, height, BAR_MARGIN);
-    this.ageUp.layout(width, height, BAR_MARGIN);
-    this.toasts.layout(width, height, BUTTON_H + BAR_MARGIN + this.queueBar.barHeight + 24);
+    this.strategy.layout(width, height, BAR_MARGIN + (compact ? BUTTON_H + 14 : 0));
+    this.ageUp.layout(width, height, BAR_MARGIN + (compact ? BUTTON_H + 14 : 0));
+    this.toasts.layout(width, height,
+      BUTTON_H + BAR_MARGIN + this.queueBar.barHeight + (compact ? 104 : 24));
     this.upgrades.layout(width, height);
     this.pause.layout(width, height);
   }
@@ -102,13 +104,16 @@ export class Hud {
     this.unitBar.update(snapshot, deltaMs);
     this.queueBar.update(player);
     this.minimap.update(snapshot);
-    this.ageUp.update(player);
+    this.ageUp.update(player, snapshot.tick);
+    this.strategy.update(player);
+    this.upgrades.update(player);
     this.toasts.tick(deltaMs);
   }
 
   handleEvents(events: readonly SimEvent[]): void {
     for (const event of events) {
       if (event.type !== 'rejected') continue;
+      if (event.owner !== undefined && event.owner !== this.me) continue;
       this.toasts.push(REJECT_TEXT[event.reason]);
       if (event.command.type === 'SPAWN_UNIT') {
         this.unitBar.onRejected(event.command.defId, event.reason);

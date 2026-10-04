@@ -16,6 +16,7 @@ export class UnitButton {
   readonly root = new Container();
 
   private readonly bg = new Graphics();
+  private readonly accent = new Graphics();
   private readonly icon = new Sprite();
   private readonly keyHint: Text;
   private readonly costText: Text;
@@ -37,39 +38,42 @@ export class UnitButton {
     onPress: (def: UnitDef) => void,
   ) {
     this.bg.roundRect(0, 0, BUTTON_W, BUTTON_H, 8).fill(COLOR.panel);
-    this.bg.roundRect(0, 0, BUTTON_W, BUTTON_H, 8).stroke({ width: 2, color: COLOR.panelEdge, alignment: 1 });
+    this.bg.roundRect(0, 0, BUTTON_W, BUTTON_H, 8).stroke({ width: 3, color: COLOR.panelEdge, alignment: 1 });
+    this.accent.roundRect(7, 5, BUTTON_W - 14, 4, 2)
+      .fill(def.faction === 'semicon' ? 0x4d7fe4 : 0xff987e);
 
     this.icon.texture = unitTexture(def.faction, def.tier);
     this.icon.anchor.set(0.5, 1);
-    // 티어마다 원본 크기가 달라서(30~66px) 고정 높이에 맞춰 스케일을 맞춘다
-    const fit = Math.min(44 / this.icon.texture.height, 40 / this.icon.texture.width);
+    // 큰 원본 아틀라도 생산 카드 안에 들어오도록 맞춘다.
+    const fit = Math.min(47 / this.icon.texture.height, 47 / this.icon.texture.width);
     this.icon.scale.set(fit);
-    this.icon.position.set(BUTTON_W / 2, BUTTON_H - 26);
+    this.icon.position.set(BUTTON_W / 2, BUTTON_H - 16);
 
     this.keyHint = new Text({
       text: String(hotkey),
-      style: { fontFamily: UI_MONO, fontSize: 11, fill: COLOR.textDim },
+      style: { fontFamily: UI_MONO, fontSize: 10, fill: COLOR.textDim },
     });
-    this.keyHint.position.set(6, 4);
+    this.keyHint.position.set(4, 3);
 
     this.costText = new Text({
       text: String(def.cost),
-      style: { fontFamily: UI_MONO, fontSize: 13, fontWeight: 'bold', fill: COLOR.cash },
+      style: { fontFamily: UI_MONO, fontSize: 11, fontWeight: 'bold', fill: COLOR.cash },
     });
     this.costText.anchor.set(0.5, 1);
-    this.costText.position.set(BUTTON_W / 2, BUTTON_H - 5);
+    this.costText.position.set(BUTTON_W / 2, BUTTON_H - 3);
 
     this.supplyText = new Text({
       text: `■${def.supply}`,
-      style: { fontFamily: UI_MONO, fontSize: 10, fill: COLOR.supply },
+      style: { fontFamily: UI_MONO, fontSize: 9, fill: COLOR.supply },
     });
     this.supplyText.anchor.set(1, 0);
-    this.supplyText.position.set(BUTTON_W - 6, 4);
+    this.supplyText.position.set(BUTTON_W - 4, 3);
 
     this.drawLock();
 
     this.root.addChild(
       this.bg,
+      this.accent,
       this.icon,
       this.keyHint,
       this.costText,

@@ -1,5 +1,6 @@
 import type { BalanceData, UnitDef } from '../sim/contracts';
-import { FACTION_COLOR } from '../render/textures';
+import semiconSkills from '../data/balance/skills/semicon.json';
+import orchardSkills from '../data/balance/skills/orchard.json';
 import { button, el, uiRoot } from './dom';
 
 /**
@@ -87,15 +88,18 @@ export class Codex {
     card.append(head, this.preview(unit));
 
     const stats = el('ul', 'sw-stats');
+    const number = (value: number): string => new Intl.NumberFormat('ko-KR', {
+      maximumFractionDigits: 1,
+    }).format(value);
     const rows: [string, string][] = [
-      ['비용', String(unit.cost)],
-      ['인구', String(unit.supply)],
-      ['HP', String(unit.hp)],
-      ['DPS', String(unit.dps)],
-      ['사거리', String(unit.range)],
-      ['이동속도', unit.speed.toFixed(1)],
-      ['생산시간', `${(unit.buildMs / 1000).toFixed(1)}s`],
-      ['쿨다운', `${(unit.cooldownMs / 1000).toFixed(1)}s`],
+      ['비용', number(unit.cost)],
+      ['인구', number(unit.supply)],
+      ['HP', number(unit.hp)],
+      ['DPS', number(unit.dps)],
+      ['사거리', number(unit.range)],
+      ['이동속도', number(unit.speed)],
+      ['생산시간', `${number(unit.buildMs / 1000)}s`],
+      ['쿨다운', `${number(unit.cooldownMs / 1000)}s`],
     ];
     for (const [key, value] of rows) {
       const li = el('li');
@@ -106,49 +110,21 @@ export class Codex {
     }
     card.append(stats);
 
-    // 스킬·상성은 BalanceData에 필드가 없다. 지어내지 않고 없다고 적는다.
-    const extra = unit as unknown as { skills?: unknown[]; counters?: unknown[] };
-    if (!extra.skills && !extra.counters) {
-      card.append(el('div', 'sw-missing', '스킬 · 상성: 밸런스 데이터에 필드 없음'));
-    }
+    if (unit.description) card.append(el('div', 'sw-missing', unit.description));
+    const catalog = [...semiconSkills.skills, ...orchardSkills.skills];
+    const names = unit.skills?.map((id) => catalog.find((skill) => skill.id === id)?.name ?? id) ?? [];
+    if (names.length > 0) card.append(el('div', 'sw-missing', '스킬: ' + names.join(' · ')));
 
     return card;
   }
 
-  private preview(unit: UnitDef): SVGSVGElement {
-    const color = FACTION_COLOR[unit.faction] ?? 0x888888;
-    const hex = `#${color.toString(16).padStart(6, '0')}`;
-    const w = 30 + unit.tier * 4;
-    const h = 40 + unit.tier * 9;
-
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('class', 'sw-preview');
-    svg.setAttribute('viewBox', '0 0 200 76');
-
-    const body = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    body.setAttribute('width', String(w * 0.6));
-    body.setAttribute('height', String(h * 0.6));
-    body.setAttribute('rx', '3');
-    body.setAttribute('fill', hex);
-    body.setAttribute('y', String(70 - h * 0.6));
-
-    // move 애니메이션 프리뷰 (§8: move 6프레임, 12fps ≈ 0.5초 주기)
-    const move = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
-    move.setAttribute('attributeName', 'x');
-    move.setAttribute('values', '10;170;10');
-    move.setAttribute('dur', `${(12 / unit.speed).toFixed(1)}s`);
-    move.setAttribute('repeatCount', 'indefinite');
-    body.append(move);
-
-    const ground = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    ground.setAttribute('x', '0');
-    ground.setAttribute('y', '70');
-    ground.setAttribute('width', '200');
-    ground.setAttribute('height', '2');
-    ground.setAttribute('fill', '#2a2f3d');
-
-    svg.append(ground, body);
-    return svg;
+  private preview(unit: UnitDef): HTMLImageElement {
+    const image = document.createElement('img');
+    image.className = 'sw-preview';
+    image.alt = unit.name;
+    image.style.objectFit = 'contain';
+    image.src = '/assets/frames/units/' + unit.faction + '/' + unit.artId + '_idle_00.png';
+    return image;
   }
 
   mount(): void {

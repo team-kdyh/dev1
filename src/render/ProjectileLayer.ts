@@ -1,6 +1,6 @@
 import { Container, Sprite, Texture } from 'pixi.js';
 import type { ProjectileSnapshot } from '../sim/contracts';
-import { FACTION_OF_PLAYER } from '../data/placeholderBalance';
+import { FACTION_OF_PLAYER } from '../data/gameData';
 import { GROUND_Y, toPixel } from './coords';
 import { FACTION_COLOR } from './textures';
 

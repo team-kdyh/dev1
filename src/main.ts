@@ -1,6 +1,6 @@
 import { Application } from 'pixi.js';
 import { App } from './app/App';
-import { PLACEHOLDER_BALANCE } from './data/placeholderBalance';
+import { GAME_BALANCE } from './data/gameData';
 import { initTextures } from './render/textures';
 
 async function boot(): Promise<void> {
@@ -18,10 +18,9 @@ async function boot(): Promise<void> {
   if (!host) throw new Error('#app 이 index.html에 없다');
   host.appendChild(app.canvas);
 
-  // 플레이스홀더 텍스처는 renderer가 있어야 만들 수 있다 — init 이후에만 호출 가능
-  initTextures(app.renderer);
+  await initTextures(app.renderer);
 
-  new App(app, PLACEHOLDER_BALANCE).start();
+  new App(app, GAME_BALANCE).start();
 }
 
 void boot();

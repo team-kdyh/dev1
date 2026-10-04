@@ -1,7 +1,7 @@
 import type { BalanceData, Command, UnitDef } from '../sim/contracts';
 import type { SimAdapter } from '../adapter/SimAdapter';
 import type { Camera } from '../render/Camera';
-import { FACTION_OF_PLAYER, findUnitDef, unitsOfFaction } from '../data/placeholderBalance';
+import { FACTION_OF_PLAYER, findUnitDef, unitsOfFaction } from '../data/gameData';
 import type { CommandGate } from './CommandGate';
 
 /** 키보드 팬 속도 (월드 px / ms) */

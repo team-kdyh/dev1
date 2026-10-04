@@ -1,4 +1,4 @@
-import { Container, Sprite, Texture } from 'pixi.js';
+import { Container, Graphics, Sprite, Texture } from 'pixi.js';
 import type { UnitSnapshot } from '../sim/contracts';
 import { laneY, lerp, toPixel } from './coords';
 import { unitTexture } from './textures';
@@ -22,6 +22,7 @@ export class UnitView {
   readonly bar = new Container();
 
   private readonly body = new Sprite();
+  private readonly shadow = new Graphics();
   private readonly hpBg = new Sprite(Texture.WHITE);
   private readonly hpFill = new Sprite(Texture.WHITE);
 
@@ -29,6 +30,15 @@ export class UnitView {
   private deathMs = -1;
   private spawnMs = 0;
   private baseTint = 0xffffff;
+  private faction = '';
+  private tier = 1;
+  private facing: 1 | -1 = 1;
+  private visualState = 'idle';
+  private stateElapsedMs = 0;
+  private attackMs = 0;
+  private attackTotalMs = 0;
+  private attackState: 'attack' | 'cast' = 'attack';
+  private hitRecoilMs = 0;
 
   /** 현재 이 뷰가 담당하는 유닛. 풀 반환 시 -1. */
   unitId = -1;
@@ -37,7 +47,8 @@ export class UnitView {
 
   constructor() {
     this.body.anchor.set(0.5, 1); // 앵커 하단 중앙 (§8)
-    this.root.addChild(this.body);
+    this.shadow.ellipse(0, -3, 35, 8).fill({ color: 0x253044, alpha: 0.24 });
+    this.root.addChild(this.shadow, this.body);
 
     this.hpBg.anchor.set(0.5, 0.5);
     this.hpBg.tint = 0x000000;
@@ -53,7 +64,13 @@ export class UnitView {
 
   reset(unit: UnitSnapshot, faction: string): void {
     this.unitId = unit.id;
+    this.faction = faction;
+    this.tier = unit.tier;
+    this.facing = unit.facing;
+    this.visualState = 'idle';
+    this.stateElapsedMs = 0;
     this.body.texture = unitTexture(faction, unit.tier);
+    this.shadow.scale.x = unit.tier >= 7 ? 1.7 : unit.tier >= 4 ? 1.3 : 1;
     this.body.tint = 0xffffff;
     this.baseTint = 0xffffff;
     this.body.alpha = 1;
@@ -63,6 +80,8 @@ export class UnitView {
     this.bar.visible = true;
     this.bar.alpha = 1;
     this.flashMs = 0;
+    this.attackMs = 0;
+    this.hitRecoilMs = 0;
     this.deathMs = -1;
     this.spawnMs = SPAWN_MS;
   }
@@ -74,8 +93,15 @@ export class UnitView {
     const y = laneY(curr.id);
     this.root.position.set(this.worldX, y);
 
-    this.body.scale.x = curr.facing;
+    this.facing = curr.facing;
+    if (curr.state !== this.visualState && this.deathMs < 0 && this.attackMs <= 0) {
+      this.visualState = curr.state;
+      this.stateElapsedMs = 0;
+    }
+    const size = curr.tier >= 7 ? 0.98 : curr.tier >= 4 ? 1.2 : 1.35;
+    this.body.scale.set(curr.facing * size, size);
     this.body.y = 0;
+    this.body.rotation = 0;
 
     const ratio = curr.maxHp > 0 ? Math.max(0, curr.hp / curr.maxHp) : 0;
     const barY = y - this.body.height - 10;
@@ -84,17 +110,33 @@ export class UnitView {
     this.bar.position.set(this.worldX, barY);
     this.bar.visible = (ratio < 1 || curr.state === 'attack') && this.deathMs < 0;
 
-    // 공격 모션이 없으므로 살짝 앞으로 기울여 상태를 눈에 보이게 한다.
-    this.body.x = curr.state === 'attack' ? curr.facing * 3 : 0;
+    this.body.x = 0;
   }
 
   flash(): void {
     this.flashMs = FLASH_MS;
-    this.body.tint = 0xffffff;
+    this.hitRecoilMs = 150;
+    this.attackMs = 0;
+    this.body.tint = 0xff8b84;
+  }
+
+  /** 실제 공격 이벤트에 맞춰 짧은 준비·타격·복귀 동작을 재생한다. */
+  playAttack(skill = false): void {
+    if (this.deathMs >= 0) return;
+    this.attackState = skill ? 'cast' : 'attack';
+    this.attackTotalMs = skill ? 470 : 340;
+    this.attackMs = this.attackTotalMs;
+    this.stateElapsedMs = 0;
   }
 
   startDeath(): void {
-    if (this.deathMs < 0) this.deathMs = 0;
+    if (this.deathMs < 0) {
+      this.deathMs = 0;
+      this.visualState = 'die';
+      this.stateElapsedMs = 0;
+      this.attackMs = 0;
+      this.hitRecoilMs = 0;
+    }
   }
 
   get isDying(): boolean {
@@ -109,6 +151,27 @@ export class UnitView {
 
   /** @returns true면 연출이 끝나 풀로 돌려보내도 된다. */
   tick(deltaMs: number): boolean {
+    this.stateElapsedMs += deltaMs;
+    this.body.texture = unitTexture(this.faction, this.tier,
+      this.attackMs > 0 ? this.attackState : this.visualState, this.stateElapsedMs);
+    if (this.attackMs > 0) {
+      this.attackMs = Math.max(0, this.attackMs - deltaMs);
+      const progress = 1 - this.attackMs / this.attackTotalMs;
+      const windup = Math.min(1, progress / 0.28);
+      const strike = Math.min(1, Math.max(0, (progress - 0.28) / 0.27));
+      const recover = Math.min(1, Math.max(0, (progress - 0.55) / 0.45));
+      const advance = progress < 0.28 ? -6 * windup
+        : progress < 0.55 ? -6 + 23 * strike : 17 * (1 - recover);
+      this.body.x = this.facing * advance;
+      this.body.y = -Math.sin(Math.PI * progress) * 7;
+      this.body.rotation = this.facing * (-0.09 * (1 - strike) + 0.15 * strike) * (1 - recover);
+    }
+    if (this.hitRecoilMs > 0) {
+      this.hitRecoilMs = Math.max(0, this.hitRecoilMs - deltaMs);
+      const remaining = this.hitRecoilMs / 150;
+      this.body.x = -this.facing * 11 * remaining;
+      this.body.rotation = -this.facing * 0.12 * remaining;
+    }
     if (this.flashMs > 0) {
       this.flashMs -= deltaMs;
       if (this.flashMs <= 0) this.body.tint = this.baseTint;

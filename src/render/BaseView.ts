@@ -26,7 +26,7 @@ export class BaseView {
   private morphMs = 0;
   private ageScale = 1;
 
-  constructor(faction: string, worldX: number) {
+  constructor(private readonly faction: string, worldX: number) {
     this.body.texture = baseTexture(faction);
     this.body.anchor.set(0.5, 1);
     this.body.y = GROUND_Y;
@@ -64,6 +64,7 @@ export class BaseView {
   morph(age: number): void {
     this.morphMs = MORPH_MS;
     this.ageScale = 1 + age * 0.08;
+    this.body.texture = baseTexture(this.faction, age);
   }
 
   tick(deltaMs: number): void {

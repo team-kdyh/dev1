@@ -62,6 +62,10 @@ export interface PlayerSnapshot {
   readonly baseMaxHp: number;
   /** defId -> 남은 쿨다운 ms */
   readonly cooldowns: Readonly<Record<UnitDefId, number>>;
+  readonly strategyCooldowns?: Readonly<Record<string, number>>;
+  readonly upgradeLevels?: Readonly<Record<string, number>>;
+  readonly cumulativeCash?: number;
+  readonly ageEnteredTick?: number;
   readonly unlockedTiers: readonly number[];
   readonly queue: readonly QueueItemSnapshot[];
 }
@@ -103,13 +107,14 @@ export type RejectReason =
 
 export type SimEvent =
   | { type: 'spawn'; unitId: UnitId; defId: UnitDefId; owner: PlayerId; x: number }
+  | { type: 'attack'; unitId: UnitId; defId: UnitDefId; owner: PlayerId; x: number }
   | { type: 'hit'; unitId: UnitId; x: number; amount: number; crit: boolean }
   | { type: 'kill'; unitId: UnitId; defId: UnitDefId; owner: PlayerId; x: number }
   | { type: 'skill'; unitId: UnitId; skillId: string; x: number }
   | { type: 'ageup'; owner: PlayerId; age: number }
   | { type: 'baseHit'; owner: PlayerId; amount: number }
   | { type: 'strategy'; owner: PlayerId; slot: 0 | 1; strategyId: string }
-  | { type: 'rejected'; command: Command; reason: RejectReason }
+  | { type: 'rejected'; command: Command; reason: RejectReason; owner?: PlayerId }
   | { type: 'gameOver'; winner: PlayerId };
 
 // ---------------------------------------------------------------------------
@@ -131,6 +136,38 @@ export interface UnitDef {
   readonly range: number;
   /** 논리 단위 / 초 */
   readonly speed: number;
+  readonly attack?: number;
+  readonly attackIntervalMs?: number;
+  readonly armor?: number;
+  readonly armorClass?: 'light' | 'heavy' | 'structure';
+  readonly damageType?: 'melee' | 'ranged' | 'siege' | 'magic';
+  readonly targetType?: string;
+  readonly splashRadius?: number;
+  readonly targetPolicy?: string;
+  readonly roles?: readonly string[];
+  readonly skills?: readonly string[];
+  readonly description?: string;
+  readonly artId?: string;
+  readonly spriteKey?: string;
+  readonly sfxAttackKey?: string;
+  readonly sfxDeathKey?: string;
+}
+
+export interface UpgradeDef {
+  readonly id: string;
+  readonly name: string;
+  readonly cost: number;
+  readonly costs: readonly number[];
+  readonly maxLevel: number;
+  readonly effect: { readonly type: string; readonly values: readonly number[] };
+}
+
+export interface StrategyDef {
+  readonly id: string;
+  readonly faction: string;
+  readonly name: string;
+  readonly cooldownMs: number;
+  readonly effects: readonly { readonly type: string; readonly stat?: string; readonly value?: number; readonly duration?: number }[];
 }
 
 export interface BalanceData {
@@ -140,4 +177,12 @@ export interface BalanceData {
   readonly supplyMax: number;
   readonly baseHp: number;
   readonly queueMax: number;
+  readonly startCash?: number;
+  readonly cashCap?: number;
+  readonly ages?: readonly { readonly age: number; readonly tiers: readonly number[]; readonly cost: number; readonly cumulativeCashRequired: number; readonly previousAgeSecondsRequired?: number; readonly globalStatBonus?: number }[];
+  readonly upgrades?: readonly UpgradeDef[];
+  readonly strategies?: readonly StrategyDef[];
+  readonly damageMatrix?: Readonly<Record<string, Readonly<Record<string, number>>>>;
+  readonly baseTurretDps?: readonly number[];
+  readonly baseTurretRange?: number;
 }

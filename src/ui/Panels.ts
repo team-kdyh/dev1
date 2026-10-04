@@ -26,8 +26,8 @@ class TextButton {
 
   constructor(text: string, width: number, height: number, onPress: () => void) {
     this.bg = new Graphics();
-    this.bg.roundRect(0, 0, width, height, 6).fill(0x1d2740);
-    this.bg.roundRect(0, 0, width, height, 6).stroke({ width: 1, color: COLOR.panelEdge, alignment: 1 });
+    this.bg.roundRect(0, 0, width, height, 6).fill(COLOR.panel);
+    this.bg.roundRect(0, 0, width, height, 6).stroke({ width: 2, color: COLOR.panelEdge, alignment: 1 });
 
     this.caption = label(text, 14, COLOR.text);
     this.caption.anchor.set(0.5);
@@ -65,17 +65,32 @@ export class StrategyButtons {
   private y = 0;
   private readonly w = 96;
   private readonly h = 34;
+  private readonly buttons: TextButton[] = [];
+  private readonly choices: readonly { id: string; name: string }[];
 
-  constructor(send: (cmd: Command) => void) {
-    const q = new TextButton('Q  전략 1', this.w, this.h, () =>
+  constructor(balance: BalanceData, faction: string, send: (cmd: Command) => void) {
+    this.choices = balance.strategies?.filter((item) => item.faction === faction) ?? [];
+    const q = new TextButton('Q  ' + (this.choices[0]?.name ?? '전략 1'), this.w, this.h, () =>
       send({ type: 'USE_STRATEGY', slot: 0 }),
     );
-    const w = new TextButton('W  전략 2', this.w, this.h, () =>
+    const w = new TextButton('W  ' + (this.choices[1]?.name ?? '전략 2'), this.w, this.h, () =>
       send({ type: 'USE_STRATEGY', slot: 1 }),
     );
+    this.buttons.push(q, w);
     q.root.position.set(0, 0);
     w.root.position.set(0, this.h + 6);
     this.root.addChild(q.root, w.root);
+  }
+
+  update(player: PlayerSnapshot): void {
+    this.buttons.forEach((button, index) => {
+      const choice = this.choices[index];
+      if (!choice) { button.setEnabled(false); return; }
+      const remaining = player.strategyCooldowns?.[choice.id] ?? 0;
+      button.setText((index === 0 ? 'Q  ' : 'W  ') + choice.name +
+        (remaining > 0 ? ' ' + Math.ceil(remaining / 1000) : ''));
+      button.setEnabled(remaining <= 0);
+    });
   }
 
   layout(screenW: number, screenH: number, bottomMargin: number): void {
@@ -101,7 +116,8 @@ export class UpgradePanel {
   readonly root = new Container();
   private readonly body = new Container();
   private readonly w = 320;
-  private readonly h = 220;
+  private readonly h = 286;
+  private readonly buttons: TextButton[] = [];
   private x = 0;
   private y = 0;
 
@@ -121,8 +137,8 @@ export class UpgradePanel {
 
   private rebuild(): void {
     this.body.removeChildren();
-    const upgrades = (this.balance as { upgrades?: readonly { id: string; name: string; cost: number }[] })
-      .upgrades;
+    this.buttons.length = 0;
+    const upgrades = this.balance.upgrades;
 
     if (!upgrades || upgrades.length === 0) {
       const empty = label('C의 밸런스 데이터에 업그레이드 항목이 없습니다.', 12, COLOR.textDim);
@@ -139,6 +155,18 @@ export class UpgradePanel {
       );
       button.root.position.set(0, i * 36);
       this.body.addChild(button.root);
+      this.buttons.push(button);
+    });
+  }
+
+  update(player: PlayerSnapshot): void {
+    this.balance.upgrades?.forEach((upgrade, index) => {
+      const button = this.buttons[index];
+      if (!button) return;
+      const level = player.upgradeLevels?.[upgrade.id] ?? 0;
+      const cost = upgrade.costs[level];
+      button.setText(upgrade.name + ' ' + (cost === undefined ? '최대' : cost));
+      button.setEnabled(cost !== undefined && player.cash >= cost);
     });
   }
 
@@ -185,15 +213,21 @@ export class AgeUpButton {
     this.root.position.set(this.x, this.y);
   }
 
-  update(player: PlayerSnapshot): void {
-    const cost = this.balance.ageUpCost[player.age];
+  update(player: PlayerSnapshot, tick: number): void {
+    const next = this.balance.ages?.find((age) => age.age === player.age + 1);
+    const cost = next?.cost;
     if (cost === undefined) {
       this.button.setText('최종 시대');
       this.button.setEnabled(false);
       return;
     }
-    this.button.setText(`E  시대 업 ${cost}`);
-    this.button.setEnabled(player.cash >= cost);
+    const cumulative = player.cumulativeCash ?? 0;
+    const ageTicks = player.ageEnteredTick ?? 0;
+    const hasCashHistory = !next || cumulative >= next.cumulativeCashRequired;
+    const hasTime = !next?.previousAgeSecondsRequired ||
+      tick - ageTicks >= next.previousAgeSecondsRequired * 30;
+    this.button.setText(hasCashHistory ? `E  시대 업 ${cost}` : `E 누적 ${next?.cumulativeCashRequired}`);
+    this.button.setEnabled(player.cash >= cost && hasCashHistory && hasTime);
   }
 
   hitTest(px: number, py: number): boolean {

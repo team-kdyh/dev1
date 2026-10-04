@@ -1,6 +1,6 @@
 import { Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import type { BalanceData, PlayerSnapshot } from '../sim/contracts';
-import { findUnitDef } from '../data/placeholderBalance';
+import { findUnitDef } from '../data/gameData';
 import { unitTexture } from '../render/textures';
 import { COLOR, UI_MONO } from './theme';
 
@@ -46,6 +46,7 @@ export class QueueBar {
   }
 
   update(player: PlayerSnapshot): void {
+    this.root.visible = player.queue.length > 0;
     this.slots.forEach((slot, i) => {
       const item = player.queue[i];
       if (!item) {
@@ -58,8 +59,12 @@ export class QueueBar {
   }
 
   hitTest(x: number, y: number): boolean {
-    return (
-      x >= this.left && x <= this.left + this.barWidth && y >= this.top && y <= this.top + SLOT
+    if (!this.root.visible) return false;
+    return this.slots.some((slot, i) =>
+      slot.root.visible &&
+      x >= this.left + i * (SLOT + GAP) &&
+      x <= this.left + i * (SLOT + GAP) + SLOT &&
+      y >= this.top && y <= this.top + SLOT,
     );
   }
 }
@@ -132,6 +137,6 @@ class QueueSlot {
     this.progressBg.visible = false;
     this.progressFill.visible = false;
     this.hint.visible = false;
-    this.root.visible = true;
+    this.root.visible = false;
   }
 }

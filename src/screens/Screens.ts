@@ -1,11 +1,12 @@
 import { button, el, uiRoot } from './dom';
+import { loadAudioSettings, saveAudioSettings, type AudioSettings } from '../audio/settings';
 
 /** §7 스플래시 */
 export class Splash {
   private readonly node = el('div', 'sw-screen');
 
   constructor(onDone: () => void, holdMs = 1100) {
-    this.node.append(el('h1', 'sw-title', 'STICK WAR'));
+    this.node.append(el('h1', 'sw-title', 'TECH WAR'));
     this.node.append(el('p', 'sw-sub', '불러오는 중…'));
     window.setTimeout(onDone, holdMs);
   }
@@ -30,11 +31,27 @@ export interface MainMenuActions {
 
 /** §7 메인메뉴 → 캠페인/빠른대전/도감/연구소/온라인 대전(M3)/설정 */
 export class MainMenu {
-  private readonly node = el('div', 'sw-screen');
+  private readonly node = el('div', 'sw-screen sw-home');
 
   constructor(actions: MainMenuActions) {
-    this.node.append(el('h1', 'sw-title', 'STICK WAR'));
-    this.node.append(el('p', 'sw-sub', 'Track A — 클라이언트'));
+    this.node.append(el('div', 'sw-eyebrow', 'PRODUCT BATTLE · SIDE SCROLL STRATEGY'));
+    this.node.append(el('h1', 'sw-title', 'TECH WAR'));
+    this.node.append(el('p', 'sw-sub', '삼성 vs 애플 · 제품 군단의 한 줄 전쟁'));
+
+    const stage = el('div', 'sw-home-stage');
+    for (const [faction, filename] of [
+      ['blue', 'semicon/semicon_t3_aphone_soldier_idle_00.png'],
+      ['coral', 'orchard/orchard_t3_phone_idle_00.png'],
+    ] as const) {
+      const figure = el('div', `sw-fighter sw-fighter-${faction}`);
+      const image = document.createElement('img');
+      image.src = `/assets/frames/units/${filename}`;
+      image.alt = faction === 'blue' ? '삼성 진영 캐릭터' : '애플 진영 캐릭터';
+      figure.append(image);
+      if (faction === 'coral') stage.append(el('div', 'sw-versus', 'VS'));
+      stage.append(figure);
+    }
+    this.node.append(stage);
 
     const menu = el('div', 'sw-menu');
     menu.append(button('캠페인', actions.campaign));
@@ -44,7 +61,7 @@ export class MainMenu {
 
     const online = button('온라인 대전', actions.online);
     online.disabled = true;
-    online.title = 'M3에서 열립니다';
+    online.title = '추후 업데이트 예정';
     menu.append(online);
 
     menu.append(button('설정', actions.settings));
@@ -139,4 +156,47 @@ export class PlaceholderScreen {
   unmount(): void {
     this.node.remove();
   }
+}
+
+/** 전투 음량은 브라우저에 저장하고 다음 경기부터 적용한다. */
+export class SettingsScreen {
+  private readonly node = el('div', 'sw-screen');
+
+  constructor(onClose: () => void) {
+    const settings = loadAudioSettings();
+    const panel = el('div', 'sw-panel sw-settings');
+    const head = el('div', 'sw-panel-head');
+    head.append(el('h2', undefined, '설정'), button('뒤로', onClose));
+    const body = el('div', 'sw-panel-body');
+    body.append(el('p', 'sw-settings-lead', '게임 사운드를 원하는 크기로 조절하세요.'));
+
+    for (const [key, title] of [
+      ['music', '전투 음악'], ['effects', '효과음'],
+    ] as const satisfies readonly (readonly [keyof AudioSettings, string])[]) {
+      const row = el('label', 'sw-setting-row');
+      const name = el('strong', undefined, title);
+      const slider = document.createElement('input');
+      slider.type = 'range';
+      slider.min = '0';
+      slider.max = '100';
+      slider.value = String(Math.round(settings[key] * 100));
+      slider.setAttribute('aria-label', title);
+      const value = el('output', undefined, `${slider.value}%`);
+      slider.addEventListener('input', () => {
+        settings[key] = Number(slider.value) / 100;
+        value.textContent = `${slider.value}%`;
+        saveAudioSettings(settings);
+      });
+      row.append(name, slider, value);
+      body.append(row);
+    }
+
+    body.append(el('p', 'sw-settings-tip',
+      '조작: 숫자키 1~9 생산 · Q/W 전략 · E 시대 · R 업그레이드 · 스페이스 전선 복귀'));
+    panel.append(head, body);
+    this.node.append(panel);
+  }
+
+  mount(): void { uiRoot().append(this.node); }
+  unmount(): void { this.node.remove(); }
 }

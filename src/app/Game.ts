@@ -6,8 +6,10 @@ import { InputRouter } from '../input/InputRouter';
 import { Camera } from '../render/Camera';
 import { GameRenderer } from '../render/GameRenderer';
 import { Interpolator } from '../render/Interpolator';
-import { toLogical } from '../render/coords';
+import { toLogical, WORLD_WIDTH } from '../render/coords';
 import { Hud } from '../ui/Hud';
+import { GameAudio } from '../audio/GameAudio';
+import { FACTION_OF_PLAYER } from '../data/gameData';
 import type { MatchResult } from '../screens/Screens';
 
 /**
@@ -23,6 +25,7 @@ export class Game {
   private readonly hud: Hud;
   private readonly gate: CommandGate;
   private readonly interpolator: Interpolator;
+  private readonly audio: GameAudio;
 
   /** onEvents는 step 중 동기로 불린다 — 여기 쌓아두고 프레임 경계에서 한 번에 소비한다. */
   private eventBuffer: SimEvent[] = [];
@@ -45,14 +48,17 @@ export class Game {
     private readonly onQuit: () => void,
   ) {
     const me = adapter.getSnapshot().me;
+    this.audio = new GameAudio(FACTION_OF_PLAYER[me]);
     this.camera = new Camera();
+    this.camera.snapTo(me === 0 ? 0 : WORLD_WIDTH);
+    this.camera.returnToAuto();
     this.renderer = new GameRenderer(app.stage, balance, adapter, this.camera);
     this.camera.attach(this.renderer.world);
     this.interpolator = new Interpolator(adapter.getSnapshot());
     this.gate = new CommandGate(adapter);
 
     this.hud = new Hud(app.stage, balance, me, this.camera, {
-      send: (cmd) => this.gate.send(cmd),
+      send: (cmd) => { this.audio.click(); this.gate.send(cmd); },
       onPauseToggle: (paused) => this.adapter.setTimeScale?.(paused ? 0 : 1),
       onQuit: () => this.onQuit(),
     });
@@ -84,6 +90,7 @@ export class Game {
     this.running = false;
     this.app.ticker.remove(this.tick);
     this.adapter.stop();
+    this.audio.stop();
     this.input.destroy();
     this.hud.root.destroy({ children: true });
     this.renderer.destroy();
@@ -111,6 +118,7 @@ export class Game {
       this.eventBuffer = [];
       this.renderer.handleEvents(batch);
       this.hud.handleEvents(batch);
+      this.audio.handle(batch, snapshot);
     }
 
     // 3) 카메라 (§3)

@@ -81,7 +81,9 @@ export class ResourceBar {
   }
 
   layout(screenW: number): void {
-    this.foeGroup.position.set(screenW - HP_W - 24, 4);
+    const scale = screenW < 650 ? 0.76 : 1;
+    this.root.scale.set(scale);
+    this.foeGroup.position.set((screenW - 12) / scale - HP_W - 12, 4);
   }
 
   /** cashHighlight: §4.4 "자원 100 이상으로 15초 유휴" 강조 (0 또는 1) */
@@ -94,7 +96,7 @@ export class ResourceBar {
       this.highlightMs += deltaMs;
       const pulse = 0.5 + 0.5 * Math.abs(Math.sin(this.highlightMs * 0.005));
       this.cash.scale.set(1 + pulse * 0.12);
-      this.cash.style.fill = pulse > 0.5 ? 0xffffff : COLOR.cash;
+      this.cash.style.fill = pulse > 0.5 ? 0x253044 : COLOR.cash;
     } else {
       this.highlightMs = 0;
       this.cash.scale.set(1);

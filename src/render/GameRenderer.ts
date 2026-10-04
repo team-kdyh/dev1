@@ -1,7 +1,7 @@
 import { Container } from 'pixi.js';
 import type { BalanceData, SimEvent, Snapshot, UnitSnapshot } from '../sim/contracts';
 import { LOGICAL_MAX, type SimAdapter } from '../adapter/SimAdapter';
-import { FACTION_OF_PLAYER } from '../data/placeholderBalance';
+import { FACTION_OF_PLAYER } from '../data/gameData';
 import { BaseView } from './BaseView';
 import type { Camera } from './Camera';
 import { toPixel } from './coords';
@@ -9,7 +9,7 @@ import { EffectDirector } from './EffectDirector';
 import type { Interpolator } from './Interpolator';
 import { DamageTextPool, ObjectPool, ParticlePool } from './pools';
 import { ProjectileLayer } from './ProjectileLayer';
-import { buildFarLayer, buildGroundLayer, buildMidLayer, buildSky } from './scenery';
+import { buildFarLayer, buildGroundLayer, buildMidLayer, buildSky, drawSky } from './scenery';
 import { UnitView } from './UnitView';
 
 /** 컬링 여유폭 — 화면 경계에서 유닛이 깜박이며 사라지는 걸 막는다 (§2.4) */
@@ -96,13 +96,15 @@ export class GameRenderer {
   }
 
   resize(width: number, height: number): void {
-    this.sky.clear();
-    this.sky.rect(0, 0, width, height).fill(0x0b0f1c);
-    this.sky.rect(0, height * 0.45, width, height * 0.55).fill({ color: 0x1a2340, alpha: 0.75 });
+    drawSky(this.sky, width, height);
     this.effects.resize(width, height);
   }
 
   handleEvents(events: readonly SimEvent[]): void {
+    for (const event of events) {
+      if (event.type === 'attack') this.views.get(event.unitId)?.playAttack();
+      if (event.type === 'skill') this.views.get(event.unitId)?.playAttack(true);
+    }
     this.effects.handle(events);
   }
 
@@ -180,10 +182,9 @@ export class GameRenderer {
       if (unit.owner === me) allyFront = Math.max(allyFront, unit.x);
       else enemyFront = Math.min(enemyFront, unit.x);
     }
-    if (allyFront === Number.NEGATIVE_INFINITY && enemyFront === Number.POSITIVE_INFINITY) {
-      return toPixel(LOGICAL_MAX / 2);
+    if (allyFront === Number.NEGATIVE_INFINITY) {
+      return toPixel(me === 0 ? 0 : LOGICAL_MAX);
     }
-    if (allyFront === Number.NEGATIVE_INFINITY) return toPixel(enemyFront);
     if (enemyFront === Number.POSITIVE_INFINITY) return toPixel(allyFront);
     return toPixel((allyFront + enemyFront) / 2);
   }

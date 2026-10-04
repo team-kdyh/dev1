@@ -127,10 +127,12 @@ export class Camera {
     }
 
     const half = this.screenW / (2 * this.scale);
+    // 본진이 화면 가장자리에서 잘리지 않도록 양쪽에 조금 여백을 둔다.
+    const basePadding = 104 / this.scale;
     this.x =
       WORLD_WIDTH <= half * 2
         ? WORLD_WIDTH / 2
-        : clamp(this.x, half, WORLD_WIDTH - half);
+        : clamp(this.x, half - basePadding, WORLD_WIDTH - half + basePadding);
 
     let shakeX = 0;
     let shakeY = 0;
