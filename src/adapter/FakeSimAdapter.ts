@@ -40,6 +40,8 @@ interface FakeUnit {
   attackCdMs: number;
   attackCount: number;
   castMs: number;
+  /** 뒤를 기다린 누적 시간 — 상한을 넘으면 그냥 전진한다 */
+  musterMs: number;
 }
 
 interface FakeProjectile {
@@ -79,6 +81,13 @@ const ALLY_SPACING = 9;
 const MUSTER_GAP = 30;
 /** 이 거리 안의 아군만 같은 본대로 본다. 멀리 있는 증원을 기다리다 전진이 멈추지 않게. */
 const COHESION_WINDOW = 220;
+/**
+ * 한 유닛이 뒤를 기다릴 수 있는 최대 시간.
+ *
+ * 상한이 없으면 교착된다 — 생산이 계속되는 동안 선두 뒤에는 항상 새 낙오자가
+ * 생기므로 선두가 영구히 멈춰 서고, 최악의 경우 양측이 아예 만나지 못한다.
+ */
+const MUSTER_MAX_MS = 1200;
 /** 본대보다 뒤처진 유닛의 가속 배율 — 한 줄로 늘어지지 않고 합류한다. */
 const CATCHUP_SPEED = 1.6;
 /** 원거리 유닛이 근접 벽 뒤에 유지하는 거리 */
@@ -292,6 +301,7 @@ export class FakeSimAdapter implements SimAdapter {
       attackCdMs: 0,
       attackCount: 0,
       castMs: 0,
+      musterMs: 0,
     };
     this.units.push(unit);
     this.emit({ type: 'spawn', unitId: unit.id, defId: def.id, owner, x });
@@ -392,11 +402,18 @@ export class FakeSimAdapter implements SimAdapter {
 
         if (holdX !== null && (unit.x - holdX) * dir >= 0) {
           unit.state = 'idle';
-        } else if (gaps.behind > MUSTER_GAP && gaps.behind <= COHESION_WINDOW) {
+        } else if (
+          gaps.behind > MUSTER_GAP &&
+          gaps.behind <= COHESION_WINDOW &&
+          unit.musterMs < MUSTER_MAX_MS
+        ) {
           // 바로 뒤 아군이 뒤처졌으면 기다린다 (각개전투 방지).
           // 간격이 COHESION_WINDOW를 넘으면 본대가 아니라 먼 증원이므로 기다리지 않는다.
+          // 대기에는 상한이 있다 — 없으면 생산이 계속되는 동안 선두가 영구히 멈춘다.
+          unit.musterMs += TICK_MS;
           unit.state = 'idle';
         } else {
+          unit.musterMs = 0;
           unit.state = 'move';
           // 앞 아군과 벌어졌으면 가속해 합류한다 → 줄이 아니라 덩어리로 움직인다.
           // 상한(COHESION_WINDOW)은 '기다리기'에만 쓴다 — 추격에 상한을 걸면
