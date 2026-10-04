@@ -45,6 +45,33 @@ const ATTACK_INTERVAL_MS = 600;
 const CONTACT_PAD = 8;
 const AI_SPAWN_INTERVAL_MS = 2500;
 
+// --- 본대 대열 (각개전투 방지) --------------------------------------------
+// 유닛이 한 기씩 도착해 1:1로 싸우는 걸 막는다. 전부 FakeSim 전용이며
+// B의 시뮬이 붙으면 이 판단은 시뮬 쪽으로 간다.
+
+/** 아군 간 최소 간격. 좁을수록 뭉쳐 보인다 — 렌더가 id별 Y 레인을 주므로 겹쳐 보이지 않는다. */
+const ALLY_SPACING = 9;
+/**
+ * 바로 뒤 아군과 이만큼 넘게 벌어지면 기다린다.
+ * 본대 중심(평균)과 비교하면 평균에 선두 자신이 섞여 제약이 절반으로 희석되므로
+ * 반드시 **바로 뒤 아군과의 실제 간격**으로 재야 한다.
+ */
+const MUSTER_GAP = 30;
+/** 이 거리 안의 아군만 같은 본대로 본다. 멀리 있는 증원을 기다리다 전진이 멈추지 않게. */
+const COHESION_WINDOW = 220;
+/** 뒤처진 유닛의 가속 배율. 추격에는 상한을 걸지 않는다 — 걸면 오히려 더 벌어진다. */
+const CATCHUP_SPEED = 1.6;
+/** 원거리 유닛이 근접 벽 뒤에 유지하는 거리 */
+const RANGED_HOLD_MIN = 26;
+/** 이 사거리 이상이면 대열상 '원거리'로 본다 (GameRenderer의 투사체 판정과 같은 기준) */
+const RANGED_MIN_RANGE = 50;
+
+/** 한 진영의 본대 상태 */
+interface PackInfo {
+  /** 가장 앞선 근접 아군 x — 원거리가 이 뒤에 선다. 없으면 null */
+  meleeFrontX: number | null;
+}
+
 function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
   return () => {
@@ -243,6 +270,7 @@ export class FakeSimAdapter implements SimAdapter {
 
   private stepUnits(dt: number): void {
     const dead: FakeUnit[] = [];
+    const packs = this.computePacks();
 
     for (const unit of this.units) {
       const dir = unit.owner === 0 ? 1 : -1;
@@ -278,8 +306,33 @@ export class FakeSimAdapter implements SimAdapter {
       } else if (this.blockedByAlly(unit, dir)) {
         unit.state = 'idle';
       } else {
-        unit.state = 'move';
-        unit.x = clamp(unit.x + dir * unit.def.speed * dt, 0, LOGICAL_MAX);
+        const pack = packs[unit.owner];
+        const gaps = this.neighborGaps(unit, dir);
+
+        // 원거리는 근접 벽을 앞지르지 않는다 — 혼자 걸어 나가 1:1로 죽는 걸 막고,
+        // 사거리가 비슷한 유닛끼리 같은 x 띠에 모여 함께 사격하게 된다.
+        //
+        // 단, 벽이 **내 앞에 있을 때만** 적용한다. 근접이 전멸했거나 아직 뒤에서
+        // 올라오는 중이면 멈춰 세우지 않는다 — 그러면 전진이 영구히 막힌다.
+        const wallAhead =
+          this.isRanged(unit) &&
+          pack.meleeFrontX !== null &&
+          (pack.meleeFrontX - unit.x) * dir > 0;
+        const holdX = wallAhead ? (pack.meleeFrontX as number) - dir * RANGED_HOLD_MIN : null;
+
+        if (holdX !== null && (unit.x - holdX) * dir >= 0) {
+          unit.state = 'idle';
+        } else if (gaps.behind > MUSTER_GAP && gaps.behind <= COHESION_WINDOW) {
+          // 바로 뒤 아군이 뒤처졌으면 기다린다 (각개전투 방지).
+          // 간격이 COHESION_WINDOW를 넘으면 본대가 아니라 먼 증원이므로 기다리지 않는다.
+          unit.state = 'idle';
+        } else {
+          unit.state = 'move';
+          // 앞 아군과 벌어졌으면 가속해 합류한다 → 줄이 아니라 덩어리로 움직인다
+          const speed =
+            gaps.ahead > MUSTER_GAP ? unit.def.speed * CATCHUP_SPEED : unit.def.speed;
+          unit.x = clamp(unit.x + dir * speed * dt, 0, LOGICAL_MAX);
+        }
       }
     }
 
@@ -317,9 +370,48 @@ export class FakeSimAdapter implements SimAdapter {
     for (const other of this.units) {
       if (other === unit || other.owner !== unit.owner) continue;
       const delta = (other.x - unit.x) * dir;
-      if (delta > 0 && delta < 11 && other.state !== 'move') return true;
+      if (delta > 0 && delta < ALLY_SPACING && other.state !== 'move') return true;
     }
     return false;
+  }
+
+  /** 대열상 원거리 유닛인가. damageType이 optional이라 사거리도 같이 본다. */
+  private isRanged(unit: FakeUnit): boolean {
+    return unit.def.damageType !== 'melee' && unit.def.range >= RANGED_MIN_RANGE;
+  }
+
+  /**
+   * 진영별 본대 정보 — 가장 앞선 근접 아군(= 벽)을 찾는다.
+   * 원거리는 이 벽을 앞지르지 않는다.
+   */
+  private computePacks(): [PackInfo, PackInfo] {
+    const melee: [number | null, number | null] = [null, null];
+    for (const unit of this.units) {
+      if (unit.hp <= 0 || this.isRanged(unit)) continue;
+      const dir = unit.owner === 0 ? 1 : -1;
+      const current = melee[unit.owner];
+      if (current === null || (unit.x - current) * dir > 0) melee[unit.owner] = unit.x;
+    }
+    return [{ meleeFrontX: melee[0] }, { meleeFrontX: melee[1] }];
+  }
+
+  /**
+   * 같은 진영에서 내 앞/뒤로 가장 가까운 아군까지의 거리. 없으면 Infinity.
+   * dir 방향이 '앞'이다.
+   */
+  private neighborGaps(unit: FakeUnit, dir: 1 | -1): { ahead: number; behind: number } {
+    let ahead = Infinity;
+    let behind = Infinity;
+    for (const other of this.units) {
+      if (other === unit || other.owner !== unit.owner || other.hp <= 0) continue;
+      const delta = (other.x - unit.x) * dir;
+      if (delta > 0) {
+        if (delta < ahead) ahead = delta;
+      } else if (delta < 0) {
+        if (-delta < behind) behind = -delta;
+      }
+    }
+    return { ahead, behind };
   }
 
   // -- 스냅샷 --------------------------------------------------------------
