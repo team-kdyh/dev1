@@ -3,7 +3,8 @@ import type { Snapshot } from '../sim/contracts';
 import { LOGICAL_MAX } from '../adapter/SimAdapter';
 import type { Camera } from '../render/Camera';
 import { WORLD_WIDTH, clamp, toLogical } from '../render/coords';
-import { COLOR } from './theme';
+import { COLOR, accentOf } from './theme';
+import { FACTION_OF_PLAYER } from '../data/balanceData';
 
 /** 전체 라인을 200px로 압축 (§4.3) */
 const MAP_W = 200;
@@ -56,17 +57,21 @@ export class Minimap {
     this.dots.clear();
     const me = snapshot.me;
 
+    // 진영 색은 C의 factions.json에서 온다 — 아군/적군을 색으로 구분한다 (§4.3)
+    const leftColor = accentOf(FACTION_OF_PLAYER[0]);
+    const rightColor = accentOf(FACTION_OF_PLAYER[1]);
+
     for (const unit of snapshot.units) {
       const px = (unit.x / LOGICAL_MAX) * MAP_W;
       const size = 1.5 + unit.tier * 0.35; // 점 크기는 티어에 비례 (§4.3)
-      const color = unit.owner === me ? 0x4a9eff : 0xff5a4a;
+      const color = unit.owner === 0 ? leftColor : rightColor;
       const py = MAP_H / 2 + (unit.owner === me ? 4 : -4);
       this.dots.circle(px, py, size).fill(color);
     }
 
     // 본진 표식
-    this.dots.rect(0, MAP_H / 2 - 7, 3, 14).fill(0x4a9eff);
-    this.dots.rect(MAP_W - 3, MAP_H / 2 - 7, 3, 14).fill(0xff5a4a);
+    this.dots.rect(0, MAP_H / 2 - 7, 3, 14).fill(leftColor);
+    this.dots.rect(MAP_W - 3, MAP_H / 2 - 7, 3, 14).fill(rightColor);
 
     // 현재 카메라 영역을 흰 프레임으로 (§4.3)
     const left = (toLogical(this.camera.viewLeft) / LOGICAL_MAX) * MAP_W;

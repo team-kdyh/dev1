@@ -9,7 +9,7 @@ import { EffectDirector } from './EffectDirector';
 import type { Interpolator } from './Interpolator';
 import { DamageTextPool, ObjectPool, ParticlePool } from './pools';
 import { ProjectileLayer } from './ProjectileLayer';
-import { buildFarLayer, buildGroundLayer, buildMidLayer, buildSky } from './scenery';
+import { buildFarLayer, buildGroundLayer, buildMidLayer, buildSky, paintSky } from './scenery';
 import { UnitView } from './UnitView';
 
 /** 컬링 여유폭 — 화면 경계에서 유닛이 깜박이며 사라지는 걸 막는다 (§2.4) */
@@ -98,9 +98,8 @@ export class GameRenderer {
   }
 
   resize(width: number, height: number): void {
-    this.sky.clear();
-    this.sky.rect(0, 0, width, height).fill(0x0b0f1c);
-    this.sky.rect(0, height * 0.45, width, height * 0.55).fill({ color: 0x1a2340, alpha: 0.75 });
+    // 하늘은 화면 고정이라 크기가 바뀔 때마다 다시 그린다 (진영 색 지평선 포함)
+    paintSky(this.sky, width, height);
     this.effects.resize(width, height);
   }
 
