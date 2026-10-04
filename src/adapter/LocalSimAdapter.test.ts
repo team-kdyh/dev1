@@ -126,7 +126,15 @@ describe('merged game contracts', () => {
       });
       sim.advanceTicks(60);
       const boss = sim.getSnapshot().units.find((unit) => unit.owner !== me && unit.tier === 9);
-      expect(boss?.maxHp).toBeCloseTo((me === 0 ? 2400 * 1.2 : 2600 * 1.2 * 1.2));
+      // 기준 HP는 밸런스 데이터에서 읽는다. 숫자를 박아두면 밸런스를 조정할 때마다
+      // 이 테스트가 엉뚱하게 깨진다 (실제로 겪었다).
+      const enemyFaction = me === 0 ? 'orchard' : 'semicon';
+      const baseHp = GAME_BALANCE.units.find(
+        (unit) => unit.tier === 9 && unit.faction === enemyFaction,
+      )?.hp ?? 0;
+      expect(baseHp).toBeGreaterThan(0);
+      // me === 1 쪽은 시뮬이 보정을 한 번 더 적용한다 — 기존 기대값 구조는 그대로 둔다.
+      expect(boss?.maxHp).toBeCloseTo(me === 0 ? baseHp * 1.2 : baseHp * 1.2 * 1.2);
     }
   });
 

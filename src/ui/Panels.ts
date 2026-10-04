@@ -25,6 +25,8 @@ class TextButton {
   private readonly bg: Graphics;
   private readonly caption: Text;
   private enabled = true;
+  /** 글자가 버튼을 넘지 않게 가두는 폭 */
+  private readonly innerWidth: number;
 
   constructor(text: string, width: number, height: number, onPress: () => void, tone: 'default' | 'gold' = 'default') {
     this.bg = new Graphics();
@@ -33,9 +35,12 @@ class TextButton {
     this.bg.roundRect(0, 0, width, height, 7)
       .stroke({ width: 1, color: tone === 'gold' ? 0xffd17a : COLOR.panelEdge, alignment: 1 });
 
+    this.innerWidth = width - 10;
+    // 글꼴 크기는 HUD 다듬기(c42cd7a)에서 정한 13을 따른다.
     this.caption = label(text, 13, COLOR.text);
     this.caption.anchor.set(0.5);
     this.caption.position.set(width / 2, height / 2);
+    this.fitCaption();
 
     this.root.addChild(this.bg, this.caption);
     this.root.eventMode = 'static';
@@ -50,7 +55,19 @@ class TextButton {
   }
 
   setText(text: string): void {
+    if (this.caption.text === text) return;
     this.caption.text = text;
+    this.fitCaption();
+  }
+
+  /**
+   * 긴 글자가 버튼 밖으로 삐져나가지 않게 가로로만 줄인다.
+   * 세로까지 줄이면 글자가 납작해지므로 scale.x만 건드린다.
+   */
+  private fitCaption(): void {
+    this.caption.scale.set(1);
+    const width = this.caption.width;
+    if (width > this.innerWidth) this.caption.scale.x = this.innerWidth / width;
   }
 
   setEnabled(enabled: boolean): void {
@@ -91,8 +108,12 @@ export class StrategyButtons {
       const choice = this.choices[index];
       if (!choice) { button.setEnabled(false); return; }
       const remaining = player.strategyCooldowns?.[choice.id] ?? 0;
-      button.setText((index === 0 ? 'Q  ' : 'W  ') + choice.name +
-        (remaining > 0 ? ' ' + Math.ceil(remaining / 1000) : ''));
+      // 쿨다운 중에는 남은 시간만 보여준다. 이름까지 같이 넣으면 버튼 폭을 넘친다.
+      button.setText(
+        remaining > 0
+          ? `${Math.ceil(remaining / 1000)}초`
+          : `${index === 0 ? 'Q' : 'W'}  ${choice.name}`,
+      );
       button.setEnabled(remaining <= 0);
     });
   }

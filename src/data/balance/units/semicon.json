@@ -29,7 +29,7 @@
       "id": "semicon_t4_sphone_sniper", "faction": "semicon", "tier": 4,
       "name": "S폰 저격수", "desc": "오래 조준해 적 후방을 치명타로 제거하는 딜러",
       "cost": 260, "supply": 2, "cooldown": 3.4, "roles": ["ranged"],
-      "stats": { "hp": 260, "armor": 3, "armorClass": "light", "atk": 55, "atkSpeed": 0.65, "range": 260, "moveSpeed": 60, "dmgType": "ranged", "targetType": "single", "targetPolicy": "farthest" },
+      "stats": { "hp": 360, "armor": 3, "armorClass": "light", "atk": 62, "atkSpeed": 0.65, "range": 260, "moveSpeed": 60, "dmgType": "ranged", "targetType": "single", "targetPolicy": "farthest" },
       "skills": ["semicon_long_exposure"], "traits": [],
       "assets": { "sprite": "units.semicon.sphone_sniper", "sfxAttack": "sfx.sphone_sniper.attack", "sfxDeath": "sfx.sphone_sniper.death" }
     },
@@ -61,7 +61,7 @@
       "id": "semicon_t8_ai_assistant", "faction": "semicon", "tier": 8,
       "name": "AI 어시스턴트", "desc": "적의 공격 속도와 스킬을 봉인하는 제어 유닛",
       "cost": 600, "supply": 2, "cooldown": 7.0, "roles": ["control", "support"],
-      "stats": { "hp": 420, "armor": 4, "armorClass": "light", "atk": 30, "atkSpeed": 0.9, "range": 200, "moveSpeed": 65, "dmgType": "magic", "targetType": "splash", "splashRadius": 120, "targetPolicy": "nearest" },
+      "stats": { "hp": 560, "armor": 4, "armorClass": "light", "atk": 42, "atkSpeed": 0.9, "range": 200, "moveSpeed": 65, "dmgType": "magic", "targetType": "splash", "splashRadius": 120, "targetPolicy": "nearest" },
       "skills": ["semicon_malfunction", "semicon_routine_execute"], "traits": [],
       "assets": { "sprite": "units.semicon.ai_assistant", "sfxAttack": "sfx.ai_assistant.attack", "sfxDeath": "sfx.ai_assistant.death" }
     },

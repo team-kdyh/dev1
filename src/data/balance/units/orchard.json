@@ -29,7 +29,7 @@
       "id": "orchard_t4_phone_pro", "faction": "orchard", "tier": 4,
       "name": "폰 프로", "desc": "약해진 적을 연쇄 처치하는 단일 고화력 딜러",
       "cost": 280, "supply": 2, "cooldown": 3.7, "roles": ["ranged"],
-      "stats": { "hp": 240, "armor": 3, "armorClass": "light", "atk": 62, "atkSpeed": 0.65, "range": 250, "moveSpeed": 62, "dmgType": "ranged", "targetType": "single", "targetPolicy": "lowestHpRatio" },
+      "stats": { "hp": 340, "armor": 3, "armorClass": "light", "atk": 68, "atkSpeed": 0.65, "range": 250, "moveSpeed": 62, "dmgType": "ranged", "targetType": "single", "targetPolicy": "lowestHpRatio" },
       "skills": ["orchard_dynamic_aim"], "traits": [],
       "assets": { "sprite": "units.orchard.phone_pro", "sfxAttack": "sfx.phone_pro.attack", "sfxDeath": "sfx.phone_pro.death" }
     },
