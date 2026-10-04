@@ -69,7 +69,29 @@ interface FakePlayer {
 
 const CONTACT_PAD = 4;
 const BASE_EDGE_REACH = 34;
-const ALLY_SPACING = 16;
+/** 아군 간 최소 간격. 좁을수록 뭉쳐 보인다 — 렌더가 id별 Y 레인을 주므로 겹쳐 보이지 않는다. */
+const ALLY_SPACING = 9;
+/**
+ * 바로 뒤 아군과 이만큼 넘게 벌어지면 기다린다 — 혼자 달려나가 1:1로 죽는 걸 막는다.
+ * 본대 중심(평균)과 비교하면 평균에 선두 자신이 섞여 제약이 절반으로 희석되므로
+ * 반드시 **바로 뒤 아군과의 실제 간격**으로 재야 한다.
+ */
+const MUSTER_GAP = 30;
+/** 이 거리 안의 아군만 같은 본대로 본다. 멀리 있는 증원을 기다리다 전진이 멈추지 않게. */
+const COHESION_WINDOW = 220;
+/** 본대보다 뒤처진 유닛의 가속 배율 — 한 줄로 늘어지지 않고 합류한다. */
+const CATCHUP_SPEED = 1.6;
+/** 원거리 유닛이 근접 벽 뒤에 유지하는 거리 */
+const RANGED_HOLD_MIN = 26;
+
+/** 한 진영의 본대 상태 */
+interface PackInfo {
+  /** 본대 중심 x (평균) */
+  packX: number;
+  /** 가장 앞선 근접 아군 x — 원거리가 이 뒤에 선다. 없으면 null */
+  meleeFrontX: number | null;
+  count: number;
+}
 const AI_SPAWN_INTERVAL_MS = 2500;
 const SKILL_DAMAGE_MULTIPLIER = 1.55;
 const BLOCKED_DAMAGE_MULTIPLIER = 0.35;
@@ -77,6 +99,18 @@ const CAST_MS = 420;
 
 /** 실제 플레이 체감 속도. setTimeScale 인자는 이 값을 기준으로 한 상대 배율이다. */
 export const DEMO_TIME_SCALE = 0.72;
+
+/**
+ * 쇼케이스용 캐시 수급 배율. **FakeSim 전용이며 C의 밸런스 JSON은 건드리지 않는다.**
+ *
+ * 계측 결과 기본 수급(8/s)에서는 내 유닛이 동시에 2~3기만 살아 있어
+ * 무엇을 해도 1:1 교전이 된다 — 뭉칠 몸 자체가 없다.
+ * 프론트의 대열·사격선 연출을 보여주려면 전선에 유닛이 쌓여야 하므로 여기서만 올린다.
+ *
+ * **밸런스 결정이 아니다.** 실제 수급 곡선은 C가 정하고 B의 시뮬이 적용한다.
+ * 이 상수는 LocalSimAdapter 교체 시 이 파일과 함께 사라진다.
+ */
+export const DEMO_CASH_MULTIPLIER = 2.6;
 
 function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
@@ -222,7 +256,7 @@ export class FakeSimAdapter implements SimAdapter {
 
     for (let i = 0; i < 2; i += 1) {
       const p = this.players[i];
-      p.cash += this.balance.cashPerSecond * dt;
+      p.cash += this.balance.cashPerSecond * DEMO_CASH_MULTIPLIER * dt;
       for (const key of Object.keys(p.cooldowns)) {
         p.cooldowns[key] = Math.max(0, p.cooldowns[key] - TICK_MS);
       }
@@ -279,8 +313,37 @@ export class FakeSimAdapter implements SimAdapter {
     ai.queue.push({ def, elapsedMs: 0 });
   }
 
+  /**
+   * 진영별 본대 정보. 뭉쳐 움직이기와 원거리 사격선 유지에 쓴다.
+   * FakeSim 전용 — B의 시뮬이 붙으면 이 판단은 시뮬 쪽으로 간다.
+   */
+  private computePacks(): [PackInfo, PackInfo] {
+    const acc = [
+      { sum: 0, n: 0, melee: null as number | null },
+      { sum: 0, n: 0, melee: null as number | null },
+    ];
+
+    for (const unit of this.units) {
+      if (unit.hp <= 0) continue;
+      const a = acc[unit.owner];
+      a.sum += unit.x;
+      a.n += 1;
+      // 가장 앞선 근접 아군 = 벽. 원거리는 이 뒤에 줄을 선다.
+      if (!isRangedAttack(unit.def)) {
+        const dir = unit.owner === 0 ? 1 : -1;
+        if (a.melee === null || (unit.x - a.melee) * dir > 0) a.melee = unit.x;
+      }
+    }
+
+    return [
+      { packX: acc[0].n > 0 ? acc[0].sum / acc[0].n : 0, meleeFrontX: acc[0].melee, count: acc[0].n },
+      { packX: acc[1].n > 0 ? acc[1].sum / acc[1].n : 0, meleeFrontX: acc[1].melee, count: acc[1].n },
+    ];
+  }
+
   private stepUnits(dt: number): void {
     const dead: FakeUnit[] = [];
+    const packs = this.computePacks();
 
     for (const unit of this.units) {
       const dir = unit.owner === 0 ? 1 : -1;
@@ -313,8 +376,35 @@ export class FakeSimAdapter implements SimAdapter {
       } else if (this.blockedByAlly(unit, dir)) {
         unit.state = 'idle';
       } else {
-        unit.state = 'move';
-        unit.x = clamp(unit.x + dir * unit.def.speed * dt, 0, LOGICAL_MAX);
+        const pack = packs[unit.owner];
+        const gaps = this.neighborGaps(unit, dir);
+
+        // 원거리는 근접 벽을 앞지르지 않는다 — 혼자 걸어 나가 1:1로 죽는 걸 막고,
+        // 사거리가 비슷한 유닛끼리 같은 x 띠에 모여 함께 사격하게 된다.
+        //
+        // 단, 벽이 **내 앞에 있을 때만** 적용한다. 근접이 전멸했거나 아직 뒤에서
+        // 올라오는 중이면 멈춰 세우지 않는다 — 그러면 전진이 영구히 막힌다.
+        const wallAhead =
+          isRangedAttack(unit.def) &&
+          pack.meleeFrontX !== null &&
+          (pack.meleeFrontX - unit.x) * dir > 0;
+        const holdX = wallAhead ? (pack.meleeFrontX as number) - dir * RANGED_HOLD_MIN : null;
+
+        if (holdX !== null && (unit.x - holdX) * dir >= 0) {
+          unit.state = 'idle';
+        } else if (gaps.behind > MUSTER_GAP && gaps.behind <= COHESION_WINDOW) {
+          // 바로 뒤 아군이 뒤처졌으면 기다린다 (각개전투 방지).
+          // 간격이 COHESION_WINDOW를 넘으면 본대가 아니라 먼 증원이므로 기다리지 않는다.
+          unit.state = 'idle';
+        } else {
+          unit.state = 'move';
+          // 앞 아군과 벌어졌으면 가속해 합류한다 → 줄이 아니라 덩어리로 움직인다.
+          // 상한(COHESION_WINDOW)은 '기다리기'에만 쓴다 — 추격에 상한을 걸면
+          // 멀리 뒤처진 유닛이 가속을 못 받아 오히려 더 벌어진다.
+          const chasing = gaps.ahead > MUSTER_GAP;
+          const speed = chasing ? unit.def.speed * CATCHUP_SPEED : unit.def.speed;
+          unit.x = clamp(unit.x + dir * speed * dt, 0, LOGICAL_MAX);
+        }
       }
     }
 
@@ -462,7 +552,26 @@ export class FakeSimAdapter implements SimAdapter {
     return best;
   }
 
-  /** 앞선 아군과 겹치지 않게 줄 세우기 — 스프라이트가 포개지는 걸 막는다. */
+  /**
+   * 같은 진영에서 내 앞/뒤로 가장 가까운 아군까지의 거리. 없으면 Infinity.
+   * dir 방향이 '앞'이다.
+   */
+  private neighborGaps(unit: FakeUnit, dir: 1 | -1): { ahead: number; behind: number } {
+    let ahead = Infinity;
+    let behind = Infinity;
+    for (const other of this.units) {
+      if (other === unit || other.owner !== unit.owner || other.hp <= 0) continue;
+      const delta = (other.x - unit.x) * dir;
+      if (delta > 0) {
+        if (delta < ahead) ahead = delta;
+      } else if (delta < 0) {
+        if (-delta < behind) behind = -delta;
+      }
+    }
+    return { ahead, behind };
+  }
+
+  /** 앞선 아군과 최소 간격 유지 — 완전히 포개지는 것만 막고, 촘촘히 뭉치는 건 허용한다. */
   private blockedByAlly(unit: FakeUnit, dir: 1 | -1): boolean {
     for (const other of this.units) {
       if (other === unit || other.owner !== unit.owner) continue;
