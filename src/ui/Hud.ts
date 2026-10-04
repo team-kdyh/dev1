@@ -27,7 +27,7 @@ export class Hud {
 
   private readonly commandDock = new Graphics();
   private readonly warnings: Warnings;
-  private readonly resources = new ResourceBar();
+  private readonly resources: ResourceBar;
   private readonly unitBar: UnitBar;
   private readonly queueBar: QueueBar;
   private readonly minimap: Minimap;
@@ -46,6 +46,7 @@ export class Hud {
     private readonly callbacks: HudCallbacks,
   ) {
     this.warnings = new Warnings(callbacks.onLowHealth);
+    this.resources = new ResourceBar(me);
     this.unitBar = new UnitBar(balance, FACTION_OF_PLAYER[me], balance.queueMax, (def: UnitDef) => {
       // 판정과 무관하게 항상 보낸다. 거부는 시뮬의 몫 (§4.1)
       callbacks.send({ type: 'SPAWN_UNIT', defId: def.id });

@@ -192,17 +192,24 @@ describe('merged game contracts', () => {
 
   it('temporarily converts an enemy for the Semicon final boss', () => {
     const sim = new LocalSimAdapter(GAME_BALANCE, 42, {
-      me: 1, enemyBossAtSeconds: 2, timeLimitSeconds: 60, startCash: 500,
+      me: 1, enemyBossAtSeconds: 2, timeLimitSeconds: 90, startCash: 500,
+      baseHp: 100_000, enemyBaseHp: 100_000,
     });
     let convertedId: number | undefined;
+    let convertedAtTick = -1;
     sim.onEvents((events) => {
       if (!events.some((event) => event.type === 'skill' && event.skillId === 'semicon_acquisition')) return;
+      // 첫 전향 대상을 추적한다. 재사용 쿨다운 뒤의 두 번째 전향으로
+      // 덮어쓰면 종료 시점에 아직 8초가 지나지 않을 수 있다.
+      if (convertedId !== undefined) return;
       convertedId = sim.getSnapshot().units.find((unit) => unit.owner === 0 &&
         unit.defId.startsWith('orchard_'))?.id;
+      convertedAtTick = sim.getSnapshot().tick;
     });
-    for (let tick = 0; tick < 30 * 50 && sim.getSnapshot().phase === 'playing'; tick++) {
+    for (let tick = 0; tick < 30 * 90 && sim.getSnapshot().phase === 'playing'; tick++) {
       if (tick % 45 === 0) sim.send({ type: 'SPAWN_UNIT', defId: 'orchard_t1_airpods' });
       sim.advanceTicks(1);
+      if (convertedAtTick >= 0 && sim.getSnapshot().tick > convertedAtTick + 8 * 30) break;
     }
     expect(convertedId).toBeTypeOf('number');
     expect(sim.getSnapshot().units.some((unit) => unit.id === convertedId)).toBe(false);

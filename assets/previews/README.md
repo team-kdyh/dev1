@@ -1,6 +1,6 @@
 # M0 플레이스홀더 검토 시트
 
-`placeholder-contact-sheet.png`와 `silhouette-contact-sheet.png`는 이전 M0 임시 에셋, `unit-art-contact-sheet.png`와 `unit-art-silhouette-sheet.png`는 현재 패킹 중인 제품형 유닛 16종·인물 보스 2종이다. 왼쪽부터 T1~T9, 첫 줄 세미콘, 둘째 줄 오차드. **A의 실제 전투 화면에서 크기를 확인하기 전까지 시각 검수는 완료되지 않았다.**
+`placeholder-contact-sheet.png`와 `silhouette-contact-sheet.png`는 이전 M0 임시 에셋, `unit-art-contact-sheet.png`와 `unit-art-silhouette-sheet.png`는 현재 패킹 중인 제품형 유닛 16종·인물 보스 2종이다. 왼쪽부터 T1~T9, 첫 줄 세미콘, 둘째 줄 오차드. 현재 게임의 데스크톱·모바일 전투 화면은 `game-generated-*.png`와 [게임 UI 미리보기](../game-ui/index.html)에서 볼 수 있다.
 
 검토할 때 같은 티어의 두 진영과 인접 티어의 실루엣을 비교하고, 제품 형태가 흐려지면 카메라·힌지·펜·바이저 등 큰 특징을 먼저 수정한다. 실제 제품 참조는 [참조표](../model-references.md)에 있다.
 

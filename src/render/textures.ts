@@ -1,4 +1,4 @@
-import { Assets, Graphics, Rectangle, Texture, type Renderer } from 'pixi.js';
+import { Assets, Rectangle, Texture } from 'pixi.js';
 import manifest from '../../assets/manifest.json';
 import { assetUrl } from '../assets/assetUrl';
 import factionsSource from '../data/balance/factions.json' with { type: 'json' };
@@ -28,10 +28,12 @@ const unitByTier = new Map<string, ArtUnit>();
 for (const unit of Object.values(units)) unitByTier.set(unit.faction + ':' + unit.tier, unit);
 const frames = new Map<string, Texture>();
 const baseCache = new Map<string, Texture>();
+const unitCardCache = new Map<string, Texture>();
 
-export async function initTextures(renderer: Renderer): Promise<void> {
+export async function initTextures(): Promise<void> {
   frames.clear();
   baseCache.clear();
+  unitCardCache.clear();
   await Promise.all(manifest.atlases.map(async (atlasName) => {
     const response = await fetch(assetUrl('atlases/' + atlasName));
     if (!response.ok) throw new Error('Atlas metadata failed: ' + atlasName);
@@ -55,11 +57,19 @@ export async function initTextures(renderer: Renderer): Promise<void> {
       }
     }
   }
-  for (const faction of Object.keys(FACTION_COLOR)) {
-    for (let age = 1; age <= 4; age++) {
-      baseCache.set(faction + ':' + age, makeBaseTexture(renderer, faction, age));
-    }
-  }
+  await Promise.all(Object.keys(FACTION_COLOR).map(async (faction) => {
+    const [base, card] = await Promise.all([
+      Assets.load<Texture>(assetUrl(`game-ui/${faction}-base.png`)),
+      Assets.load<Texture>(assetUrl(`game-ui/${faction}-unit-card.png`)),
+    ]);
+    for (let age = 1; age <= 4; age++) baseCache.set(faction + ':' + age, base);
+    // 생성 이미지의 투명 바깥 여백을 프레임에서 제외한다. 버튼 전체가
+    // 터치 영역과 일치하고 작은 모바일 화면에서도 카드가 선명하게 보인다.
+    unitCardCache.set(faction, new Texture({
+      source: card.source,
+      frame: new Rectangle(177, 109, 820, 1121),
+    }));
+  }));
 }
 
 export function unitTexture(faction: string, tier: number, state = 'idle', elapsedMs = 0): Texture {
@@ -75,39 +85,8 @@ export function baseTexture(faction: string, age = 1): Texture {
   return baseCache.get(faction + ':' + age) ?? Texture.WHITE;
 }
 
-export const pixelTexture = (): Texture => Texture.WHITE;
-
-function makeBaseTexture(renderer: Renderer, faction: string, age: number): Texture {
-  const color = faction === 'semicon' ? 0x4d7fe4 : 0xff987e;
-  const shell = faction === 'semicon' ? 0xe8f3ff : 0xfff0e8;
-  const ink = 0x253044;
-  const w = 190;
-  const h = 260;
-
-  const g = new Graphics();
-  g.ellipse(w / 2, h - 4, 91, 12).fill({ color: ink, alpha: 0.22 });
-  g.roundRect(11, 42, w - 22, h - 44, 20).fill(shell).stroke({ width: 6, color: ink });
-  g.roundRect(17, 47, w - 34, 61, 17).fill(color).stroke({ width: 4, color: ink });
-  g.roundRect(40, 63, w - 80, 30, 12).fill(0xffffff).stroke({ width: 3, color: ink });
-  g.circle(74, 78, 4).fill(ink);
-  g.circle(116, 78, 4).fill(ink);
-  g.moveTo(86, 86).quadraticCurveTo(95, 92, 104, 86).stroke({ width: 3, color: ink });
-  g.roundRect(28, 120, w - 56, 110, 13).fill(0xffffff).stroke({ width: 4, color: ink });
-  g.roundRect(57, 165, 76, 94, 10).fill(ink);
-  g.roundRect(65, 172, 60, 87, 7).fill(color);
-  g.circle(112, 213, 4).fill(0xffffff);
-  g.circle(47, 140, 7).fill(0xffd875).stroke({ width: 2, color: ink });
-  g.circle(143, 140, 7).fill(0xffd875).stroke({ width: 2, color: ink });
-  g.roundRect(65, 24, 60, 22, 11).fill(ink);
-  g.roundRect(72, 27, 46, 15, 7).fill(0xffe085);
-  for (let level = 2; level <= age; level++) {
-    const towerX = level % 2 === 0 ? 18 : 146;
-    const towerY = 14 - level * 3;
-    g.roundRect(towerX, towerY, 26, 48, 7).fill(color).stroke({ width: 4, color: ink });
-    g.circle(towerX + 13, towerY + 14, 5).fill(0xffffff).stroke({ width: 2, color: ink });
-  }
-
-  const texture = renderer.generateTexture({ target: g, resolution: 1 });
-  g.destroy();
-  return texture;
+export function unitCardTexture(faction: string): Texture {
+  return unitCardCache.get(faction) ?? Texture.WHITE;
 }
+
+export const pixelTexture = (): Texture => Texture.WHITE;

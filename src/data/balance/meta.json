@@ -1,10 +1,10 @@
 {
   "$schema": "../schema/meta.schema.json",
   "schemaVersion": "1.0.0",
-  "balanceVersion": "0.2.0-fast-pve",
+  "balanceVersion": "0.3.0-quick-base",
   "tickRate": 30,
   "laneLength": 1000,
-  "matchTimeLimitSeconds": 300,
+  "matchTimeLimitSeconds": 240,
   "economy": {
     "startCash": 300,
     "baseCashPerSecond": 8,
@@ -13,7 +13,7 @@
   },
   "supply": { "base": 12, "max": 18 },
   "bases": {
-    "hp": 5000,
+    "hp": 3000,
     "spawnPoints": { "p0": 60, "p1": 940 },
     "turret": {
       "range": 180,

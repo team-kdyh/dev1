@@ -259,7 +259,8 @@ const CSS = `
 }
 .sw-faction-card.sw-orchard { background: linear-gradient(145deg, #8d4854, #43253b); }
 .sw-faction-card:hover { box-shadow: 0 19px 37px rgba(0,0,0,.32); }
-.sw-faction-card img { filter: drop-shadow(0 8px 7px rgba(0,0,0,.45)); }
+.sw-faction-card { min-height: 305px; }
+.sw-faction-card img { width: 195px; height: 205px; filter: drop-shadow(0 8px 7px rgba(0,0,0,.45)); }
 .sw-faction-card small { color: #cddbeb; }
 .sw-panel { border: 1px solid #d2ddec; border-radius: 18px; box-shadow: 0 24px 60px rgba(0,0,0,.32); }
 .sw-panel-head { background: #203555; color: #f7f9ff; border-bottom: 0; padding: 16px 20px; }
@@ -291,6 +292,7 @@ const CSS = `
   .sw-versus { width: 45px; height: 45px; font-size: 13px; }
   .sw-fighter-label { font-size: 8px; }
   .sw-faction-card { min-height: 155px; }
+  .sw-faction-card img { width: 105px; height: 110px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .sw-fighter img { animation: none; }

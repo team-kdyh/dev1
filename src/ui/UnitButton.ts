@@ -1,6 +1,6 @@
 import { Container, Graphics, Sprite, Text } from 'pixi.js';
 import type { PlayerSnapshot, RejectReason, UnitDef } from '../sim/contracts';
-import { unitTexture } from '../render/textures';
+import { unitCardTexture, unitTexture } from '../render/textures';
 import { BUTTON_H, BUTTON_W, COLOR, UI_FONT, UI_MONO } from './theme';
 import { unlockHint } from './ageLabels';
 
@@ -16,7 +16,7 @@ const PRESS_MS = 110;
 export class UnitButton {
   readonly root = new Container();
 
-  private readonly bg = new Graphics();
+  private readonly bg = new Sprite();
   private readonly accent = new Graphics();
   private readonly icon = new Sprite();
   private readonly keyHint: Text;
@@ -40,37 +40,35 @@ export class UnitButton {
     onPress: (def: UnitDef) => void,
   ) {
     const factionAccent = def.faction === 'semicon' ? 0x60bdff : 0xff8c7b;
-    this.bg.roundRect(0, 0, BUTTON_W, BUTTON_H, 9)
-      .fill(def.faction === 'semicon' ? 0x203f61 : 0x513849);
-    this.bg.roundRect(0, 0, BUTTON_W, BUTTON_H, 9)
-      .stroke({ width: 1.5, color: factionAccent, alpha: 0.8, alignment: 1 });
-    this.bg.roundRect(2, BUTTON_H - 20, BUTTON_W - 4, 18, 6)
-      .fill({ color: 0x081727, alpha: 0.8 });
+    this.bg.texture = unitCardTexture(def.faction);
+    this.bg.width = BUTTON_W;
+    this.bg.height = BUTTON_H;
     this.accent.roundRect(8, 5, BUTTON_W - 16, 3, 2).fill(factionAccent);
 
     this.icon.texture = unitTexture(def.faction, def.tier);
     this.icon.anchor.set(0.5, 1);
     // 큰 원본 아틀라도 생산 카드 안에 들어오도록 맞춘다.
-    const fit = Math.min(51 / this.icon.texture.height, 51 / this.icon.texture.width);
+    const fit = Math.min(52 / this.icon.texture.height, 52 / this.icon.texture.width);
     this.icon.scale.set(fit);
-    this.icon.position.set(BUTTON_W / 2, BUTTON_H - 17);
+    this.icon.position.set(BUTTON_W / 2, BUTTON_H - 19);
 
     this.keyHint = new Text({
       text: String(hotkey),
-      style: { fontFamily: UI_MONO, fontSize: 11, fontWeight: 'bold', fill: COLOR.text },
+      style: { fontFamily: UI_MONO, fontSize: 11, fontWeight: 'bold', fill: 0x18273c },
     });
     this.keyHint.position.set(7, 9);
 
     this.costText = new Text({
       text: String(def.cost),
-      style: { fontFamily: UI_MONO, fontSize: 12, fontWeight: 'bold', fill: COLOR.cash },
+      style: { fontFamily: UI_MONO, fontSize: 12, fontWeight: 'bold',
+        fill: def.faction === 'semicon' ? 0xffe6a4 : 0xffffff },
     });
     this.costText.anchor.set(0.5, 1);
     this.costText.position.set(BUTTON_W / 2, BUTTON_H - 4);
 
     this.supplyText = new Text({
       text: `◆${def.supply}`,
-      style: { fontFamily: UI_MONO, fontSize: 9, fontWeight: 'bold', fill: COLOR.supply },
+      style: { fontFamily: UI_MONO, fontSize: 9, fontWeight: 'bold', fill: 0x274463 },
     });
     this.supplyText.anchor.set(1, 0);
     this.supplyText.position.set(BUTTON_W - 6, 9);
@@ -153,7 +151,9 @@ export class UnitButton {
     this.root.alpha = locked ? 0.55 : grey ? 0.8 : 1;
 
     // 비용 빨강 (캐시 부족)
-    this.costText.style.fill = this.reason === 'NO_CASH' ? COLOR.danger : COLOR.cash;
+    this.costText.style.fill = this.reason === 'NO_CASH'
+      ? this.def.faction === 'semicon' ? 0xff9696 : 0x5a1830
+      : this.def.faction === 'semicon' ? 0xffe6a4 : 0xffffff;
 
     // 인구 아이콘 깜박임
     this.pulseMs += deltaMs;

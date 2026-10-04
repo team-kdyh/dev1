@@ -18,7 +18,7 @@ async function boot(): Promise<void> {
   if (!host) throw new Error('#app 이 index.html에 없다');
   host.appendChild(app.canvas);
 
-  await initTextures(app.renderer);
+  await initTextures();
 
   new App(app, GAME_BALANCE).start();
 }

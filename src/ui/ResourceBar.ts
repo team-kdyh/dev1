@@ -1,5 +1,5 @@
 import { Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
-import type { Snapshot } from '../sim/contracts';
+import type { PlayerId, Snapshot } from '../sim/contracts';
 import { COLOR, UI_FONT, UI_MONO } from './theme';
 
 const PANEL_W = 236;
@@ -28,18 +28,21 @@ export class ResourceBar {
   private readonly foeGroup = new Container();
   private highlightMs = 0;
 
-  constructor() {
+  constructor(me: PlayerId) {
+    const isSemicon = me === 0;
+    const allyAccent = isSemicon ? 0x6cc7ff : 0xff9c83;
+    const foeAccent = isSemicon ? 0xff9c83 : 0x6cc7ff;
     this.panel.roundRect(0, 0, PANEL_W, PANEL_H, 12).fill({ color: COLOR.panel, alpha: 0.96 });
     this.panel.roundRect(0, 0, PANEL_W, PANEL_H, 12)
       .stroke({ width: 1, color: COLOR.panelEdge, alpha: 0.9, alignment: 1 });
-    this.panel.roundRect(13, 10, 4, 36, 2).fill(COLOR.cash);
+    this.panel.roundRect(13, 10, 4, 36, 2).fill(allyAccent);
     this.panel.roundRect(13, PANEL_H - 14, HP_W, 2, 1)
       .fill({ color: 0x7da4c5, alpha: 0.4 });
 
     this.cashLabel = new Text({
-      text: 'CASH',
+      text: isSemicon ? 'SAMSUNG / CASH' : 'APPLE / CASH',
       style: { fontFamily: UI_MONO, fontSize: 10, fontWeight: 'bold', fill: COLOR.textDim,
-        letterSpacing: 2 },
+        letterSpacing: 1 },
     });
     this.cashLabel.position.set(24, 10);
 
@@ -84,9 +87,9 @@ export class ResourceBar {
     this.foePanel.roundRect(0, 0, PANEL_W, 52, 12).fill({ color: COLOR.panel, alpha: 0.95 });
     this.foePanel.roundRect(0, 0, PANEL_W, 52, 12)
       .stroke({ width: 1, color: COLOR.panelEdge, alpha: 0.8, alignment: 1 });
-    this.foePanel.roundRect(13, 12, 4, 23, 2).fill(COLOR.danger);
+    this.foePanel.roundRect(13, 12, 4, 23, 2).fill(foeAccent);
     this.foeLabel = new Text({
-      text: 'ENEMY BASE',
+      text: isSemicon ? 'APPLE BASE' : 'SAMSUNG BASE',
       style: { fontFamily: UI_MONO, fontSize: 11, fontWeight: 'bold', fill: COLOR.text,
         letterSpacing: 1.2 },
     });

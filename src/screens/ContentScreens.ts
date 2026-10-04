@@ -14,14 +14,14 @@ export class FactionScreen {
     this.node.append(el('p', 'sw-sub', '제품 군단을 골라 전장에 출격하세요'));
     const choices = el('div', 'sw-faction-grid');
     for (const [faction, name, note, filename] of [
-      ['semicon', '삼성 · 세미콘', '견고한 기기와 강한 전선', 'semicon/semicon_t3_aphone_soldier_idle_00.png'],
-      ['orchard', '애플 · 오차드', '빠른 기기와 날카로운 공격', 'orchard/orchard_t3_phone_idle_00.png'],
+      ['semicon', '삼성 · 갤럭시', '삼성 제품 군단 · 견고한 전선', 'game-ui/semicon-base.png'],
+      ['orchard', '애플 · 아이폰', '애플 제품 군단 · 빠른 공세', 'game-ui/orchard-base.png'],
     ] as const) {
       const card = el('button', `sw-faction-card sw-${faction}`);
       card.type = 'button';
       const image = document.createElement('img');
-      image.src = assetUrl(`frames/units/${filename}`);
-      image.alt = '';
+      image.src = assetUrl(filename);
+      image.alt = `${name} 본진`;
       card.append(image, el('strong', undefined, name), el('small', undefined, note));
       card.addEventListener('click', () => onChoose(faction));
       choices.append(card);

@@ -27,6 +27,11 @@ for (const [id, unit] of Object.entries(art.units)) {
   add(`frames/units/${unit.faction}/${id}_idle_00.png`);
 }
 
+for (const faction of ['semicon', 'orchard']) {
+  add(`game-ui/${faction}-base.png`);
+  add(`game-ui/${faction}-unit-card.png`);
+}
+
 for (const group of [audio.sfx, audio.bgm]) {
   for (const variants of Object.values(group)) {
     for (const sound of Object.values(variants)) {
